@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique
+  password    String    // Hasheada con bcrypt
+  roleId      String   
+  role        Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+model Role {
+  id          String    @id @default(uuid())
+  name        String    @unique // "ADMIN", "EDITOR"
+  permissions Json      // Ej: { "pages:create": true, "posts:delete": false }
+  users       User[]
+}
+
+model Collection {
+  id        String    @id @default(uuid())
+  slug      String    @unique // "products", "sellers"
+  name      String
+  fields    Json      // Definición de campos (como en Payload)
+  createdAt DateTime  @default(now())
+  entries   Entry[]
+}
+
+model Entry {
+  id           String      @id @default(uuid())
+  collectionId String      
+  collection   Collection  @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  data         Json        // { name: "Casa en la playa", price: 100000 }
+  createdAt    DateTime    @default(now())
+
+  // Relaciones con otras entradas
+  relationshipsFrom Relationship[] @relation("FromEntry")
+  relationshipsTo   Relationship[] @relation("ToEntry")
+}
+
+model Relationship {
+  id          String @id @default(uuid())
+  fromEntryId String
+  fromEntry   Entry  @relation("FromEntry", fields: [fromEntryId], references: [id], onDelete: Cascade)
+  toEntryId   String
+  toEntry     Entry  @relation("ToEntry", fields: [toEntryId], references: [id], onDelete: Cascade)
+  type        String // "SELLER_TO_HOUSE", "PRODUCT_TO_CATEGORY"
+}
+
+model Global {
+  id        String    @id @default(uuid())
+  key       String    @unique // "site-settings", "homepage"
+  value     Json      // { "logo": "url.jpg", "footerText": "..." }
+}
+
+model FormSubmission {
+  id        String    @id @default(uuid())
+  formId    String    // ID del formulario (relacionado con Entry)
+  data      Json      // { name: "Juan", email: "j@test.com" }
+  createdAt DateTime  @default(now())
+}
