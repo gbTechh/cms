@@ -71,3 +71,11 @@ model FormSubmission {
   data      Json      // { name: "Juan", email: "j@test.com" }
   createdAt DateTime  @default(now())
 }
+
+model Media {
+  id        String   @id @default(uuid())
+  url       String
+  altText   String?
+  mimeType  String
+  createdAt DateTime @default(now())
+}
