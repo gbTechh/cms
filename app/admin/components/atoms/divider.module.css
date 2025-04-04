@@ -1,0 +1,4 @@
+.divider {
+  border-bottom: 0.8px solid var(--border-color);
+  display: block;
+}

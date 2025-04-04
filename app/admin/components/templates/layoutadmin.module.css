@@ -1,0 +1,139 @@
+:root {
+  /* Variables de CSS */
+  --bg-body: #141414;
+  --bg-aside: #141414;
+  --bg-main: #181818;
+  --bg-scroll: #ececec;
+  --bg-box: #fff;
+  --bg-card-hover: rgba(210, 210, 214, 0.267);
+
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  --font-base: "Inter", sans-serif;
+  --font-heading: "Inter", sans-serif;
+  --font-size-base: 1rem; /* Esto ahora es 1px */
+  --font-size-sm: 0.875rem; /* 0.875px */
+  --font-size-md: 1.225rem; /* 1.225px */
+  --font-size-lg: 1.5rem; /* 1.5px */
+  --font-size-xl: 1.8rem; /* 2px */
+
+  --box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+
+  --pd-aside: 0.5rem;
+
+  --color-black: #000;
+  --color-white: #fff;
+  --color-primary: #181818;
+  --color-primary-hover: #181818e5;
+  --color-contrast: #292929;
+  --color-contrast-hover: #c7c7c7e5;
+  --color-error: #f43f5e;
+  --color-error-hover: #f43f5eb9;
+  --color-success: #4ade80;
+  --color-success-hover: #4ade80c0;
+  --color-warning: #fde047;
+  --color-warning-hover: #fde047e5;
+  --color-grey: #727272;
+  --color-grey-hover: #727272e5;
+
+  --color-alert-error: #fbeaea;
+  --color-alert-error-border: #ffe3e3;
+  --color-alert-success-border: #e3fff1;
+  --color-alert-success: #50c480;
+
+  --color-text-black: #000;
+  --color-text-white: #fff;
+  --color-text-primary: #afafaf;
+  --color-text-primary-hover: #b5b5b5e5;
+  --color-text-contrast: #5b5b5b;
+  --color-text-contrast-hover: #747474;
+  --color-text-error: #f43f5e;
+  --color-text-error-hover: #f43f5eb9;
+  --color-text-success: #4ade80;
+  --color-text-success-hover: #4ade80c0;
+  --color-text-warning: #ebd425;
+  --color-text-warning-hover: #fde047e5;
+  --color-text-grey: #727272;
+  --color-text-grey-hover: #727272e5;
+
+  /* --color-btn-black: #01010e; */
+  --color-btn-black: 240, 87%, 3%;
+  --color-btn-black-flat: #212122;
+  --color-btn-black-hover: #1a1a22;
+  --color-btn-white: #fff;
+  /* --color-btn-primary: #554cf5; */
+  --color-btn-primary: 243, 89%, 63%;
+  --color-btn-primary-flat: #827ceec7;
+  --color-btn-primary-hover: #554cf5e5;
+  /* --color-btn-contrast: #c7c7c7; */
+  --color-btn-contrast: 0, 0%, 78%;
+  --color-btn-contrast-flat: #e7e7e7e3;
+  --color-btn-contrast-hover: #c7c7c7e5;
+  /* --color-btn-error: #f43f5e; */
+  --color-btn-error: 350, 89%, 60%;
+  --color-btn-error-flat: #f55771ce;
+  --color-btn-error-hover: #f43f5dd8;
+  /* --color-btn-success: #4ade80; */
+  --color-btn-success: 142, 69%, 58%;
+  --color-btn-success-flat: #78f8a7e8;
+  --color-btn-success-hover: #4ade80c0;
+  /* --color-btn-warning: #fde047; */
+  --color-btn-warning: 50, 98%, 64%;
+  --color-btn-warning-flat: #fae474dc;
+  --color-btn-warning-hover: #fcde47c9;
+  --color-btn-grey: 0, 0%, 45%;
+  --color-btn-grey-flat: #999999d5;
+  --color-btn-grey-hover: #727272e5;
+
+  /*FORM*/
+  --border-color: rgb(35, 35, 35);
+  --border-row-table: rgba(236, 236, 236, 0.856);
+
+  --bg-input: #f5f5f5;
+  --border-input: #f0f0f0;
+  --boder-input-error: hsl(var(--color-btn-error));
+  --boder-input-focus: hsl(var(--color-btn-primary));
+  --bg-tablerow-hover: #f5f5f546;
+}
+
+@media (width > 576px) {
+  :root {
+    --pd-aside: 1rem;
+  }
+}
+
+.container {
+  background-color: var(--bg-body);
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+
+.main {
+  width: 100%;
+  background-color: var(--bg-main);
+  border-color: var(--border-color);
+  border-width: 1px;
+  border-style: solid;
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    min-height: 4.9rem;
+    border-bottom: 0.8px solid var(--border-color);
+  }
+}

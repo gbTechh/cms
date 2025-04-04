@@ -33,7 +33,7 @@ model Collection {
   id        String    @id @default(uuid())
   slug      String    @unique // "products", "sellers"
   name      String
-  fields    Json      // Definición de campos (como en Payload)
+  fields    Json?      // Definición de campos (como en Payload)
   createdAt DateTime  @default(now())
   entries   Entry[]
 }

@@ -1,0 +1,29 @@
+.breadcrumbs {
+  display: flex;
+  list-style: none;
+  gap: 0.4rem;
+}
+
+.span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.textLink {
+  text-decoration: none;
+  text-transform: capitalize;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.8rem;
+}

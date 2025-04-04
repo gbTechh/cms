@@ -1,0 +1,30 @@
+.dropdown {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  appearance: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.4rem;
+}
+.arrow {
+  color: var(--color-text-contrast);
+  width: 35px;
+  transition: 0.2s all ease;
+}
+
+.turn {
+  transform: rotate(180deg);
+  transition: 0.2s all ease;
+}

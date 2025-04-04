@@ -1,0 +1,28 @@
+.wrapp {
+  border: 0.8px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.1s ease;
+
+  svg,
+  path,
+  line,
+  circle,
+  polyline {
+    font-size: 1.5rem;
+    transition: 0.2s all ease;
+    color: hsl(var(--color-btn-primary));
+  }
+}
+
+.wrapp:hover {
+  box-shadow: var(--box-shadow-sm);
+}
+
+.wrapp:hover svg {
+  opacity: 0.95;
+  transform: scale(1.05);
+}

@@ -21,7 +21,11 @@ export default defineConfig({
       },
       routes: async (defineRoutes) => {
         return flatRoutes("routes", defineRoutes, {
-          ignoredRouteFiles: ["**/*.test.{js,jsx,ts,tsx}","**/*.css", "**/__*.*"],
+          ignoredRouteFiles: [
+            "**/*.test.{js,jsx,ts,tsx}",
+            "**/*.css",
+            "**/__*.*",
+          ],
         });
       },
     }),
