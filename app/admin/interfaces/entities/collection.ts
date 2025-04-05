@@ -13,8 +13,8 @@ export interface ICollection {
   id: string;
   slug: string; // "products", "sellers"
   name: string;
-  fields: IField; // Definición de campos (como en Payload)
-  createdAt: string;
+  fields?: IField[]; // Definición de campos (como en Payload)
+  createdAt?: string;
   entries?: IEntry[];
 }
 export interface ICollectionCreate {

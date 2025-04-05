@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { PrismaSingleton } from "../bd";
 import {
+  CollectionRepository,
   ICollection,
   ICollectionCreate,
   ICollectionError,
@@ -10,9 +11,7 @@ import { CatchError, TError } from "~/admin/lib";
 
 const prisma = PrismaSingleton.getInstance();
 
-export class PrismaCollectionsRepository
-  implements PrismaCollectionsRepository
-{
+export class PrismaCollectionsRepository implements CollectionRepository {
   async getJustCollections(): Promise<ICollection[] | []> {
     const data = await prisma.collection.findMany({
       orderBy: {
@@ -116,7 +115,7 @@ export class PrismaCollectionsRepository
     }
   }
   */
-
+  /*
   async createCollection(data: ICollectionCreate): Promise<{
     error: TError<ICollectionError> | null;
     collection: ICollection | null;
@@ -241,5 +240,5 @@ export class PrismaCollectionsRepository
     } finally {
       prisma.$disconnect();
     }
-  }
+  }*/
 }

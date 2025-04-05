@@ -11,8 +11,8 @@ import {
 export interface CollectionRepository {
   getJustCollections(): Promise<ICollection[]>;
   getAllCollections(): Promise<ICollection[]>;
-  getCollectionById(id: string): Promise<ICollection | null>;
-  createCollection(data: ICollectionCreate): Promise<{
+  getCollectionBySlug(slug: string): Promise<ICollection | null>;
+  /*createCollection(data: ICollectionCreate): Promise<{
     error: TError<ICollectionError> | null;
     collection: ICollection | null;
   }>;
@@ -34,5 +34,5 @@ export interface CollectionRepository {
   deleteEntry(id: string): Promise<{
     error: TError<IEntryError> | null;
     entry: IEntry | null;
-  }>;
+  }>;*/
 }

@@ -2,7 +2,7 @@
 .button {
   border-width: 0.8px;
   border-style: solid;
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
   transition: all 0.3s ease;
   cursor: pointer;
   font-family: var(--font-base);
@@ -18,24 +18,20 @@
 .extrasmall {
   font-size: 1.2rem;
   padding: 0.4rem 1rem;
-  padding-bottom: 0.5rem;
 }
 .small {
   font-size: 1.3rem;
-  padding: 0.55rem 0.75rem;
-  padding-bottom: 0.7rem;
+  padding: 0.75rem 1rem;
 }
 
 .medium {
   font-size: 1.45rem;
   padding: 0.55rem 1.5rem;
-  padding-bottom: 0.7rem;
 }
 
 .large {
   font-size: 1.55rem;
   padding: 0.6rem 2.5rem;
-  padding-bottom: 0.7rem;
 }
 
 /* Colores */
@@ -89,9 +85,9 @@
   background: hsl(var(--color-btn-warning), 80%);
 }
 .black {
-  border-color: hsl(var(--color-btn-black));
+  border-color: hsl(var(--color-btn-black-border));
   background: hsl(var(--color-btn-black));
-  color: #e2e2e2;
+  color: var(--color-text-contrast);
 }
 
 .black:hover:not(:disabled) {
@@ -108,9 +104,12 @@
   color: #fff;
 }
 .solid.contrast {
-  color: var(--color-text-primary);
+  color: var(--color-text-contrast);
 }
 .solid.warning {
+  color: var(--color-text-warning);
+}
+.solid.black {
   color: var(--color-text-primary);
 }
 

@@ -1,5 +1,5 @@
 :root {
-  --font-size-2xl: 2rem;
+  --font-size-big: 2.75rem;
   --font-size-xl: 1.7rem;
   --font-size-lg: 1.65rem;
   --font-size-md: 1.55rem;
@@ -46,6 +46,9 @@
 }
 
 /* Tamaños */
+.big {
+  font-size: var(--font-size-big);
+}
 .xl {
   font-size: var(--font-size-xl);
 }

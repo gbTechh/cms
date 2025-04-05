@@ -8,6 +8,7 @@ const prisma = PrismaSingleton.getInstance();
 export async function syncCollections() {
   const modelCollections = await loadModelCollections();
   const dbCollections = await prisma.collection.findMany();
+  console.log({dbCollections})
 
   const modelSlugs = modelCollections.map((c) => c.slug);
   const dbSlugs = dbCollections.map((c) => c.slug);

@@ -38,7 +38,7 @@ export function Aside({ collections }: Props) {
                     : styles.li
                 }
               >
-                <Link to={e.slug}>
+                <Link to={`collections/${e.slug}`}>
                   <Text
                     as="span"
                     type="base"

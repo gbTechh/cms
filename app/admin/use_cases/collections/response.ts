@@ -1,26 +1,27 @@
-import { StatusEnum } from "@prisma/client";
-import { ICollection, IEntry } from "~/admin/interfaces";
+import { ICollection, IEntry, IField } from "~/admin/interfaces";
 
 export class CollectionResponse {
   id: string;
   name: string;
   slug: string;
-  is_page: boolean;
-  status: StatusEnum;
-  entries: IEntry[] | undefined
+  fields?: IField[];
+  createdAt?: string;
+  entries?: IEntry[];
 
   constructor({
     id,
     name, 
     slug,
+    fields,
+    createdAt,
     entries
   }: ICollection) {
     this.id = id;
     this.name = name;
     this.slug = slug;
-    this.status = status;
-    this.is_page = is_page;
-    this.entries = entries;   
+    this.fields = fields;
+    this.createdAt = createdAt;
+    this.entries = entries;
   }
 }
 

@@ -9,7 +9,7 @@ interface DropDownMenuProps {
 }
 
 export function DropDownMenu({ title, children }: DropDownMenuProps) {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
 
   return (
     <div className={styles.dropdown}>

@@ -7,6 +7,7 @@ export const loader = async () => {
       message: "Colecciones sincronizadas correctamente",
     });
   } catch (error) {
+    console.log(error)
     return Response.json(
       { error: "Error al sincronizar colecciones" },
       { status: 500 }
