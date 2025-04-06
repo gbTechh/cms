@@ -33,43 +33,42 @@ type TRoutes = {
   STYLES: string;
 };
 
-const admin = '/admin'
+const admin = "/admin";
 
-const adminLogin = admin + '/login'
+const adminLogin = admin + "/login";
 
-const bienvenida = admin + '/bienvenida'
+const bienvenida = admin + "/bienvenida";
 
 const dashboard = admin + "/dashboard";
 
 const tag = admin + "/etiquetas";
 const editTag = tag + "/editar";
 
-const media = admin + '/media';
+const media = admin + "/media";
 
-const pages = admin + '/pages';
-const addPages = pages + '/add';
+const pages = admin + "/pages";
+const addPages = pages + "/add";
 const editPages = pages;
 
-
-const customer = admin + '/clientes';
-const addCustomer = customer + '/agregar';
+const customer = admin + "/clientes";
+const addCustomer = customer + "/agregar";
 const editCustomer = customer;
 
-const setting = admin + '/settings';
+const setting = admin + "/settings";
 
 const staff = setting + "/staff";
 const listStaff = staff;
 const editStaff = staff;
-const addStaff = staff + '/agregar';
+const addStaff = staff + "/agregar";
 const rolesStaff = setting + "/roles";
 const editRoles = rolesStaff;
 
-const fields = admin + '/fields';
-const addFields = fields + '/add';
+const fields = admin + "/fields";
+const addFields = fields + "/add";
 const editFields = fields;
 
 const collections = admin + "/collections";
-const addCollections = collections + "/add";
+const addCollections = collections + "/new";
 const editCollections = collections;
 
 const singlePost = admin + "/single-post";
@@ -77,9 +76,9 @@ const addSinglePost = singlePost + "/add";
 const editSinglePost = singlePost;
 
 const tema = admin + "/tema";
-const menu = tema + "/menu"
-const templates = tema + "/menu"
-const styles = tema + "/menu"
+const menu = tema + "/menu";
+const templates = tema + "/menu";
+const styles = tema + "/menu";
 
 export const ROUTES: TRoutes = {
   ADMIN: admin,
@@ -115,5 +114,5 @@ export const ROUTES: TRoutes = {
   TEMA: tema,
   MENU: menu,
   TEMPLATES: templates,
-  STYLES: styles
+  STYLES: styles,
 };

@@ -13,7 +13,16 @@ type TextColor =
   | "warning"
   | "custom"
   | "white";
-type TextSize = "big" | "xl" | "lg" | "md" | "sm" | "xs" | "custom" | "14" | "input";
+type TextSize =
+  | "big"
+  | "xl"
+  | "lg"
+  | "md"
+  | "sm"
+  | "xs"
+  | "custom"
+  | "14"
+  | "input";
 type FontWeight =
   | "thin"
   | "extralight"

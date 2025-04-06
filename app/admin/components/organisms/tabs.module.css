@@ -1,0 +1,49 @@
+.tabs {
+  background: hsl(var(--color-btn-black));
+  padding: 0.25rem;
+  max-width: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  border-radius: 1rem;
+  gap:0.25rem;
+  width: auto;
+}
+
+.tabItem {
+  width: auto;
+}
+
+.btn {
+  appearance: none;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  border:1px solid transparent;
+  transition: 0.2s all ease;
+
+  .text {
+    background-color: inherit;
+    text-transform: capitalize;
+  }
+}
+
+.active {
+  border-radius: 0.75rem;
+  background-color: var(--bg-input);
+  width: auto;
+
+  .text {
+    font-weight: 500;
+  }
+}
+
+.inactive:hover {
+  border-radius: 0.75rem;
+  background-color: rgba(26, 26, 26, 0.66);
+  width: auto;
+}

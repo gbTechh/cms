@@ -8,14 +8,7 @@ export class CollectionResponse {
   createdAt?: string;
   entries?: IEntry[];
 
-  constructor({
-    id,
-    name, 
-    slug,
-    fields,
-    createdAt,
-    entries
-  }: ICollection) {
+  constructor({ id, name, slug, fields, createdAt, entries }: ICollection) {
     this.id = id;
     this.name = name;
     this.slug = slug;
@@ -44,7 +37,7 @@ export class EntryResponse {
     status,
     createdAt,
     updatedAt,
-    collection
+    collection,
   }: IEntry) {
     this.id = id;
     this.title = title;

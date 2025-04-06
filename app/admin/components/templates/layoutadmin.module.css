@@ -4,7 +4,7 @@
   --bg-aside: #101010;
   --bg-main: #181818;
   --bg-scroll: #ececec;
-  --bg-box: #fff;
+  --bg-box: #161616;
   --bg-card-hover: rgba(210, 210, 214, 0.267);
 
   --spacing-xs: 4px;
@@ -101,11 +101,11 @@
   --border-color: rgb(35, 35, 35);
   --border-row-table: rgba(236, 236, 236, 0.856);
 
-  --bg-input: #181818;
+  --bg-input: #1f1f1f;
   --bg-input-hover: #121212;
-  --border-input: #f0f0f0;
+  --border-input: rgb(35, 35, 35);
   --boder-input-error: hsl(var(--color-btn-error));
-  --boder-input-focus: hsl(var(--color-btn-primary));
+  --boder-input-focus: #505050;
   --bg-tablerow-hover: #f5f5f546;
 }
 
@@ -140,8 +140,12 @@
   }
 
   .body {
-    padding: 1.5rem;
-    padding-left: 3rem;
+    padding: 1.5rem 3rem;
+    padding-bottom: 0;
     width: 100%;
+    height: 100%;
+    flex:1;
+    display: flex;
+    flex-direction: column;
   }
 }

@@ -24,11 +24,11 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
   }
 
   async getCollectionBySlug(slug: string | undefined) {
-    if(!slug) return null;
+    if (!slug) return null;
     const collection = await this.collection.getCollectionBySlug(slug);
-    if(collection){
+    if (collection) {
       return this.mapped(collection);
-    }else{
+    } else {
       return null;
     }
   }

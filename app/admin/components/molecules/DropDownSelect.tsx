@@ -14,9 +14,27 @@ interface DropdownSelectProps {
   name?: string;
   error?: string;
   label?: string | React.ReactNode;
-  labelColor?: "black" | "primary" | "contrast" | "error" | "success" | "warning" | "custom";
+  labelColor?:
+    | "black"
+    | "primary"
+    | "contrast"
+    | "error"
+    | "success"
+    | "warning"
+    | "custom";
   labelSize?: "custom" | "sm" | "xl" | "lg" | "md" | "xs" | "14";
-  labelFw?: "thin" | "extralight" | "light" | "semilight" | "normal" | "medium" | "semibold" | "bold" | "extrabold" | "black" | "extrablack";
+  labelFw?:
+    | "thin"
+    | "extralight"
+    | "light"
+    | "semilight"
+    | "normal"
+    | "medium"
+    | "semibold"
+    | "bold"
+    | "extrabold"
+    | "black"
+    | "extrablack";
 }
 
 export const DropdownSelect: React.FC<DropdownSelectProps> = ({
@@ -29,7 +47,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
   labelSize = "14",
   labelFw = "normal",
   name,
-  error = ""
+  error = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
@@ -41,7 +59,10 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -60,7 +81,7 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
     onChange(option.value);
   };
 
-  const selectedOption = options?.find(opt => opt?.value === internalValue);
+  const selectedOption = options?.find((opt) => opt?.value === internalValue);
   return (
     <div>
       <input type="hidden" name={name} value={value} />

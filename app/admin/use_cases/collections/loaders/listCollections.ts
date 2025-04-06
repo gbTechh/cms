@@ -4,7 +4,7 @@ import { CollectionService } from "../service";
 import { PrismaCollectionsRepository } from "~/admin/infraestructure";
 
 interface ResponseData {
-  collections: CollectionResponse[]
+  collections: CollectionResponse[];
 }
 
 export const listCollections = async (
@@ -17,7 +17,6 @@ export const listCollections = async (
 
   const collection = new CollectionService(new PrismaCollectionsRepository());
   const data = await collection.getJustCollections();
-
 
   return {
     collections: data,

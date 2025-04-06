@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaEllipsisH } from "react-icons/fa";
-import styles from './table.module.css'
+import styles from "./table.module.css";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { Button, Spacer, Text } from "../atoms";
 import { DropdownSelect } from "../molecules";
@@ -149,20 +149,18 @@ export const Table: React.FC<Props> = ({ headers, data, actionOptions }) => {
                 >
                   {header.label}
                   <Text
-                        as="span"
-                        size="input"
-                        fw="medium"
-                        className={styles.sortedSpan}
-                    >
-                        {sortOrder === "asc" ? (
-                        <MdKeyboardArrowUp />
-                        ) : (
-                        <MdKeyboardArrowDown />
-                        )}
-                    </Text>
-              
+                    as="span"
+                    size="input"
+                    fw="medium"
+                    className={styles.sortedSpan}
+                  >
+                    {sortOrder === "asc" ? (
+                      <MdKeyboardArrowUp />
+                    ) : (
+                      <MdKeyboardArrowDown />
+                    )}
+                  </Text>
                 </Text>
-               
               </th>
             ))}
             <th className={styles.actionHeader}></th>
@@ -210,9 +208,13 @@ export const Table: React.FC<Props> = ({ headers, data, actionOptions }) => {
           ))}
         </tbody>
       </table>
-       { data && data.length <= 0 ? ( <div className={styles.noData}>
-            <Text color="contrast" >Aun no tiene datos...</Text>
-        </div>): (<></>)}
+      {data && data.length <= 0 ? (
+        <div className={styles.noData}>
+          <Text color="contrast">Aun no tiene datos...</Text>
+        </div>
+      ) : (
+        <></>
+      )}
       <Spacer className={styles.spacer} />
       <div>
         <div className={styles.resultsPerPage}>
@@ -226,21 +228,20 @@ export const Table: React.FC<Props> = ({ headers, data, actionOptions }) => {
           />
         </div>
         <div className={styles.pagination}>
-            {Array.from({ length: totalPages }).map((_, index) => (
+          {Array.from({ length: totalPages }).map((_, index) => (
             <Button
-                key={index}
-                size="small"
-                onClick={() => handlePageChange(index + 1)}
-                className={`${styles.paginationButton} ${
+              key={index}
+              size="small"
+              onClick={() => handlePageChange(index + 1)}
+              className={`${styles.paginationButton} ${
                 currentPage === index + 1 ? styles.activePage : ""
-                }`}
+              }`}
             >
-                {index + 1}
+              {index + 1}
             </Button>
-            ))}
+          ))}
         </div>
       </div>
-      
     </div>
   );
 };

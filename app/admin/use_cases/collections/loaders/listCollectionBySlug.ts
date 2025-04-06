@@ -21,6 +21,6 @@ export const listCollectionBySlug = async ({
   const data = await collection.getCollectionBySlug(slug);
 
   return {
-    collection: data
+    collection: data,
   };
 };

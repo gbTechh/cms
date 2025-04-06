@@ -1,0 +1,34 @@
+.box {
+  border-width: 0.8px;
+  border-style: solid;
+}
+
+.width-auto { width: auto; }
+.width-full { width: 100%; }
+.width-half { width: 50%; }
+
+.height-auto { height: auto; }
+.height-full { height: 100%; }
+.height-half { height: 50%; }
+
+.background-light {
+  background: var(--bg-box);
+}
+.background-none { background: none; }
+
+.padding-none { padding: 0rem; }
+.padding-small { padding: 0.5rem; }
+.padding-medium { padding: 1rem; }
+.padding-large { padding: 2rem; }
+
+.borderRadius-small { border-radius: 0.25rem; }
+.borderRadius-medium { border-radius: 0.75rem; }
+.borderRadius-large { border-radius: 1.25rem; }
+
+.borderColor-primary { border-color: var(--border-color); }
+
+@media (min-width: 768px) {
+  .padding-small { padding: 1rem; }
+  .padding-medium { padding: 1.5rem; }
+  .padding-large { padding: 3rem; }
+}

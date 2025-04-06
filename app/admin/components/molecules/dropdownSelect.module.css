@@ -1,61 +1,61 @@
 .wrapper {
-    position: relative;
-    width: 100%;
-  }
-  
-  .select {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    gap:1rem;
-    border: 1px solid var(--border-color);
-    padding: 0.9rem 1.25rem;
-    border-radius: 0.8rem;
-    background-color: var(--bg-input);
-    cursor: pointer;
-  }
-  
-  .errorSelect {
-    outline: 1px solid var(--color-error) !important;
-  }
-  
-  .select:focus{
-    outline: 1px solid var(--boder-input-focus) !important;
-  }
-  
-  .options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: var(--bg-input);
-    border: 1px solid var(--border-color);
-    border-radius: 0.8rem;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 10;
-  }
-  
-  .option {
-    padding: 10px;
-    cursor: pointer;
-    transition: 0.1s all ease;
-  }
-  
-  .option:hover {
-    background-color: var(--bg-input-hover);
-  }
-  
-  .selected {
-    background-color: var(--selected-color);
-  }
-  
-  .caret {
-    transition: transform 0.3s ease;
-    color: var(--color-text-primary);
-  }
-  
-  .caretOpen {
-    transform: rotate(180deg);
-  }
+  position: relative;
+  width: 100%;
+}
+
+.select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  gap: 1rem;
+  border: 1px solid var(--border-color);
+  padding: 0.9rem 1.25rem;
+  border-radius: 0.8rem;
+  background-color: var(--bg-input);
+  cursor: pointer;
+}
+
+.errorSelect {
+  outline: 1px solid var(--color-error) !important;
+}
+
+.select:focus {
+  outline: 1px solid var(--boder-input-focus) !important;
+}
+
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 0.8rem;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.option {
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.1s all ease;
+}
+
+.option:hover {
+  background-color: var(--bg-input-hover);
+}
+
+.selected {
+  background-color: var(--selected-color);
+}
+
+.caret {
+  transition: transform 0.3s ease;
+  color: var(--color-text-primary);
+}
+
+.caretOpen {
+  transform: rotate(180deg);
+}
