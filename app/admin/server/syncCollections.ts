@@ -1,56 +1,120 @@
-// scripts/syncCollections.ts
-
-import { PrismaSingleton } from "../infraestructure";
+import { PrismaSingleton } from "~/admin/infraestructure";
+import { validateCollection } from "../lib";
 import { loadModelCollections } from "./loadModelCollections";
 
 const prisma = PrismaSingleton.getInstance();
 
 export async function syncCollections() {
+  // Cargar colecciones desde archivos
   const modelCollections = await loadModelCollections();
-  const dbCollections = await prisma.collection.findMany();
-  console.log({ dbCollections });
+  if (modelCollections.length === 0) {
+    console.warn("⚠️ No se encontraron colecciones para sincronizar.");
+    return;
+  }
 
-  const modelSlugs = modelCollections.map((c) => c.slug);
-  const dbSlugs = dbCollections.map((c) => c.slug);
+  // Obtener colecciones de la base de datos (incluyendo soft-deleted)
+  const dbCollections = await prisma.collection.findMany({
+    where: {
+      // Incluye tanto activas como soft-deleted para manejar reactivación
+    },
+  });
+  console.log(
+    `📊 Colecciones en la base de datos: ${dbCollections
+      .map(
+        (c) => `${c.slug} (${c.fileName}${c.deletedAt ? ", soft-deleted" : ""})`
+      )
+      .join(", ")}`
+  );
 
-  // Crear nuevas
+  // Mapa de archivos existentes
+  const allModelFiles = new Set(modelCollections.map((c) => c.fileName));
+  console.log(
+    `📂 Archivos de colecciones: ${Array.from(allModelFiles).join(", ")}`
+  );
+
+  // Procesar colecciones (crear, actualizar o reactivar solo las válidas)
   for (const model of modelCollections) {
-    const exists = dbSlugs.includes(model.slug);
-    if (!exists) {
-      await prisma.collection.create({
-        data: {
-          name: model.name,
-          slug: model.slug,
-          fields: model.fields as any,
-        },
+    // Verificar si tiene slug y name válidos
+    if (!model.slug || !model.name) {
+      console.warn(
+        `⚠️ Colección en ${model.fileName}.ts no se procesará: falta slug o name.`
+      );
+      continue;
+    }
+
+    // Validar la colección con Zod
+    const result = validateCollection(model);
+    if (!result.success) {
+      console.error(
+        `❌ ERROR en la colección ${model.name} (${model.slug}, archivo: ${model.fileName}):`,
+        result.error.flatten()
+      );
+      console.log(
+        `ℹ️ Colección ${model.slug} no se procesará, pero no se eliminará (archivo: ${model.fileName}).`
+      );
+      continue;
+    }
+
+    try {
+      await prisma.$transaction(async (tx) => {
+        await tx.collection.upsert({
+          where: { fileName: model.fileName }, // Usar fileName como clave única
+          update: {
+            slug: model.slug,
+            name: model.name,
+            fields: model.fields as any,
+            isMedia: model.isMedia ?? false,
+            deletedAt: null, // Reactivar si estaba soft-deleted
+          },
+          create: {
+            slug: model.slug,
+            name: model.name,
+            fields: model.fields as any,
+            isMedia: model.isMedia ?? false,
+            fileName: model.fileName,
+            deletedAt: null, // Nueva colección activa
+          },
+        });
       });
-      console.log(`✅ Colección creada: ${model.slug}`);
+      console.log(
+        `✅ Colección sincronizada: ${model.slug} (archivo: ${model.fileName})`
+      );
+    } catch (error) {
+      console.error(
+        `❌ Error al sincronizar la colección ${model.slug} (archivo: ${model.fileName}):`,
+        error
+      );
     }
   }
 
-  // Actualizar campos (puedes mejorarlo con un comparador de `fields`)
-  for (const model of modelCollections) {
-    const db = dbCollections.find((c) => c.slug === model.slug);
-    if (db && JSON.stringify(db.fields) !== JSON.stringify(model.fields)) {
-      await prisma.collection.update({
-        where: { slug: model.slug },
-        data: {
-          name: model.name,
-          fields: model.fields as any,
-        },
-      });
-      console.log(`🔁 Colección actualizada: ${model.slug}`);
-    }
-  }
+  // Marcar como soft-deleted las colecciones cuyos archivos .ts ya no existen
+  const toSoftDelete = dbCollections
+    .filter(
+      (dbCollection) =>
+        !allModelFiles.has(dbCollection.fileName) && !dbCollection.deletedAt // Solo las no eliminadas
+    )
+    .map((c) => c.fileName);
 
-  // Eliminar las que ya no existen como archivos
-  const toDelete = dbSlugs.filter((slug) => !modelSlugs.includes(slug));
-  for (const slug of toDelete) {
-    await prisma.collection.delete({
-      where: { slug },
-    });
-    console.log(`❌ Colección eliminada: ${slug}`);
+  if (toSoftDelete.length > 0) {
+    console.log(`🗑️ Colecciones para soft delete: ${toSoftDelete.join(", ")}`);
+    for (const fileName of toSoftDelete) {
+      try {
+        await prisma.collection.update({
+          where: { fileName },
+          data: { deletedAt: new Date() },
+        });
+        console.log(`🗑️ Colección marcada como soft-deleted: ${fileName}`);
+      } catch (error) {
+        console.error(
+          `❌ Error al marcar soft delete para ${fileName}:`,
+          error
+        );
+      }
+    }
+  } else {
+    console.log("ℹ️ No hay colecciones para soft delete.");
   }
 
   console.log("✨ Sincronización de colecciones completada.");
 }
+syncCollections();

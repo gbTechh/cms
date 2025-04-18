@@ -1,5 +1,5 @@
 import styles from "./aside.module.css";
-import { Link, useLocation } from "@remix-run/react";
+import { Link, Links, useLocation } from "@remix-run/react";
 import { SiPayloadcms } from "react-icons/si";
 import { Text, WrappIcon } from "../atoms";
 import { ICollection } from "~/admin/interfaces";
@@ -16,12 +16,14 @@ export function Aside({ collections }: Props) {
     <aside className={styles.aside}>
       <div className={styles.head}>
         <div className={styles.divIcon}>
-          <WrappIcon>
-            <SiPayloadcms />
-          </WrappIcon>
+          <Link to={"collections"}>
+            <WrappIcon>
+              <SiPayloadcms />
+            </WrappIcon>
+          </Link>
         </div>
         <div>
-          <Text size="sm" color="contrast">
+          <Text size="sm" as="p" color="contrast">
             username
           </Text>
         </div>

@@ -1,0 +1,14 @@
+.card {
+  display: flex;
+  gap: 1rem;
+  min-height: 10rem;
+  padding: 2rem;
+
+  .title{
+    flex: 1;
+    font-weight: 500;
+  }
+  .icon {
+    font-size: 2rem;
+  }
+}

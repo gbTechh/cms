@@ -14,36 +14,47 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(uuid())
-  email       String    @unique
-  password    String    // Hasheada con bcrypt
-  roleId      String   
-  role        Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String // Hasheada con bcrypt
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 model Role {
-  id          String    @id @default(uuid())
-  name        String    @unique // "ADMIN", "EDITOR"
-  permissions Json      // Ej: { "pages:create": true, "posts:delete": false }
+  id          String @id @default(uuid())
+  name        String @unique // "ADMIN", "EDITOR"
+  permissions Json // Ej: { "pages:create": true, "posts:delete": false }
   users       User[]
 }
 
+enum CollectionType {
+  collection
+  global
+  page
+}
+
 model Collection {
-  id        String    @id @default(uuid())
-  slug      String    @unique // "products", "sellers"
+  id        String         @id @default(uuid())
+  slug      String         @unique // "products", "sellers"
   name      String
-  fields    Json?      // Definición de campos (como en Payload)
-  createdAt DateTime  @default(now())
+  type      CollectionType @default(collection)
+  fileName  String         @unique
+  isMedia   Boolean        @default(false)
+  fields    Json? // Definición de campos (como en Payload)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  deletedAt DateTime?
   entries   Entry[]
 }
 
 model Entry {
-  id           String      @id @default(uuid())
-  collectionId String      
-  collection   Collection  @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  data         Json        // { name: "Casa en la playa", price: 100000 }
-  createdAt    DateTime    @default(now())
+  id           String     @id @default(uuid())
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  data         Json // { name: "Casa en la playa", price: 100000 }
+  createdAt    DateTime   @default(now())
 
   // Relaciones con otras entradas
   relationshipsFrom Relationship[] @relation("FromEntry")
@@ -60,16 +71,16 @@ model Relationship {
 }
 
 model Global {
-  id        String    @id @default(uuid())
-  key       String    @unique // "site-settings", "homepage"
-  value     Json      // { "logo": "url.jpg", "footerText": "..." }
+  id    String @id @default(uuid())
+  key   String @unique // "site-settings", "homepage"
+  value Json // { "logo": "url.jpg", "footerText": "..." }
 }
 
 model FormSubmission {
-  id        String    @id @default(uuid())
-  formId    String    // ID del formulario (relacionado con Entry)
-  data      Json      // { name: "Juan", email: "j@test.com" }
-  createdAt DateTime  @default(now())
+  id        String   @id @default(uuid())
+  formId    String // ID del formulario (relacionado con Entry)
+  data      Json // { name: "Juan", email: "j@test.com" }
+  createdAt DateTime @default(now())
 }
 
 model Media {
@@ -77,5 +88,9 @@ model Media {
   url       String
   altText   String?
   mimeType  String
+  fileSize  Int?
+  width     Int?
+  height    Int?
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

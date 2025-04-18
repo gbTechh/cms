@@ -1,6 +1,6 @@
 import { ICollection } from "~/admin/interfaces";
 import styles from './entrynew.module.css'
-import { Box, Input, Spacer, Text } from "../atoms";
+import { Input, Spacer, Text } from "../atoms";
 import { useEffect, useState } from "react";
 import { Tabs, TabsProvider } from "../organisms";
 

@@ -13,6 +13,7 @@ export interface ICollection {
   id: string;
   slug: string; // "products", "sellers"
   name: string;
+  isMedia: boolean;
   fields?: IField[]; // Definición de campos (como en Payload)
   createdAt?: string;
   entries?: IEntry[];
@@ -21,6 +22,7 @@ export interface ICollectionCreate {
   slug: string; // "products", "sellers"
   name: string;
   fields: IField[]; // Definición de campos (como en Payload)
+  isMedia?: boolean;
   entries?: IEntry[];
 }
 
@@ -57,14 +59,17 @@ export interface FieldBase {
 
 /** Campos básicos */
 export interface TextField extends FieldBase {
-  type: "text" | "textarea" | "richText";
+  type: "text" | "textarea";
   maxLength?: number;
 }
-
+export interface RichTextField extends FieldBase {
+  type: "richText";
+}
 export interface NumberField extends FieldBase {
   type: "number";
   min?: number;
   max?: number;
+  step?: number;
 }
 
 export interface BooleanField extends FieldBase {
@@ -73,6 +78,7 @@ export interface BooleanField extends FieldBase {
 
 export interface DateField extends FieldBase {
   type: "date";
+  format?: "date" | "datetime";
 }
 
 export interface SelectField extends FieldBase {
@@ -88,7 +94,8 @@ export interface RelationshipField extends FieldBase {
 
 export interface UploadField extends FieldBase {
   type: "upload";
-  relationTo: string; // "media"
+  allowedTypes?: string[]; // Ej: ["image/*", "application/pdf"]
+  maxSize?: number; // En bytes
 }
 
 /** Campos avanzados */
@@ -106,6 +113,7 @@ export interface RepeaterField extends FieldBase {
 
 export type IField =
   | TextField
+  | RichTextField
   | NumberField
   | BooleanField
   | DateField

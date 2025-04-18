@@ -1,0 +1,90 @@
+.div {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    cursor: pointer;
+  }
+  .input {
+    display: none;
+  }
+
+  .wrap {
+  }
+}
+
+.title {
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.dropzone {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px dashed hsl(var(--color-btn-primary));
+
+  width: 100%;
+}
+
+.input {
+  display: none;
+}
+
+.label {
+  cursor: pointer;
+}
+
+.labelText {
+  transition: color 0.3s;
+}
+
+.labelText:hover {
+  color: #a78bfa;
+}
+
+.fileGallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 0.75rem;
+  padding: 0 1rem;
+  transition: 0.2s all ease;
+}
+.fileItem:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.filePreview {
+  height: 4rem;
+  width: 4rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.imageName {
+  flex: 1;
+  text-align: left;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}

@@ -1,14 +1,15 @@
 import { ICollectionCreate } from "~/admin/interfaces";
 
-const BlogsCollection: ICollectionCreate = {
-  name: "Blogs",
-  slug: "blogsss",
+const MediaCollection: ICollectionCreate = {
+  name: "Media",
+  slug: "media",
+  isMedia: true,
   fields: [
     {
-      name: "title",
-      type: "text",
       label: "título del blog",
+      name: "title",
       defaultValue: "Untitled",
+      type: "text",
     },
     {
       name: "content",
@@ -16,7 +17,6 @@ const BlogsCollection: ICollectionCreate = {
       label: "contenido",
     },
   ],
-  isMedia: false,
 };
 
-export default BlogsCollection;
+export default MediaCollection;

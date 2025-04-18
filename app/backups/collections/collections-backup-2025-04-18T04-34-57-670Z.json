@@ -1,0 +1,94 @@
+[
+  {
+    "id": "abf78797-0fab-4a8e-add0-8739ca2ce279",
+    "slug": "blogsss",
+    "name": "Blogs",
+    "fileName": "blogs",
+    "isMedia": false,
+    "fields": [
+      {
+        "name": "title",
+        "type": "text",
+        "label": "título del blog",
+        "defaultValue": "Untitled"
+      },
+      {
+        "name": "content",
+        "type": "richText",
+        "label": "contenido"
+      }
+    ],
+    "createdAt": "2025-04-18T03:23:50.010Z",
+    "updatedAt": "2025-04-18T04:21:00.207Z",
+    "deletedAt": null
+  },
+  {
+    "id": "53974f0c-2641-42c3-861c-c09da3e00706",
+    "slug": "categories",
+    "name": "categories",
+    "fileName": "categories",
+    "isMedia": false,
+    "fields": [
+      {
+        "name": "title",
+        "type": "text",
+        "label": "título del proyecto",
+        "defaultValue": "Untitled"
+      },
+      {
+        "name": "content",
+        "type": "richText",
+        "label": "contenido"
+      }
+    ],
+    "createdAt": "2025-04-18T03:03:31.017Z",
+    "updatedAt": "2025-04-18T04:21:00.210Z",
+    "deletedAt": null
+  },
+  {
+    "id": "31439759-de73-45ff-9b0e-ed1f06eb652b",
+    "slug": "media",
+    "name": "Media",
+    "fileName": "media",
+    "isMedia": false,
+    "fields": [
+      {
+        "name": "title",
+        "type": "text",
+        "label": "título del blog",
+        "defaultValue": "Untitled"
+      },
+      {
+        "name": "content",
+        "type": "richText",
+        "label": "contenido"
+      }
+    ],
+    "createdAt": "2025-04-18T03:03:31.020Z",
+    "updatedAt": "2025-04-18T04:21:00.213Z",
+    "deletedAt": null
+  },
+  {
+    "id": "252b621c-26dd-419a-80d1-6adf283bc4b2",
+    "slug": "proeyctos2",
+    "name": "Proyectos",
+    "fileName": "projects",
+    "isMedia": false,
+    "fields": [
+      {
+        "name": "title",
+        "type": "text",
+        "label": "título del proyecto",
+        "defaultValue": "Untitled"
+      },
+      {
+        "name": "content",
+        "type": "richText",
+        "label": "contenido"
+      }
+    ],
+    "createdAt": "2025-04-18T03:03:31.022Z",
+    "updatedAt": "2025-04-18T04:21:00.215Z",
+    "deletedAt": null
+  }
+]

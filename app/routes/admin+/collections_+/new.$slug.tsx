@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { EntryNew } from "~/admin/components";
+import { EntryNew, MediaNew } from "~/admin/components";
 import { listCollectionBySlug } from "~/admin/use_cases";
 
 export const loader = async (ctx: LoaderFunctionArgs) => {
@@ -9,5 +9,12 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
 
 export default function CollectionNewAdmin() {
   const { collection } = useLoaderData<typeof loader>();
-  return <EntryNew data={collection!} />;
+  console.log({collection})
+  return (
+    <>
+      {
+        collection?.isMedia ? (<MediaNew data={collection!} />) : (<EntryNew data={collection!}/>)
+      }
+    </>
+  );
 }
