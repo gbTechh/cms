@@ -9,7 +9,7 @@ interface FileSelectorProps  {
   onFilesSelected: (files: File[]) => void;
   maxFiles?: number;
   data?: (string | File)[];
-  label: string;
+  label?: string;
   acceptedTypes?: string[];
 }
 
@@ -118,7 +118,7 @@ export const FileSelector: React.FC<FileSelectorProps> = ({
           </Text>
         </label>
       </div>
-      <div className={styles.fileGallery}>
+      {/* <div className={styles.fileGallery}>
         {selectedFiles.map((file, index) => (
           <div key={index} className={styles.fileItem}>
             <img
@@ -140,7 +140,7 @@ export const FileSelector: React.FC<FileSelectorProps> = ({
             </button>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

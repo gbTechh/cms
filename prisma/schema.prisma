@@ -36,17 +36,26 @@ enum CollectionType {
 }
 
 model Collection {
-  id        String         @id @default(uuid())
-  slug      String         @unique // "products", "sellers"
-  name      String
-  type      CollectionType @default(collection)
-  fileName  String         @unique
-  isMedia   Boolean        @default(false)
-  fields    Json? // Definición de campos (como en Payload)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  deletedAt DateTime?
-  entries   Entry[]
+  id         String         @id @default(uuid())
+  slug       String         @unique // "products", "sellers"
+  name       String
+  type       CollectionType @default(collection)
+  fileName   String         @unique
+  isMedia    Boolean        @default(false)
+  fields     Json? // Definición de campos (como en Payload)
+  dataSingle DataSingle?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  deletedAt  DateTime?
+  entries    Entry[]
+}
+
+model DataSingle {
+  id           Int        @id @default(autoincrement())
+  collectionId String     @unique
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  slug         String     @unique // Slug editable para el frontend
+  data         Json // Datos de la página/global
 }
 
 model Entry {

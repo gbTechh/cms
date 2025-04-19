@@ -25,9 +25,9 @@
 }
 
 .dropzone {
-  padding: 1rem;
+  padding: 4rem;
   border-radius: 0.75rem;
-  border: 1px dashed hsl(var(--color-btn-primary));
+  border: 1px dashed hsl(var(--boder-input-focus-hsl));
 
   width: 100%;
 }
