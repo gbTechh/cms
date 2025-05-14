@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./text.module.css";
 
-type TextElement = keyof JSX.IntrinsicElements;
+export type TextElement = keyof JSX.IntrinsicElements;
 
 type TextType = "big" | "title" | "subtitle" | "base" | "custom";
 type TextColor =
@@ -44,6 +44,7 @@ interface TextProps extends React.HTMLAttributes<HTMLElement> {
   size?: TextSize;
   fw?: FontWeight;
   className?: string;
+  htmlFor?: string;
 }
 
 export const Text: React.FC<TextProps> = ({

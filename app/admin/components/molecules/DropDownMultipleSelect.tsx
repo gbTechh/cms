@@ -1,21 +1,19 @@
-import React, { useState, useRef, useEffect } from "react";
-import styles from "./dropdownSelect.module.css";
-import { Label, Spacer, Text } from "../atoms";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+import styles from "./dropdownmultipleselect.module.css";
+import { Input, Label, Spacer, Text } from "../atoms";
 import { BaseFieldProps } from "~/admin/interfaces";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { IoIosClose } from "react-icons/io";
-export interface OptionDropdownSelect {
-  value: string;
-  label: string;
-}
+import { OptionDropdownSelect } from "./DropDownSelect";
+
 
 interface DropdownSelectProps extends BaseFieldProps {
-  options: OptionDropdownSelect[];
+  options: OptionDropdownSelect[] | [];
   onChange: (value: any) => void;  
   value?: string;
 }
 
-export const DropdownSelect: React.FC<DropdownSelectProps> = ({
+export const DropDownMultipleSelect: React.FC<DropdownSelectProps> = ({
   options,
   onChange,
   placeholder = "Select an option",
@@ -29,12 +27,19 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
   required = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [internalValue, setInternalValue] = useState(value);
+  const [optionsState, setOptionsState] = useState<OptionDropdownSelect[] | []>(options);
+  const [internalValue, setInternalValue] = useState<OptionDropdownSelect[] | []>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownMenuRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    setInternalValue(value);
-  }, [value]);
+    if(value){
+      const newValue = optionsState.find(e => e.value === value) as OptionDropdownSelect
+      setInternalValue([newValue]);
+      removeItemById(value)
+    }
+  }, [value,options]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,8 +56,11 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  const filteredOptions = optionsState.filter((option) =>
+    option.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
       if (isOpen && dropdownRef.current && dropdownMenuRef.current) {
         const inputRect = dropdownRef.current.getBoundingClientRect();
         const calendarHeight = dropdownMenuRef.current.offsetHeight || 300; // Estimación de altura si no se calcula
@@ -65,23 +73,42 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
           dropdownMenuRef.current.style.top = '100p%';
         }
       }
-    }, [isOpen]);
+    }, [isOpen, optionsState, filteredOptions]);
 
   const handleToggle = () => setIsOpen(!isOpen);
 
   const handleSelect = (option: OptionDropdownSelect) => {
-    setInternalValue(option?.value);
+    const newValue = optionsState.find(e => e.value === option?.value) as OptionDropdownSelect
+    const filterValue = internalValue.some(e => e.value === newValue.value)
+    if(!filterValue) {
+      setInternalValue(prevItems => [...prevItems, newValue]);
+    }
+    removeItemById(option.value)
     setIsOpen(false);
+    setSearchTerm("");
   };
   const handleCliclClean = () => {
-    setInternalValue('')
+    setInternalValue([])
+    setOptionsState(options)
   }
-  const selectedOption = options?.find((opt) => opt?.value === internalValue);
 
+  const removeItemById = (value: string) => {
+    setOptionsState(prevItems => prevItems.filter(item => item.value !== value));
+  };
+
+  const handleRemoveItem = (item: OptionDropdownSelect) => {
+    setInternalValue(prevItems => prevItems.filter(e => e.value !== item.value));
+    setOptionsState(prevItems => [...prevItems, item]);
+  }
+  const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsOpen(true);
+    setSearchTerm(event.target.value);
+  }
+
+  
   console.log({internalValue})
   return (
-    <div>
-      <input type="hidden" name={name} value={value} />
+    <div>      
       <Label
         required={required}
         label={label}
@@ -90,13 +117,21 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
         <div
           className={`${error && styles.errorSelect} ${styles.select}`}
           onClick={handleToggle}
-        >
-          <Text as="span" size="14" className={styles.text}>
-            {selectedOption ? selectedOption.label : placeholder}
-          </Text>
+        > 
+          <div className={styles.wrapSelected}>
+          {
+            internalValue.map(e => (
+              <Text onClick={() => handleRemoveItem(e)} key={e?.value} as="span" size="input" className={styles.spanText}>
+                {e?.label}
+              </Text>
+            ))
+          }
+          <Input autoComplete="off" autoCorrect="off" inputClassName={styles.inputSearch} value={searchTerm} onChange={handleSearchInput} />
+          </div>
+
           <div className={styles.divBtns}>           
             {
-              internalValue !== '' ? (<button
+              internalValue.length > 0 ? (<button
                 type="button"
                 className={styles.btnClean}
                 onClick={handleCliclClean}
@@ -112,17 +147,23 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
         </div>
         {isOpen && (
           <div className={styles.options} ref={dropdownMenuRef}>
-            {options?.map((option) => (
+            {filteredOptions.map((option) => (
               <div
                 key={option.value}
-                className={`${styles.option} ${
-                  internalValue === option.value ? styles.selected : ""
-                }`}
+                className={`${styles.option}`}
                 onClick={() => handleSelect(option)}
               >
                 <Text size="input">{option.label}</Text>
               </div>
             ))}
+            {
+              filteredOptions.length <= 0 ? ( <div
+                className={`${styles.option}`}
+               
+              >
+                <Text size="input">No hay opciones</Text>
+              </div>) : (<></>)
+            }
           </div>
         )}
       </div>

@@ -2,23 +2,36 @@ import { ICollection } from "~/admin/interfaces";
 import styles from './entrynew.module.css'
 import { Input, Spacer, Text } from "../atoms";
 import { useEffect, useState } from "react";
-import { Tabs, TabsProvider } from "../organisms";
+import { FieldFactory, Tabs, TabsProvider } from "../organisms";
+import { Descendant } from "slate";
 
 interface Props {
   data: ICollection;
 }
 
+const defaultRichTextValue: Descendant[] = [
+  {
+    children: [{ text: '' }],
+  },
+];
 
 export function EntryNew({ data }: Props) {
   const [titleState, setTitleState] = useState<string>("[Untitled]")
-
+  const { fields } = data
   useEffect(() => {
     if(titleState === "") {
       setTitleState("[Untitled]")
     }
   }, [titleState])
-  
+ 
 
+  const [formData, setFormData] = useState<{ [key: string]: any }>({});
+  const handleChange = (name: string, value: any) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  console.log({formData})
+ 
   return (
     <div className={styles.container}>
      <div className={styles.wrapTitle}>
@@ -36,12 +49,22 @@ export function EntryNew({ data }: Props) {
                 onChange={(ev) => {setTitleState(ev.target.value)}}
               />
           </div>
+          <Spacer y={2}/>
           <div className={styles.tabs}>
             <TabsProvider>
               <Tabs>
                 <Tabs.Item text="Contenido">
                   <div className={styles.wrap}>
-                    <Text>asdsad</Text>
+                    {
+                      fields?.map(field => (
+                        <FieldFactory
+                          key={field.name}
+                          field={field}
+                          value={formData[field.name] || (field.defaultValue ?? '')}
+                          onChange={(value: any) => handleChange(field.name, value)}
+                        />
+                      ))
+                    }
                   </div>
                 </Tabs.Item>
                 <Tabs.Item text="Meta">

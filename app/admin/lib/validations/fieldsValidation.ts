@@ -12,6 +12,7 @@ const BaseFieldSchema = z.object({
 const TextFieldSchema = BaseFieldSchema.extend({
   type: z.literal("text"),
   maxLength: z.number().optional(),
+  defaultValue: z.string().optional(),
 });
 
 const TextareaFieldSchema = BaseFieldSchema.extend({
@@ -29,10 +30,16 @@ const NumberFieldSchema = BaseFieldSchema.extend({
   min: z.number().optional(),
   max: z.number().optional(),
   step: z.number().optional(),
+  defaultValue: z.number().optional(),
 });
 
 const CheckboxFieldSchema = BaseFieldSchema.extend({
   type: z.literal("checkbox"),
+  defaultValue: z.boolean().optional(),
+});
+const ToggleFieldSchema = BaseFieldSchema.extend({
+  type: z.literal("toggle"),
+  defaultValue: z.boolean().optional(),
 });
 
 const DateFieldSchema = BaseFieldSchema.extend({
@@ -40,9 +47,26 @@ const DateFieldSchema = BaseFieldSchema.extend({
   format: z.enum(["date", "datetime"]).optional(),
 });
 
+const OptionDropdownSelectSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+  // Agrega otras propiedades si las tienes en tu interfaz
+});
+
 const SelectFieldSchema = BaseFieldSchema.extend({
   type: z.literal("select"),
-  options: z.array(z.string()).min(1, "Se requiere al menos una opción"),
+  hasMany: z.boolean().optional(),
+  options: z
+    .array(OptionDropdownSelectSchema)
+    .min(1, "Se requiere al menos una opción"),
+  defaultValue: z.string().optional(),
+});
+const RadioFieldSchema = BaseFieldSchema.extend({
+  type: z.literal("radio"),
+  options: z
+    .array(OptionDropdownSelectSchema)
+    .min(1, "Se requiere al menos una opción"),
+  defaultValue: z.string().optional(),
 });
 
 const RelationshipFieldSchema = BaseFieldSchema.extend({
@@ -93,6 +117,8 @@ const FieldSchema: z.ZodType = z.lazy(() =>
     RichTextFieldSchema,
     NumberFieldSchema,
     CheckboxFieldSchema,
+    RadioFieldSchema,
+    ToggleFieldSchema,
     DateFieldSchema,
     SelectFieldSchema,
     RelationshipFieldSchema,

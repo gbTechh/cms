@@ -7,7 +7,7 @@ const ProjectsCollection: ICollectionCreate = {
     {
       label: "título del proyecto",
       name: "title",
-      defaultValue: "Untitled",
+      defaultValue: "",
       type: "text",
     },
     {

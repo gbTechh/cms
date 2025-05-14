@@ -11,10 +11,10 @@ export function Spacer({ x = 0, y = 0, ...props }: Props) {
   return (
     <div
       style={{
-        marginLeft: `${x ? `calc(${x}rem / 2.5)` : `0px`}`,
-        marginRight: `${x ? `calc(${x}rem / 2.5)` : `0px`}`,
-        marginTop: `${y ? `calc(${y}rem / 2.5)` : `0px`}`,
-        marginBottom: `${y ? `calc(${y}rem / 2.5)` : `0px`}`,
+        marginLeft: `${x ? `calc(${x}rem / 2)` : `0px`}`,
+        marginRight: `${x ? `calc(${x}rem / 2)` : `0px`}`,
+        marginTop: `${y ? `calc(${y}rem / 2)` : `0px`}`,
+        marginBottom: `${y ? `calc(${y}rem / 2)` : `0px`}`,
       }}
       {...props}
       className={styles.spacer}

@@ -1,0 +1,59 @@
+.ul {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  position: relative;
+  font-size: 0.9rem;
+}
+
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.customRadio {
+  position: relative;
+  height: 2.2rem;
+  width: 2.2rem;
+  background-color: var(--bg-input);
+  border: 2px solid var(--border-input);
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.radioInput:checked ~ .customRadio {
+  background-color: var(--bg-input-active);
+  border-color: var(--border-input);
+}
+
+.customRadio:after {
+  content: "";
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+}
+
+.radioInput:checked ~ .customRadio:after {
+  display: block;
+}
+
+.radioOption:hover .customRadio {
+  border-color: var(--border-input);
+  background-color: var(--bg-input-active);
+}

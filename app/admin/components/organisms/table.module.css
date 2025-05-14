@@ -52,7 +52,7 @@
   }
 }
 .search:focus {
-  border: 1px solid var(--boder-input-focus);
+  border: 1px solid var(--border-input-focus);
 }
 
 

@@ -1,19 +1,13 @@
 .container {
   display: flex;
-}
-
-.stackedContainer {
   flex-direction: column;
+
 }
 
-.inlineContainer {
-  flex-direction: row-reverse;
-  justify-content: flex-end;
-  align-items: center;
-}
 
 .label {
   text-transform: capitalize;
+  margin-bottom: 1rem;
 }
 
 .label-checkbox,
@@ -23,14 +17,21 @@
 
 .label-date,
 .label-text,
+.label-textarea,
 .label-password,
 .label-email,
 .label-number {
   margin-bottom: 1rem;
 }
 
-.input {
+.textarea {
+  resize: none;
+  field-sizing: content;
+  max-height: 300px;
+  min-height: 80px;
+  width: 100%;
   outline: none;
+  border-width: 1px;
   font-size: 1.4rem;
   font-family: var(--font-base);
   color: var(--color-text-primary);
@@ -38,18 +39,20 @@
   padding: 1.2rem 1.25rem;
   border-radius: 0.8rem;
   background-color: var(--bg-input);
-  border: 1px solid var(--border-input);
+  border-color: none;
+  border: none;
+  outline: 1px solid var(--border-input) !important;
 }
 
-.input:focus {
+.textarea:focus {
   outline: 1px solid var(--border-input-focus) !important;
 }
 
-.inputError:focus {
+.textareaError:focus {
   outline: 1px solid var(--border-input-error) !important;
 }
 
-.inputError {
+.textareaError {
   border-color: none;
   border: none;
   outline: 1px solid var(--border-input-error) !important;
@@ -60,7 +63,11 @@
   padding: 0 0.25rem;
   margin-top: 0.75rem;
 }
-
+.length{
+  width: 100%;
+  text-align: right;
+  padding-top: 1rem;
+}
 @media (min-width: 768px) {
   .input {
     font-size: rem;

@@ -1,0 +1,78 @@
+.checkboxWrapper .checkbox {
+  --bg: #101010;
+  --brdr: var(--border-input);
+  --brdr-actv: var(--border-input);
+  --brdr-hovr: var(--border-input);
+  --dur: calc((var(--size, 2)/2) * 0.6s);
+  display: inline-block;
+  width: 2rem;
+  position: relative;
+}
+.checkboxWrapper .checkbox:after {
+  content: "";
+  width: 100%;
+  padding-top: 100%;
+  display: block;
+}
+.checkboxWrapper .checkbox > * {
+  position: absolute;
+}
+.checkboxWrapper .checkbox input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  background-color: var(--bg);
+  border-radius: calc(var(--size, 1) * 4px);
+  border: calc(var(--newBrdr, var(--size, 1)) * 1px) solid;
+  color: var(--newBrdrClr, var(--brdr));
+  outline: none;
+  margin: 0;
+  padding: 0;
+  transition: all calc(var(--dur) / 3) linear;
+}
+.checkboxWrapper .checkbox input:hover,
+.checkboxWrapper .checkbox input:checked {
+  --newBrdr: calc(var(--size, 1) * 2);
+}
+.checkboxWrapper .checkbox input:hover {
+  --newBrdrClr: var(--brdr-hovr);
+}
+.checkboxWrapper .checkbox input:checked {
+  --newBrdrClr: var(--brdr-actv);
+  transition-delay: calc(var(--dur) /1.3);
+}
+.checkboxWrapper .checkbox input:checked + svg {
+  --dashArray: 16 93;
+  --dashOffset: 109;
+}
+.checkboxWrapper .checkbox svg {
+  fill: none;
+  left: 0;
+  pointer-events: none;
+  stroke: var(--stroke, var(--border-active));
+  stroke-dasharray: var(--dashArray, 93);
+  stroke-dashoffset: var(--dashOffset, 94);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+  top: 0;
+  transition: stroke-dasharray var(--dur), stroke-dashoffset var(--dur);
+}
+.checkboxWrapper .checkbox svg,
+.checkboxWrapper .checkbox input {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+

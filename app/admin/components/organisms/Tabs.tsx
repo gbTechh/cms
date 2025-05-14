@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import classNames from "classnames";
 import styles from "./tabs.module.css";
-import { Text } from "../atoms";
+import { Spacer, Text } from "../atoms";
 
 interface TabsProps {
   children: ReactElement<TabsItemProps> | ReactElement<TabsItemProps>[];

@@ -29,7 +29,17 @@
   margin-bottom: 1rem;
 }
 
+.wrapInput{
+  border-radius: 0.8rem;
+  background-color: var(--bg-input);
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--border-input);
+}
+
 .input {
+  flex:1;
+  height: 100%;
   outline: none;
   font-size: 1.4rem;
   font-family: var(--font-base);
@@ -37,12 +47,13 @@
   font-weight: 400;
   padding: 1.2rem 1.25rem;
   border-radius: 0.8rem;
-  background-color: var(--bg-input);
-  border: 1px solid var(--border-input);
+  background: transparent;
+  border: 1px solid transparent;
+  overflow:hidden;
 }
 
-.input:focus {
-  outline: 1px solid var(--border-input-focus) !important;
+.input:focus{
+  border: 1px solid var(--border-input-focus) !important;
 }
 
 .inputError:focus {
@@ -59,6 +70,36 @@
 .errorText {
   padding: 0 0.25rem;
   margin-top: 0.75rem;
+}
+
+.input[type="number"]::-webkit-inner-spin-button,
+.input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Para Firefox */
+.input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.buttonsContainer{
+  display: flex;
+
+}
+.stepButton{
+  cursor: pointer;
+  font-size: 2rem;
+  aspect-ratio: 1/1;
+  width: 44px;
+  appearance: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 0px solid transparent;
+  border-left: 1px solid var(--border-input);
+}
+.stepButton:hover {
+  background: var(--bg-input-hover);
 }
 
 @media (min-width: 768px) {

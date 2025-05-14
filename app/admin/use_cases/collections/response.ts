@@ -29,7 +29,7 @@ export class CollectionResponse {
 }
 
 export class EntryResponse {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   id_collection: number;

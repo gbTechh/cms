@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { IEntry } from "./entry";
+import { OptionDropdownSelect } from "~/admin/components";
 
 type JsonValue =
   | string
@@ -34,23 +35,6 @@ export interface ICollectionError {
   entries?: IEntry[];
 }
 export interface FieldBase {
-  type:
-    | "text"
-    | "textarea"
-    | "richText"
-    | "number"
-    | "boolean"
-    | "date"
-    | "upload"
-    | "select"
-    | "relationship"
-    | "group"
-    | "repeater"
-    | "json"
-    | "code"
-    | "radio"
-    | "point"
-    | "hidden";
   label: string;
   name: string; // Clave única del campo
   required?: boolean;
@@ -61,35 +45,52 @@ export interface FieldBase {
 export interface TextField extends FieldBase {
   type: "text" | "textarea";
   maxLength?: number;
+  defaultValue?: string;
 }
 export interface RichTextField extends FieldBase {
   type: "richText";
+  defaultValue?: string;
 }
 export interface NumberField extends FieldBase {
   type: "number";
   min?: number;
   max?: number;
   step?: number;
+  defaultValue?: number;
 }
 
-export interface BooleanField extends FieldBase {
-  type: "boolean";
+export interface CheckBox extends FieldBase {
+  type: "checkbox";
+  defaultValue?: boolean;
+}
+export interface Toggle extends FieldBase {
+  type: "toggle";
+  defaultValue?: boolean;
 }
 
 export interface DateField extends FieldBase {
   type: "date";
   format?: "date" | "datetime";
+  defaultValue?: string;
 }
 
 export interface SelectField extends FieldBase {
-  type: "select" | "radio";
-  options: string[]; // ["Opción 1", "Opción 2"]
+  type: "select";
+  hasMany?: boolean;
+  options: OptionDropdownSelect[]; // ["Opción 1", "Opción 2"]
+  defaultValue?: string;
+}
+export interface RadioButton extends FieldBase {
+  type: "radio";
+  options: OptionDropdownSelect[]; // ["Opción 1", "Opción 2"]
+  defaultValue?: string;
 }
 
 export interface RelationshipField extends FieldBase {
   type: "relationship";
   relationTo: string; // "users", "posts", etc.
   multiple?: boolean;
+  defaultValue?: string;
 }
 
 export interface UploadField extends FieldBase {
@@ -115,10 +116,12 @@ export type IField =
   | TextField
   | RichTextField
   | NumberField
-  | BooleanField
+  | CheckBox
+  | RadioButton
   | DateField
   | SelectField
   | RelationshipField
   | UploadField
   | GroupField
+  | Toggle
   | RepeaterField;

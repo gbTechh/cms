@@ -1,0 +1,111 @@
+.container {
+  width: 100%;
+  position: relative;
+}
+.wrap {
+  display: flex;
+  width: 100%;
+}
+
+.inputDiv {
+  width: 100%;
+  flex:1; 
+}
+
+.input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+/* Ocultar el ícono de calendario en navegadores WebKit (Chrome, Safari, Edge) */
+.input::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Asegurar que no se muestre el ícono en Firefox */
+.input::-moz-calendar-picker-indicator {
+  display: none;
+}
+
+/* Ocultar el ícono en Edge (versiones antiguas) */
+.input::-ms-clear {
+  display: none;
+}
+
+/* Opcional: Asegurar que el input no tenga otros elementos nativos (como flechas) */
+.input::-webkit-inner-spin-button,
+.input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dropdown {
+  border-radius: 0.75rem;
+  margin-top: 1rem;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+  padding: 8px;
+}
+.btnOpenCalendar{
+  appearance: none;
+  background: var(--bg-input);
+  border-radius: 0 0.75rem 0.75rem 0;
+  border: 1px solid var(--border-input);
+  border-left: none; 
+  width: 44px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 1.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btnCloseCalendar{
+  appearance: none;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-left: none; 
+  width: 44px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btnOpenCalendar:hover {
+  background: var(--bg-input-hover);
+}
+
+.button {
+  appearance: none;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  font-size: 2rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+}
+.button:hover {
+  background: #353535 !important;
+}
+
+.btnDate{
+  padding: 1px;
+  aspect-ratio: 1/1;
+  border: 1px solid #353535; 
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+.btnDate:hover {
+  background: #353535 !important;
+}

@@ -5,8 +5,10 @@ import styles from "./input.module.css";
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
+  inputClassName?: string;
   labelClassName?: string;
   error?: string | null;
+  required?: boolean;
   labelColor?:
     | "black"
     | "primary"
@@ -38,11 +40,13 @@ export const Input = forwardRef<HTMLInputElement, Props>(
       label = "",
       name,
       className = "",
+      inputClassName = "",
       labelClassName = "",
       labelColor = "primary",
       labelSize = "sm",
       error = "",
       labelFw = "normal",
+      required = false,
       ...props
     }: Props,
     ref: Ref<HTMLInputElement>
@@ -67,6 +71,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
       styles.input,
       error ? styles.inputError : "",
       styles[`input-${type}`],
+      inputClassName
     ].join(" ");
 
 
@@ -76,10 +81,11 @@ export const Input = forwardRef<HTMLInputElement, Props>(
           <label htmlFor={idInput} className={labelClasses}>
             <Text color={labelColor} size={labelSize} type="title" fw={labelFw}>
               {label}
+              {required ? <span className={styles.required}>*</span> : (<></>)}
             </Text>
           </label>
         )}
-
+        
         <input
           {...props}
           ref={ref}
