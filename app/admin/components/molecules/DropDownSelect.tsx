@@ -29,12 +29,17 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
   required = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalValue, setInternalValue] = useState<string>();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownMenuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     setInternalValue(value);
   }, [value]);
+
+  useEffect(() => {
+    onChange(internalValue)
+  }, [internalValue, value])
+  
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

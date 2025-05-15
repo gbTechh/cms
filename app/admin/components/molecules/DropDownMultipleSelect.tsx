@@ -126,7 +126,14 @@ export const DropDownMultipleSelect: React.FC<DropdownSelectProps> = ({
               </Text>
             ))
           }
-          <Input autoComplete="off" autoCorrect="off" inputClassName={styles.inputSearch} value={searchTerm} onChange={handleSearchInput} />
+          <Input 
+            autoComplete="off"
+            autoCorrect="off" 
+            inputClassName={styles.inputSearch} 
+            value={searchTerm} 
+            onChange={handleSearchInput}
+            placeholder="Busca o selecciona una opcion"
+          />
           </div>
 
           <div className={styles.divBtns}>           

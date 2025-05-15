@@ -2,7 +2,7 @@ import { ICollectionCreate } from "~/admin/interfaces";
 
 const BlogsCollection: ICollectionCreate = {
   name: "Blogs",
-  slug: "blogsss",
+  slug: "blogs",
   fields: [
     {
       name: "title",

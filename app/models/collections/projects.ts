@@ -91,6 +91,31 @@ const ProjectsCollection: ICollectionCreate = {
       ],
       defaultValue: "website",
     },
+    {
+      name: 'responses',
+      label: 'Respuestas',
+      type: 'array', // Esto sería reemplazado por CustomArrayField
+      fields: [
+        { name: 'answer', type: 'text', label: 'Respuesta', required: true },
+        { name: 'pregunta', type: 'text', label: 'Pregunta', required: true },
+        { name: 'selection', type: 'select', label: "Tipo",
+          options: [
+            { label: "Sitio Web", value: "website" },
+            { label: "GitHub", value: "github" },
+            { label: "Documentación", value: "docs" },
+            { label: "Demo", value: "demo" },
+            { label: "Otro", value: "other" },
+          ]
+          , required: true
+         },
+         { name: 'aaaa', type: 'array', label: 'arraysito', fields: [
+          {name: 'hola', type: 'text', label: 'saludo'}
+         ]}
+      ],
+      minItems: 1,
+      maxItems: 3,
+      required: true,
+    },
   ],
 };
 

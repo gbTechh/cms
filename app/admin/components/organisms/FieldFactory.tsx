@@ -4,28 +4,30 @@ import { Checkbox, Input, InputNumber, RadioButton, TextArea, Toggle } from '../
 import styles from "./fieldFactory.module.css";
 import RichTextEditor from '../molecules/RichTextEditor';
 import { DatePicker, DropDownMultipleSelect, DropdownSelect } from '../molecules';
+import { ArrayField } from './ArrayField';
 
 interface FieldProps {
   field: IField;
+  name?: string;
   value?: any;
   onChange: (value: any) => void;
 }
 
 const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
-  text: ({ field, value, onChange }) => (
+  text: ({ field, name, value, onChange }) => (
     <Input
       type="text"
       label={field.label}
-      name={field.name}
+      name={name ?? field.name}
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
       required={field.required}
       placeholder={field.label}
     />
   ),
-  textarea: ({ field, value, onChange }) => (
+  textarea: ({ field, name, value, onChange }) => (
     <TextArea
-      name={field.name}
+      name={name ?? field.name}
       label={field.label}
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
@@ -33,11 +35,11 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
       placeholder={field.label}
     />
   ),
-  number: ({ field, value, onChange }) => (
+  number: ({ field, name, value, onChange }) => (
     <InputNumber
       type='text'
       label={field.label}
-      name={field.name}
+      name={name ?? field.name}
       value={value || ''}
       onChange={(e) => onChange(Number(e.target.value))}
       required={field.required}
@@ -47,30 +49,30 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
       step={(field as any).step}
     />    
   ),
-  toggle: ({ field, value, onChange }) => (
+  toggle: ({ field, name, value, onChange }) => (
       <Toggle
         label={field.label}
-        name={field.name}
+        name={name ?? field.name}
         value={value} // Valor controlado desde el padre
         onChange={(e) => onChange(e.target.checked)}
       />
   ),
-  checkbox: ({ field, value, onChange }) => (
+  checkbox: ({ field, name, value, onChange }) => (
       <Checkbox
         label={field.label}
-        name={field.name}
+        name={name ?? field.name}
         isChecked={value} // Valor controlado desde el padre
         onChange={(e) => onChange(e.target.checked)}
       />
   ),
-  radio: ({ field, value, onChange }) => {
+  radio: ({ field, name, value, onChange }) => {
     // Verifica que el campo sea de tipo SelectField
     if (field.type !== 'radio') return null;
     
     return (
       <RadioButton
         options={field.options} // Ahora TypeScript sabe que field es SelectField
-        name={field.name}
+        name={name ?? field.name}
         label={field.label}
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
@@ -84,17 +86,17 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
   //     onChange={onChange}
   //   />
   // ),
-  date: ({ field, value, onChange }) => (
+  date: ({ field, name, value, onChange }) => (
     <DatePicker
       label={field.label}
-      name={field.name}
+      name={name ?? field.name}
       value={value}
       onChange={onChange}
       required={field.required}
       formatType={(field as any).format}
     />
   ),
-  select: ({ field, value, onChange }) => {
+  select: ({ field, name, value, onChange }) => {
     // Verifica que el campo sea de tipo SelectField
     if (field.type !== 'select') return null;
     
@@ -104,28 +106,43 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
           field.hasMany ? 
           (<DropDownMultipleSelect
             options={field.options} // Ahora TypeScript sabe que field es SelectField
-            name={field.name}
+            name={name ?? field.name}
             label={field.label}
             value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(value) => onChange(value)}
             required={field.required}
           />) : 
           (<DropdownSelect
             options={field.options} // Ahora TypeScript sabe que field es SelectField
-            name={field.name}
+            name={name ?? field.name}
             label={field.label}
             value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(value) => onChange(value)}
             required={field.required}
           />)
         }
       </>
     );
   },
-  upload: ({ field, value, onChange }) => (
+  array: ({ field, name, value, onChange}) => {
+    if (field.type !== 'array') return null;
+
+    return (
+      <ArrayField 
+        fields={field.fields}
+        label={field.label}
+        name={name ?? field.name}
+        min={field.minItems}
+        max={field.maxItems}
+        required={field.required}
+        
+      />
+    )
+  },
+  upload: ({ field, name, value, onChange }) => (
     <input
       type="file"
-      name={field.name}
+      name={name ?? field.name}
       onChange={(e) => onChange(e.target.files?.[0])}
       required={field.required}
       accept={(field as any).allowedTypes?.join(',')}
@@ -134,12 +151,11 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
   // Para relationship, group, repeater, etc., los implementaremos más adelante
 };
 
-export const FieldFactory: React.FC<FieldProps> = ({ field, value = "", onChange }) => {
+export const FieldFactory: React.FC<FieldProps> = ({ field, name, value = "", onChange }) => {
   const Component = fieldComponents[field.type] || fieldComponents['text'];
-  console.log('field:', {field});
   return (
     <div className={styles.component}>
-      <Component field={field} value={value } onChange={onChange} />
+      <Component field={field} value={value } name={name} onChange={onChange} />
     </div>
   );
 };

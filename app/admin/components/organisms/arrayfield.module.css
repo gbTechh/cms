@@ -1,0 +1,15 @@
+.btnAdd {
+  font-size: 1.3rem;
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  gap: 0.5rem;
+
+  .icon {
+    font-size: 2rem;
+  }
+}

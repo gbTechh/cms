@@ -105,8 +105,8 @@ export interface GroupField extends FieldBase {
   fields: IField[];
 }
 
-export interface RepeaterField extends FieldBase {
-  type: "repeater";
+export interface ArrayField extends FieldBase {
+  type: "array";
   fields: IField[];
   minItems?: number;
   maxItems?: number;
@@ -124,4 +124,4 @@ export type IField =
   | UploadField
   | GroupField
   | Toggle
-  | RepeaterField;
+  | ArrayField;

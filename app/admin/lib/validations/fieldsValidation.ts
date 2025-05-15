@@ -134,6 +134,8 @@ const FieldSchema: z.ZodType = z.lazy(() =>
 ArrayFieldSchema = BaseFieldSchema.extend({
   type: z.literal("array"),
   fields: z.array(FieldSchema),
+  maxItems: z.number().optional(),
+  minItems: z.number().optional(),
 });
 
 GroupFieldSchema = BaseFieldSchema.extend({
