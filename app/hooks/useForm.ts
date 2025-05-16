@@ -1,21 +1,31 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
-// interface IData {
-//   [key: string]: string
-// }
+type OnChangeInput =
+  | ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  | { name: string; value: any };
 
-// type Data<T> = (formData: T) => IData
-
-export const useForm = <T>(initState: T) => {
+export const useForm = <T extends Record<string, any>>(initState: T) => {
   const [formData, setFormData] = useState(initState);
 
-  const onChange = (
-    ev: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [ev.target.name]: ev.target.value,
-    }));
+  const onChange = (input: OnChangeInput) => {
+    // Manejar ChangeEvent
+    if ("target" in input) {
+      setFormData((prev) => ({
+        ...prev,
+        [input.target.name]: input.target.value,
+      }));
+    }
+    // Manejar objeto { name, value }
+    else {
+      const { name, value } = input;
+      console.log({ input });
+      if (name) {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
+    }
   };
 
   const changeData = (row: string, value: string) => {
@@ -28,12 +38,6 @@ export const useForm = <T>(initState: T) => {
   const resetForm = () => {
     setFormData({ ...initState });
   };
-
-  useEffect(() => {
-    if (JSON.stringify(initState) !== JSON.stringify(formData)) {
-      setFormData(initState);
-    }
-  }, [initState]);
 
   return {
     ...formData,

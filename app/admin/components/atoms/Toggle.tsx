@@ -5,7 +5,7 @@ import { BaseFieldProps } from "~/admin/interfaces";
 
 interface Props extends BaseFieldProps {
   value?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: any) => void;
 }
 
 export function Toggle({
@@ -48,7 +48,7 @@ export function Toggle({
           name={name}
           className={styles.srOnly}
           checked={value}
-          onChange={onChange}
+          onChange={(ev) => onChange({name, value: ev.target.checked})}
         />
         <div
           className={`${styles.toggleBackground} ${

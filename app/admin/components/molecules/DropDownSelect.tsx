@@ -11,7 +11,7 @@ export interface OptionDropdownSelect {
 
 interface DropdownSelectProps extends BaseFieldProps {
   options: OptionDropdownSelect[];
-  onChange: (value: any) => void;  
+  onChange: (value?: any) => void;  
   value?: string;
 }
 
@@ -32,14 +32,11 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
   const [internalValue, setInternalValue] = useState<string>();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownMenuRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setInternalValue(value);
   }, [value]);
 
-  useEffect(() => {
-    onChange(internalValue)
-  }, [internalValue, value])
-  
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -77,13 +74,15 @@ export const DropdownSelect: React.FC<DropdownSelectProps> = ({
   const handleSelect = (option: OptionDropdownSelect) => {
     setInternalValue(option?.value);
     setIsOpen(false);
+    onChange({name, value: option?.value})
   };
   const handleCliclClean = () => {
     setInternalValue('')
+    onChange({name, value: ''})
+
   }
   const selectedOption = options?.find((opt) => opt?.value === internalValue);
 
-  console.log({internalValue})
   return (
     <div>
       <input type="hidden" name={name} value={value} />

@@ -74,12 +74,22 @@ export interface DateField extends FieldBase {
   defaultValue?: string;
 }
 
-export interface SelectField extends FieldBase {
+interface SelectSingleField extends FieldBase {
   type: "select";
-  hasMany?: boolean;
-  options: OptionDropdownSelect[]; // ["Opción 1", "Opción 2"]
+  hasMany?: false;
+  options: OptionDropdownSelect[];
   defaultValue?: string;
 }
+
+interface SelectMultipleField extends FieldBase {
+  type: "select";
+  hasMany: true;
+  options: OptionDropdownSelect[];
+  defaultValue?: string[];
+}
+
+export type SelectField = SelectSingleField | SelectMultipleField;
+
 export interface RadioButton extends FieldBase {
   type: "radio";
   options: OptionDropdownSelect[]; // ["Opción 1", "Opción 2"]

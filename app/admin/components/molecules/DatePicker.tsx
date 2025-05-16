@@ -11,7 +11,7 @@ interface DatePickerProps {
   label: string;
   name: string;
   value: string | undefined;
-  onChange: (value: string) => void;
+  onChange: (value: any) => void;
   required?: boolean;
   formatType?: 'date' | 'datetime'; // De tu interfaz DateField
 }
@@ -79,10 +79,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({ label, name, value, onCh
     if (isValid(parsedDate)) {
       setSelectedDate(parsedDate);
       setCurrentDate(parsedDate);
-      onChange(format(parsedDate, 'yyyy-MM-dd'));
+      onChange({name, value: format(parsedDate, 'yyyy-MM-dd')});
     } else {
       setSelectedDate(null);
-      onChange('');
+      onChange({name, value: ''});
     }
   };
 
@@ -91,7 +91,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ label, name, value, onCh
     setSelectedDate(date);
     setCurrentDate(date);
     setIsCalendarOpen(false);
-    onChange(format(date, 'yyyy-MM-dd'));
+    onChange({name, value: format(date, 'yyyy-MM-dd')});
   };
 
   // Navegar entre meses

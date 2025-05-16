@@ -30,6 +30,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     | "extrabold"
     | "black"
     | "extrablack";
+  onChange?: (ev: any) => void
 }
 
 export const Input = forwardRef<HTMLInputElement, Props>(
@@ -47,6 +48,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
       error = "",
       labelFw = "normal",
       required = false,
+      onChange,
       ...props
     }: Props,
     ref: Ref<HTMLInputElement>
@@ -93,6 +95,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
           name={name}
           type={type}
           placeholder={placeholder}
+          onChange={onChange}
           className={inputClasses}
         />
         {error && (

@@ -55,12 +55,23 @@ const OptionDropdownSelectSchema = z.object({
 
 const SelectFieldSchema = BaseFieldSchema.extend({
   type: z.literal("select"),
-  hasMany: z.boolean().optional(),
+  hasMany: z.boolean().optional().default(false),
   options: z
     .array(OptionDropdownSelectSchema)
     .min(1, "Se requiere al menos una opción"),
-  defaultValue: z.string().optional(),
+  defaultValue: z
+    .unknown()
+    .optional()
+    .transform((val, ctx) => {
+      const hasMany = (ctx as any).hasMany;
+
+      if (hasMany) {
+        return Array.isArray(val) ? val : val !== undefined ? [val] : undefined;
+      }
+      return Array.isArray(val) ? val[0] : val;
+    }),
 });
+
 const RadioFieldSchema = BaseFieldSchema.extend({
   type: z.literal("radio"),
   options: z

@@ -30,7 +30,7 @@ export function Checkbox({
             name={name}
             className={styles.srOnly}
             checked={isChecked}
-            onChange={onChange}
+            onChange={(ev) => onChange({name, value: ev.target.checked})}
           />
           <svg>
             <use xlinkHref="#checkbox" className={styles.checkbox}></use>

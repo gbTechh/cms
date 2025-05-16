@@ -20,7 +20,7 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
       label={field.label}
       name={name ?? field.name}
       value={value || ''}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={onChange}
       required={field.required}
       placeholder={field.label}
     />
@@ -30,7 +30,7 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
       name={name ?? field.name}
       label={field.label}
       value={value || ''}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={onChange}
       required={field.required}
       placeholder={field.label}
     />
@@ -41,7 +41,7 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
       label={field.label}
       name={name ?? field.name}
       value={value || ''}
-      onChange={(e) => onChange(Number(e.target.value))}
+      onChange={onChange}
       required={field.required}
       placeholder={field.label}
       min={(field as any).min}
@@ -50,20 +50,20 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
     />    
   ),
   toggle: ({ field, name, value, onChange }) => (
-      <Toggle
-        label={field.label}
-        name={name ?? field.name}
-        value={value} // Valor controlado desde el padre
-        onChange={(e) => onChange(e.target.checked)}
-      />
+    <Toggle
+      label={field.label}
+      name={name ?? field.name}
+      value={value} // Valor controlado desde el padre
+      onChange={onChange}
+    />
   ),
   checkbox: ({ field, name, value, onChange }) => (
-      <Checkbox
-        label={field.label}
-        name={name ?? field.name}
-        isChecked={value} // Valor controlado desde el padre
-        onChange={(e) => onChange(e.target.checked)}
-      />
+    <Checkbox
+      label={field.label}
+      name={name ?? field.name}
+      isChecked={value} // Valor controlado desde el padre
+      onChange={onChange}
+    />
   ),
   radio: ({ field, name, value, onChange }) => {
     // Verifica que el campo sea de tipo SelectField
@@ -75,7 +75,7 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
         name={name ?? field.name}
         label={field.label}
         value={value || ''}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         required={field.required}
       />
     );
@@ -108,7 +108,7 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
             options={field.options} // Ahora TypeScript sabe que field es SelectField
             name={name ?? field.name}
             label={field.label}
-            value={value || ''}
+            value={value || []}
             onChange={(value) => onChange(value)}
             required={field.required}
           />) : 
@@ -116,7 +116,7 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
             options={field.options} // Ahora TypeScript sabe que field es SelectField
             name={name ?? field.name}
             label={field.label}
-            value={value || ''}
+            value={value || []}
             onChange={(value) => onChange(value)}
             required={field.required}
           />)
@@ -135,7 +135,6 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
         min={field.minItems}
         max={field.maxItems}
         required={field.required}
-        
       />
     )
   },
