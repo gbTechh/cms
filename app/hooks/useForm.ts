@@ -10,15 +10,15 @@ export const useForm = <T extends Record<string, any>>(initState: T) => {
   const onChange = (input: OnChangeInput) => {
     // Manejar ChangeEvent
     if ("target" in input) {
+      const { name, value } = input.target;
       setFormData((prev) => ({
         ...prev,
-        [input.target.name]: input.target.value,
+        [name]: value,
       }));
     }
     // Manejar objeto { name, value }
     else {
       const { name, value } = input;
-      console.log({ input });
       if (name) {
         setFormData((prev) => ({
           ...prev,
@@ -28,7 +28,7 @@ export const useForm = <T extends Record<string, any>>(initState: T) => {
     }
   };
 
-  const changeData = (row: string, value: string) => {
+  const changeData = (row: string, value: any) => {
     setFormData((prev) => ({
       ...prev,
       [row]: value,

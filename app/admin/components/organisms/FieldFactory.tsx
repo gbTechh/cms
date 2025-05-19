@@ -1,16 +1,20 @@
-import React from 'react';
-import { IField, SelectField } from '~/admin/interfaces';
+import React, { ChangeEvent } from 'react';
+import { IField } from '~/admin/interfaces';
 import { Checkbox, Input, InputNumber, RadioButton, TextArea, Toggle } from '../atoms';
 import styles from "./fieldFactory.module.css";
-import RichTextEditor from '../molecules/RichTextEditor';
+//import RichTextEditor from '../molecules/RichTextEditor';
 import { DatePicker, DropDownMultipleSelect, DropdownSelect } from '../molecules';
 import { ArrayField } from './ArrayField';
+
+type OnChangeInput =
+  | ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  | { name: string; value: any };
 
 interface FieldProps {
   field: IField;
   name?: string;
   value?: any;
-  onChange: (value: any) => void;
+  onChange: (value: OnChangeInput) => void;
 }
 
 const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
@@ -129,7 +133,9 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
 
     return (
       <ArrayField 
+        onChange={onChange}
         fields={field.fields}
+        value={value || []}
         label={field.label}
         name={name ?? field.name}
         min={field.minItems}
@@ -138,15 +144,15 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
       />
     )
   },
-  upload: ({ field, name, value, onChange }) => (
-    <input
-      type="file"
-      name={name ?? field.name}
-      onChange={(e) => onChange(e.target.files?.[0])}
-      required={field.required}
-      accept={(field as any).allowedTypes?.join(',')}
-    />
-  ),
+  // upload: ({ field, name, value, onChange }) => (
+  //   <input
+  //     type="file"
+  //     name={name ?? field.name}
+  //     onChange={(e) => onChange(e.target.files?.[0])}
+  //     required={field.required}
+  //     accept={(field as any).allowedTypes?.join(',')}
+  //   />
+  // ),
   // Para relationship, group, repeater, etc., los implementaremos más adelante
 };
 

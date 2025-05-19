@@ -71,6 +71,11 @@ module.exports = {
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
+      rules: {
+        "@typescript-eslint/no-explicit-any": "off", // Desactiva completamente la regla
+        // O usa "warn" para que solo muestre advertencias (no errores):
+        // "@typescript-eslint/no-explicit-any": "warn",
+      },
     },
 
     // Node
@@ -81,4 +86,5 @@ module.exports = {
       },
     },
   ],
+ 
 };

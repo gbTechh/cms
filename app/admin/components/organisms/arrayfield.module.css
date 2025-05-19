@@ -1,3 +1,83 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 0;
+}
+
+.boxArray {
+  border: 1px solid var(--border-input);
+  border-radius: 0.8rem;
+  animation: fade-in 0.2s normal ;
+  transition: 0.2s all ease;
+}
+.boxArray:hover{
+  border: 1px solid var(--border-input-focus);
+}
+.boxHead:hover{
+  background: var(--bg-input-hover);
+}
+.boxHead {
+  border-radius: 0.8rem;
+  transition: 0.2s background ease;
+  padding: 1rem 2rem;
+  width: 100%;
+  background: var(--bg-input);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .btnTitle {
+    cursor: pointer;
+    appearance: none;
+    background: none;
+    border: none;
+    flex:1;
+
+    .title{
+      width: 100%;
+      flex:1;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+ 
+  .divBtns{
+
+    display: flex;
+    gap:0.2rem;
+    align-items: center;
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border-input);
+      background: var(--bg-input-hover);
+      display: flex;
+      align-items: center;
+      border-radius: 0.25rem;
+      padding: 0.5rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      color: var(--color-text-primary);
+      font-size: 1.6rem;
+
+
+      svg,path,line{
+        color: inherit;
+      }
+    }
+    .btn:hover{
+      background: var(--bg-body);
+    }
+  
+    .btnDeleteRow{
+    }
+  }
+}
+.boxBody{
+  padding: 0rem 2rem;
+}
+
 .btnAdd {
   font-size: 1.3rem;
   color: var(--color-text-primary);
@@ -11,5 +91,14 @@
 
   .icon {
     font-size: 2rem;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

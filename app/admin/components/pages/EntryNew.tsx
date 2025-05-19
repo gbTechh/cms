@@ -3,7 +3,6 @@ import styles from './entrynew.module.css'
 import { Input, Spacer, Text } from "../atoms";
 import { useEffect, useState } from "react";
 import { FieldFactory, Tabs, TabsProvider } from "../organisms";
-import { Descendant } from "slate";
 import { Form } from "@remix-run/react";
 import { useForm } from "~/hooks";
 
@@ -11,11 +10,11 @@ interface Props {
   data: ICollection;
 }
 
-const defaultRichTextValue: Descendant[] = [
-  {
-    children: [{ text: '' }],
-  },
-];
+// const defaultRichTextValue: Descendant[] = [
+//   {
+//     children: [{ text: '' }],
+//   },
+// ];
 
 export function EntryNew({ data }: Props) {
   const [titleState, setTitleState] = useState<string>("[Untitled]")
@@ -29,13 +28,13 @@ export function EntryNew({ data }: Props) {
 
  
 
-  const { formData, setFormData, onChange } = useForm({});
+  const { formData, onChange } = useForm({});
   console.log({formData})
   return (
     <Form method="post">
       <button type="submit">Guardar</button>
       <div className={styles.container}>
-      <div className={styles.wrapTitle}>
+      <div className={`${styles.wrapTitle} paddingWrap`}>
           <Text size="big" color="white">
             {titleState}
           </Text>
@@ -44,18 +43,18 @@ export function EntryNew({ data }: Props) {
         </div>
         <div className={styles.body}>
           <div className={styles.content}>
-            <div className={styles.title}>
+            <div className={`${styles.title} paddingWrapBody`}>
               <Input 
                   label="título"
                   onChange={(ev) => {setTitleState(ev.target.value)}}
                 />
             </div>
             <Spacer y={2}/>
-            <div className={styles.tabs}>
+            <div className={`${styles.tabs}`}>
               <TabsProvider>
                 <Tabs>
                   <Tabs.Item text="Contenido">
-                    <div className={styles.wrap}>
+                    <div className={`${styles.wrap} paddingWrapTab`}>
                       {
                         fields?.map(field => (
                           <FieldFactory

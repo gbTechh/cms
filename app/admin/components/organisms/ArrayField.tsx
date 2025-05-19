@@ -1,45 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text } from "../atoms";
-import { BaseFieldProps, IField } from "~/admin/interfaces";
 import { IoAddCircleOutline } from "react-icons/io5";
-import styles from "./arrayfield.module.css";
+import styles from './arrayfield.module.css';
 import { FieldFactory } from "./FieldFactory";
+import { BaseFieldProps, IField } from "~/admin/interfaces";
+import { MdOutlineTableRows } from "react-icons/md";
+import { LuTrash2 } from "react-icons/lu";
+import { CgMoveDown, CgMoveUp } from "react-icons/cg";
 
-// Generar un identificador único para cada fila
+type OnChangeInput =
+  | React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  | { name: string; value: any };
+
 const generateRowId = (index: number) => `row${index + 1}`;
 
 interface Props extends BaseFieldProps {
   fields: IField[] | [];
   min?: number;
   max?: number;
-  initialData?: { [key: string]: any }; // Datos iniciales desde la base de datos
-  onChange: (value: any) => void;
+  value: any[];
+  onChange: (value: OnChangeInput) => void;
+  name: string;
 }
 
 export const ArrayField: React.FC<Props> = ({
   label = "",
-  name,
-  min,
+  name = "",
   max,
-  fields,
   onChange,
-  required = false,
-  initialData = {},
+  value = [],
+  fields,
+  //required = false
 }) => {
-  // Inicializar el estado local 'rows' con los datos iniciales
-  const [rows, setRows] = useState<{ id: string; data: any }[]>(
-    Object.entries(initialData).map(([id, data]) => ({ id, data }))
-  );
-
-  // Validar el número de filas
-  const validateRows = (): string | boolean => {
-    const rowCount = rows.length;
-    if (required && rowCount < 1) return "Este campo es requerido.";
-    if (min && rowCount < min) return `Mínimo ${min} filas requeridas.`;
-    if (max && rowCount > max) return `Máximo ${max} filas permitidas.`;
-    return true;
+  // Convertir el valor en un formato manejable para el componente
+  const [rows, setRows] = useState<{ id: string; data: any}[]>([]);
+  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const toggleRowExpansion = (rowId: string) => {
+    setExpandedRows(prev => ({
+      ...prev,
+      [rowId]: !prev[rowId]
+    }));
   };
+  // Inicializar y sincronizar rows con el valor externo
+  useEffect(() => {
+    if (Array.isArray(value) && value.length > 0) {
+      // Si ya hay valor, usar eso
+      const rowsFromValue = value.map((rowData, index) => ({
+        id: generateRowId(index),
+        data: rowData,
+        isExpanded: true
+      }));
+      setRows(rowsFromValue);
+    } else if (rows.length === 0) {
+      // Si no hay filas y no hay valor, inicializar vacío
+      setRows([]);
+    }
+  }, [value]);
 
+  // const toggleRowExpansion = (rowId: string) => {
+  //   setRows(rows.map(row => 
+  //     row.id === rowId 
+  //       ? { ...row, isExpanded: !row.isExpanded } 
+  //       : row
+  //   ));
+  // };
   // Agregar una nueva fila
   const handleAddRow = () => {
     const rowCount = rows.length;
@@ -47,28 +71,48 @@ export const ArrayField: React.FC<Props> = ({
       console.warn(`No se pueden añadir más filas. Límite: ${max}`);
       return;
     }
+
+    // Crear nueva fila con valores predeterminados
     const newRowId = generateRowId(rowCount);
     const newRowData = fields.reduce((acc, field) => {
-      const defaultValue = field.type === "array" ? {} : field.defaultValue ?? "";
+      const defaultValue = field.type === "array" 
+        ? [] 
+        : field.type === "select" && field.hasMany 
+          ? [] 
+          : field.defaultValue ?? "";
       return { ...acc, [field.name]: defaultValue };
     }, {});
-    const newRows = [...rows, { id: newRowId, data: newRowData }];
+    
+    const newRows = [...rows, { id: newRowId, data: newRowData, isExpanded: true }];
     setRows(newRows);
+    
+    // Notificar cambio al componente padre
+    const newValue = newRows.map(row => row.data);
+    onChange({ name, value: newValue });
   };
 
   // Eliminar una fila
   const handleRemoveRow = (rowId: string) => {
     const newRows = rows.filter((row) => row.id !== rowId);
     setRows(newRows);
+    
+    // Notificar cambio al componente padre
+    const newValue = newRows.map(row => row.data);
+    onChange({ name, value: newValue });
   };
 
   // Manejar cambios en los campos de una fila
-  const handleFieldChange = (rowId: string, fieldName: string, value: any) => {
+  const handleFieldChange = (rowId: string, fieldName: string, fieldValue: any) => {
     const newRows = rows.map((row) =>
-      row.id === rowId ? { ...row, data: { ...row.data, [fieldName]: value } } : row
+      row.id === rowId 
+        ? { ...row, data: { ...row.data, [fieldName]: fieldValue } } 
+        : row
     );
     setRows(newRows);
-    onChange({name: fieldName, value: newRows})
+    
+    // Notificar cambio al componente padre
+    const newValue = newRows.map(row => row.data);
+    onChange({ name, value: newValue });
   };
 
   // Reordenar filas
@@ -77,65 +121,106 @@ export const ArrayField: React.FC<Props> = ({
     const [movedRow] = newRows.splice(fromIndex, 1);
     newRows.splice(toIndex, 0, movedRow);
     setRows(newRows);
-  };
-
-  // Transformar rows en el formato para la base de datos
-  const getDataForDatabase = () => {
-    return rows.reduce((acc, row) => ({ ...acc, [row.id]: row.data }), {});
+    
+    // Notificar cambio al componente padre
+    const newValue = newRows.map(row => row.data);
+    onChange({ name, value: newValue });
   };
 
   // Renderizar cada fila
   const renderRow = (row: { id: string; data: any }, index: number) => (
     <div
       key={row.id}
-      style={{ marginBottom: "10px", border: "1px solid #ccc", padding: "10px" }}
+      className={styles.boxArray}
     >
-      {fields?.map((field) => {
-        const fieldName = `${name}.${row.id}.${field.name}`;
-        return (
-          <FieldFactory
-            key={fieldName}
-            name={fieldName}
-            field={field}
-            value={row.data[field.name] || (field.type === "array" ? {} : field.defaultValue ?? "")}
-            //onChange={(value: any) => handleFieldChange(row.id, field.name, value)}
-            onChange={onChange}
-          />
-        );
-      })}
-      <button type="button" onClick={() => handleRemoveRow(row.id)}>
-        Eliminar
-      </button>
-      {index > 0 && (
-        <button type="button" onClick={() => moveRow(index, index - 1)}>
-          Mover arriba
+      <div
+      role="button"
+      tabIndex={0} // Permite que el div sea enfocable
+      aria-expanded={expandedRows[row.id]} // Para accesibilidad
+      className={`${styles.boxHead} ${styles.buttonReset}`}
+     
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleRowExpansion(row.id);
+        }
+      }}
+    >
+        <button className={styles.btnTitle} onClick={() => toggleRowExpansion(row.id)}>
+          <Text as="span" className={styles.title} fw="semibold" color="primary" size="input" type="base"><MdOutlineTableRows />{`Fila ${index +1}`}</Text>          
         </button>
-      )}
-      {index < rows.length - 1 && (
-        <button type="button" onClick={() => moveRow(index, index + 1)}>
-          Mover abajo
-        </button>
-      )}
+        <div className={styles.divBtns}>          
+          {index > 0 && (
+            <button className={styles.btn} type="button" onClick={() => moveRow(index, index - 1)}>
+              <CgMoveUp />
+            </button>
+          )}
+          {index < rows.length - 1 && (
+            <button className={styles.btn} type="button" onClick={() => moveRow(index, index + 1)}>
+              <CgMoveDown />
+            </button>
+          )}
+          <button className={`${styles.btnDeleteRow} ${styles.btn}`} type="button" onClick={() => handleRemoveRow(row.id)}>
+            <LuTrash2 />
+          </button>
+        </div>
+      </div>
+      <div 
+        className={styles.boxBody} 
+        style={{ 
+          display: expandedRows[row.id] ? "block" : "none", // Muestra/oculta el contenido
+          transition: "all 0.3s ease" // Animación opcional
+        }}
+      >
+        {fields?.map((field) => {
+          // Crear un manejador específico para este campo en esta fila
+          const handleChange = (input: OnChangeInput) => {
+            let fieldValue;
+            
+            if ("target" in input) {
+              fieldValue = input.target.value;
+            } else {
+              fieldValue = input.value;
+            }
+            
+            handleFieldChange(row.id, field.name, fieldValue);
+          };
+          
+          return (
+            <FieldFactory
+              key={`${row.id}-${field.name}`}
+              name={`${name}-${row.id}-${field.name}`}
+              field={field}
+              value={row.data[field.name] ?? (
+                field.type === "array" 
+                  ? [] 
+                  : field.type === "select" && field.hasMany 
+                    ? [] 
+                    : field.defaultValue ?? ""
+              )}
+              onChange={handleChange}
+            />
+          );
+        })}
+      </div>
+     
     </div>
   );
 
-  // Depuración
-  console.log("rows:", rows);
-  console.log("Data for database:", getDataForDatabase());
-
   return (
-    <div>
+    <div className={styles.wrap}>
       {label && <Text size="md">{label}</Text>}
       {rows.map(renderRow)}
-      <button className={styles.btnAdd} onClick={handleAddRow} type="button">
-        <IoAddCircleOutline className={styles.icon} />
-        {`Agregar ${name}`}
-      </button>
-      {validateRows() !== true && (
-        <Text size="sm" color="error">
-          {validateRows()}
-        </Text>
-      )}
+      <Text>
+        <button 
+          className={styles.btnAdd} 
+          onClick={handleAddRow} 
+          type="button"
+        >
+          <IoAddCircleOutline className={styles.icon} />
+          {`Agregar ${label || name}`}
+        </button>
+      </Text>
     </div>
   );
 };
