@@ -3,11 +3,12 @@ import { Text } from "./Text";
 import styles from "./textarea.module.css"
 import { useId } from "react";
 
-interface TextAreaFieldProps extends BaseFieldProps {  
+interface TextAreaFieldProps extends BaseFieldProps {
   onChange: (e: any) => void;
   rows?: number;
   value?: string;
   maxLength?: number;
+  readOnly?: boolean;
 }
 
 export const TextArea: React.FC<TextAreaFieldProps> = ({
@@ -25,32 +26,21 @@ export const TextArea: React.FC<TextAreaFieldProps> = ({
   onChange,
   rows = 4,
   maxLength = 1000,
+  readOnly = false,
 }) => {
   const idInput = useId();
 
-  const containerClasses = [
-    styles.container,
-    className,
-  ].join(" ");
+  const containerClasses = [styles.container, className].join(" ");
+  const labelClasses = [styles.label, labelClassName].join(" ");
+  const inputClasses = [styles.textarea, error ? styles.inputError : ""].join(" ");
 
-  const labelClasses = [
-    styles.label,
-    labelClassName,
-  ].join(" ");
-
-  const inputClasses = [
-    styles.textarea,
-    error ? styles.inputError : "",
-  ].join(" ");
-
-  console.log({value})
   return (
     <div className={containerClasses}>
       {label && (
         <label htmlFor={idInput} className={labelClasses}>
           <Text color={labelColor} size={labelSize} type="title" fw={labelFw}>
             {label}
-            {required ? <span className={styles.required}>*</span> : (<></>)}
+            {required ? <span className={styles.required}>*</span> : <></>}
           </Text>
         </label>
       )}
@@ -62,6 +52,8 @@ export const TextArea: React.FC<TextAreaFieldProps> = ({
         className={inputClasses}
         rows={rows}
         maxLength={maxLength}
+        value={value}
+        readOnly={readOnly}
         onChange={onChange}
       />
       <Text size="input" className={styles.length}>

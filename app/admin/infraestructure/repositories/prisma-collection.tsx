@@ -3,242 +3,140 @@ import { PrismaSingleton } from "../bd";
 import {
   CollectionRepository,
   ICollection,
-  ICollectionCreate,
-  ICollectionError,
+  IEntry,
+  IEntryCreate,
+  IEntryError,
   IField,
 } from "~/admin/interfaces";
 import { CatchError, TError } from "~/admin/lib";
 
 const prisma = PrismaSingleton.getInstance();
 
+const mapEntry = (entry: any): IEntry => ({
+  ...entry,
+  data: entry.data as Record<string, any>,
+  createdAt: entry.createdAt.toISOString(),
+  relationshipsFrom: entry.relationshipsFrom ?? [],
+  relationshipsTo: entry.relationshipsTo ?? [],
+});
+
 export class PrismaCollectionsRepository implements CollectionRepository {
-  async getJustCollections(): Promise<ICollection[] | []> {
+  async getJustCollections(): Promise<ICollection[]> {
     const data = await prisma.collection.findMany({
-      orderBy: {
-        id: "desc",
-      },
-      include: {
-        entries: false,
-      },
+      orderBy: { id: "desc" },
+      where: { deletedAt: null },
     });
-
-    const result = data.map((collection) => ({
-      ...collection,
-      createdAt: collection.createdAt.toISOString(),
-      fields: collection.fields as unknown as IField,
+    return data.map((c) => ({
+      ...c,
+      createdAt: c.createdAt.toISOString(),
+      fields: c.fields as unknown as IField[],
     }));
-
-    return result;
   }
-  async getAllCollections(): Promise<ICollection[] | []> {
+
+  async getAllCollections(): Promise<ICollection[]> {
     const data = await prisma.collection.findMany({
-      orderBy: {
-        id: "desc",
-      },
+      orderBy: { id: "desc" },
+      where: { deletedAt: null },
       include: {
         entries: {
-          include: {
-            relationshipsFrom: true,
-            relationshipsTo: true,
-          },
+          include: { relationshipsFrom: true, relationshipsTo: true },
         },
       },
     });
-
-    const result = data.map((collection) => ({
-      ...collection,
-      createdAt: collection.createdAt.toISOString(),
-      fields: collection.fields as unknown as IField,
-      entries: collection.entries.map((entry) => ({
-        ...entry,
-        data: entry.data as Record<string, any>,
-        createdAt: entry.createdAt.toISOString(),
-      })),
+    return data.map((c) => ({
+      ...c,
+      createdAt: c.createdAt.toISOString(),
+      fields: c.fields as unknown as IField[],
+      entries: c.entries.map(mapEntry),
     }));
-
-    return result;
   }
+
   async getCollectionBySlug(slug: string): Promise<ICollection | null> {
     const data = await prisma.collection.findUnique({
-      where: {
-        slug,
-      },
+      where: { slug },
       include: {
         entries: {
-          include: {
-            relationshipsFrom: true,
-            relationshipsTo: true,
-          },
+          include: { relationshipsFrom: true, relationshipsTo: true },
+          orderBy: { createdAt: "desc" },
         },
       },
     });
-    if (data) {
-      const result: ICollection = {
-        ...data,
-        createdAt: data.createdAt.toISOString(),
-        fields: data.fields as unknown as IField,
-        entries: data.entries.map((entry) => ({
-          ...entry,
-          data: entry.data as Record<string, any>,
-          createdAt: entry.createdAt.toISOString(),
-        })),
-      };
-      return result;
-    } else {
-      return null;
-    }
+    if (!data) return null;
+    return {
+      ...data,
+      createdAt: data.createdAt.toISOString(),
+      fields: data.fields as unknown as IField[],
+      entries: data.entries.map(mapEntry),
+    };
   }
-  /*
-  async getEntryBySlug(slug: string): Promise<IEntry | null> {
-    const data = await prisma.entry.findUnique({
+
+  async findEntryBySlug(collectionId: string, slug: string, excludeId?: string): Promise<IEntry | null> {
+    const data = await prisma.entry.findFirst({
       where: {
-        slug,
+        collectionId,
+        data: { path: ["entry_slug"], equals: slug },
+        ...(excludeId ? { NOT: { id: excludeId } } : {}),
       },
-      include: {
-        collection: {
-          select: {
-            name: true,
-            slug: true
-          }
-        }
-      }
+      include: { relationshipsFrom: true, relationshipsTo: true },
     });
-    if (data) {
-      const result: IEntry = {
-        ...data,
-        createdAt: data.createdAt.toISOString(),
-        updatedAt: data.updatedAt.toISOString(),
-      }
-      return result;
-    } else {
-      return null;
-    }
+    return data ? mapEntry(data) : null;
   }
-  */
-  /*
-  async createCollection(data: ICollectionCreate): Promise<{
-    error: TError<ICollectionError> | null;
-    collection: ICollection | null;
+
+  async getEntryById(id: string): Promise<IEntry | null> {
+    const data = await prisma.entry.findUnique({
+      where: { id },
+      include: { relationshipsFrom: true, relationshipsTo: true },
+    });
+    if (!data) return null;
+    return mapEntry(data);
+  }
+
+  async createEntry(input: IEntryCreate): Promise<{
+    error: TError<IEntryError> | null;
+    entry: IEntry | null;
   }> {
     try {
-      const collection = await prisma.collection.create({
+      const entry = await prisma.entry.create({
         data: {
-          ...data,
-          fields: data.fields as unknown as Prisma.JsonValue, // 🔥 Convertir a JsonValue
-          createdAt: new Date(data.createdAt), // 🔥 Convertir string a Date
+          collectionId: input.collectionId,
+          data: input.data as Prisma.JsonObject,
         },
+        include: { relationshipsFrom: true, relationshipsTo: true },
       });
-
-      if (collection) {
-        return {
-          error: null,
-          collection: {
-            ...collection,
-            createdAt: collection.createdAt.toISOString(), // 🔥 Convertir a string
-            fields: collection.fields as unknown as IField, // 🔥 Convertir JsonValue a IField
-          },
-        };
-      } else {
-        return { error: null, collection: null };
-      }
-    } catch (error) {
-      return { error: CatchError(error), collection: null };
-    } finally {
-      prisma.$disconnect();
-    }
-  }
-
-  async updateCollection(
-    data: ICollectionCreate,
-    slug: string
-  ): Promise<{
-    error: TError<ICollectionError> | null;
-    collection: ICollection | null;
-  }> {
-    try {
-      const collection = await prisma.collection.update({
-        data: data,
-        where: {
-          slug: slug,
-        },
-      });
-      if (collection) {
-        return { error: null, collection };
-      } else {
-        return { error: null, collection: null };
-      }
-    } catch (error) {
-      return { error: CatchError(error, "actualizar"), collection: null };
-    } finally {
-      prisma.$disconnect();
-    }
-  }
-  async createEntry(
-    data: IEntryCreate
-  ): Promise<{ error: TError<IEntryError> | null; entry: IEntry | null }> {
-    try {
-      const entry = await prisma.entry.create({ data });
-      if (entry) {
-        const result: IEntry = {
-          ...entry,
-          createdAt: entry.createdAt.toISOString(),
-          updatedAt: entry.updatedAt.toISOString(),
-        };
-        return { error: null, entry: result };
-      } else {
-        return { error: null, entry: null };
-      }
+      return { error: null, entry: mapEntry(entry) };
     } catch (error) {
       return { error: CatchError(error, "crear"), entry: null };
-    } finally {
-      prisma.$disconnect();
     }
   }
-  async deleteCollection(id: number): Promise<{
-    error: TError<ICollectionError> | null;
-    collection: ICollection | null;
+
+  async updateEntry(id: string, data: Record<string, any>): Promise<{
+    error: TError<IEntryError> | null;
+    entry: IEntry | null;
   }> {
     try {
-      const collection = await prisma.collection.delete({
-        where: {
-          id: id,
-        },
+      const entry = await prisma.entry.update({
+        where: { id },
+        data: { data: data as Prisma.JsonObject },
+        include: { relationshipsFrom: true, relationshipsTo: true },
       });
-      if (collection) {
-        return { error: null, collection };
-      } else {
-        return { error: null, collection: null };
-      }
+      return { error: null, entry: mapEntry(entry) };
     } catch (error) {
-      return { error: CatchError(error, "eliminar"), collection: null };
-    } finally {
-      prisma.$disconnect();
+      return { error: CatchError(error, "actualizar"), entry: null };
     }
   }
-  async deleteEntry(id: number): Promise<{
+
+  async deleteEntry(id: string): Promise<{
     error: TError<IEntryError> | null;
     entry: IEntry | null;
   }> {
     try {
       const entry = await prisma.entry.delete({
-        where: {
-          id: id,
-        },
+        where: { id },
+        include: { relationshipsFrom: true, relationshipsTo: true },
       });
-      if (entry) {
-        const result: IEntry = {
-          ...entry,
-          createdAt: entry.createdAt.toISOString(),
-          updatedAt: entry.updatedAt.toISOString(),
-        };
-        return { error: null, entry: result };
-      } else {
-        return { error: null, entry: null };
-      }
+      return { error: null, entry: mapEntry(entry) };
     } catch (error) {
       return { error: CatchError(error, "eliminar"), entry: null };
-    } finally {
-      prisma.$disconnect();
     }
-  }*/
+  }
 }

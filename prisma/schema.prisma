@@ -15,18 +15,17 @@ datasource db {
 
 model User {
   id        String   @id @default(uuid())
+  name      String
   email     String   @unique
-  password  String // Hasheada con bcrypt
-  roleId    String
-  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  password  String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Role {
   id          String @id @default(uuid())
-  name        String @unique // "ADMIN", "EDITOR"
-  permissions Json // Ej: { "pages:create": true, "posts:delete": false }
-  users       User[]
+  name        String @unique
+  permissions Json
 }
 
 enum CollectionType {

@@ -1,42 +1,28 @@
-import { ICollection } from "~/admin/interfaces";
 import styles from './medianew.module.css'
-import { Input, Spacer, Text } from "../atoms";
-import { useEffect, useState } from "react";
+import { Button, Input, Spacer, Text } from "../atoms";
+import { useState } from "react";
 import { FileSelector } from "../organisms";
 import video from "../../assets/images/video.png";
 import noImage from "../../assets/images/no-image.jpg";
 import pdf from "../../assets/images/pdf.png";
 import { IoClose } from "react-icons/io5";
+import { useSubmit } from "@remix-run/react";
+import { ICollection } from "~/admin/interfaces";
 
 interface Props {
-  data: ICollection;
+  collection: ICollection;
 }
 
+export function MediaNew({ collection }: Props) {
+  const submit = useSubmit();
+  const [selectedFiles, setSelectedFiles] = useState<(File | string)[]>([]);
+  const [altText, setAltText] = useState("");
 
-export function MediaNew({ data }: Props) {
-  const [titleState, setTitleState] = useState<string>("Media")
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  console.log('selectedFiles:', {selectedFiles});
-  const handleFilesSelected = (files: File[]) => {
-    setSelectedFiles(files);
-    // Aquí puedes hacer lo que necesites con los archivos seleccionados
-    console.log("Archivos seleccionados en MediaNew:", files);
-  };
-
-  useEffect(() => {
-    if(titleState === "") {
-      setTitleState("[Untitled]")
-    }
-  }, [titleState])
-  
   const getFilePreview = (file: string | File) => {
-    if (typeof file === "string" && file.startsWith("http")) {
-      return file; // URL de imagen existente
-    }
+    if (typeof file === "string" && file.startsWith("http")) return file;
     if (file instanceof File && file.type.startsWith("image")) {
       return URL.createObjectURL(file);
     }
-    // Placeholders para otros tipos de archivos
     if (file instanceof File) {
       if (file.type.startsWith("video")) return video;
       if (file.type === "application/pdf") return pdf;
@@ -44,71 +30,89 @@ export function MediaNew({ data }: Props) {
     return noImage;
   };
 
-  const getFileName = (file: string | File) => {
-    if (typeof file === "string") {
-      const str = file.split("/");
-      return str[str.length - 1];
-    }
-    return file.name;
-  };
+  const getFileName = (file: string | File) =>
+    typeof file === "string" ? file.split("/").pop()! : file.name;
 
   const handleRemoveFile = (index: number) => {
-    setSelectedFiles((prevFiles) => {
-      const newFiles = prevFiles.filter((_, i) => i !== index);
-      handleFilesSelected(newFiles as File[]);
-      return newFiles;
-    });
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  console.log({selectedFiles})
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedFiles.length === 0) return;
+
+    const fd = new FormData();
+    for (const file of selectedFiles) {
+      if (file instanceof File) fd.append("files", file);
+    }
+    fd.append("altText", altText);
+
+    // Submit to the current route action (no explicit action URL needed)
+    submit(fd, { method: "post", encType: "multipart/form-data" });
+  };
+
   return (
-    <div className={styles.container}>
-     <div className={styles.wrapTitle}>
-        <Text size="big" color="white">
-          {titleState}
-        </Text>
-        <Spacer y={0.2}/>
-        <Text size="14" color="primary">{`Creando un/a nuevo ${data.name}`}</Text>
-      </div>
-      <div className={styles.body}>
-        {selectedFiles.length > 1 ? (
-          <div className={styles.files}>
-            {selectedFiles.map((file, index) => (
-              <div className={styles.fileWrapp}>
-                <img
-                  width={30}
-                  src={getFilePreview(file)}
-                  alt={getFileName(file)}
-                  className={styles.filePreview}
-                />
-                <Text size="input" color="primary" className={styles.fileName}>
-                  {getFileName(file)}
-                </Text>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveFile(index)}
-                  className={styles.removeButton}
-                >
-                  <IoClose />
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : (<></>)}        
-        <div className={styles.content}>
-          <FileSelector maxFiles={50} onFilesSelected={handleFilesSelected}/>  
-          <div>
-            
-          </div>
-          <Input 
-            label="Alt"
-          />        
+    <form onSubmit={handleSubmit}>
+      <div className={styles.container}>
+        <div className={styles.wrapTitle}>
+          <Text size="big" color="white">{collection.name}</Text>
+          <Spacer y={0.2} />
+          <Text size="14" color="primary">Subir archivos a {collection.name}</Text>
         </div>
-       
-        
-        
+        <div className={styles.body}>
+          {selectedFiles.length > 0 && (
+            <div className={styles.files}>
+              {selectedFiles.map((file, index) => (
+                <div key={index} className={styles.fileWrapp}>
+                  <img
+                    width={30}
+                    src={getFilePreview(file)}
+                    alt={getFileName(file)}
+                    className={styles.filePreview}
+                  />
+                  <Text size="input" color="primary" className={styles.fileName}>
+                    {getFileName(file)}
+                  </Text>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    color="black"
+                    size="extrasmall"
+                    onClick={() => handleRemoveFile(index)}
+                    className={styles.removeButton}
+                  >
+                    <IoClose />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className={styles.content}>
+            <FileSelector
+              files={selectedFiles}
+              maxFiles={50}
+              onFilesSelected={setSelectedFiles}
+            />
+            <Input
+              label="Alt text"
+              name="altText"
+              value={altText}
+              onChange={(e) => setAltText(e.target.value)}
+              placeholder="Descripción de la imagen"
+            />
+            <Button
+              type="submit"
+              color="primary"
+              fullWidth
+              disabled={selectedFiles.length === 0}
+            >
+              {selectedFiles.length === 0
+                ? "Selecciona archivos"
+                : `Subir ${selectedFiles.length} archivo${selectedFiles.length > 1 ? "s" : ""}`}
+            </Button>
+          </div>
+        </div>
       </div>
-      
-    </div>
+    </form>
   );
 }

@@ -75,6 +75,7 @@ export const TabsItem = ({
   return (
     <div className={`${styles.tabItem} ${className}`} style={style}>
       <button
+        type="button"
         onClick={clickTab}
         className={classNames(styles.btn, {
           [styles.active]: isActive,

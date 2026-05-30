@@ -4,14 +4,14 @@
   min-height: calc(100dvh - var(--pd-aside));
   max-width: 320px;
   background-color: var(--bg-aside);
-  /*padding: var(--pd-aside);*/
-  padding: 0rem;
+  padding: 0;
   display: flex;
   flex-direction: column;
 
   .divIcon {
     width: 3rem;
     height: 3rem;
+    flex-shrink: 0;
     aspect-ratio: 1/1;
 
     span {
@@ -27,35 +27,53 @@
     position: fixed;
     top: 0;
     left: 0;
-
     display: none;
   }
 }
 
+/* ── Head ── */
 .head {
   width: 100%;
   padding: var(--pd-aside);
   height: 5rem;
   border-bottom: 0.8px solid var(--border-color);
   display: flex;
-  width: 100%;
   align-items: center;
   justify-content: flex-start;
   gap: 1rem;
+  overflow: hidden;
 }
 
+.headInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  overflow: hidden;
+
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* ── Content ── */
 .content {
   width: 100%;
   height: 100%;
   padding: var(--pd-aside);
   padding-top: 1.5rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-direction: column;
+  gap: 1.5rem;
   position: relative;
   flex-grow: 1;
+  overflow-y: auto;
 }
 
+/* ── Collections list ── */
 .ul {
   display: flex;
   flex-direction: column;
@@ -84,13 +102,6 @@
   li:hover .text {
     color: var(--color-text-contrast-hover) !important;
   }
-  li:hover path {
-    color: var(--color-text-contrast-hover) !important;
-  }
-  li:hover circle {
-    color: var(--color-text-contrast-hover) !important;
-  }
-
   a {
     text-decoration: none;
     display: flex;
@@ -101,5 +112,107 @@
     text-decoration: none;
     list-style: none;
     text-transform: capitalize;
+  }
+}
+
+/* ── Settings section ── */
+.settingsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.settingsLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: border 0.2s ease;
+
+  &:hover {
+    background: var(--bg-main);
+    border-color: var(--border-color);
+  }
+  &:hover .text {
+    color: var(--color-text-contrast-hover) !important;
+  }
+}
+
+.settingsLinkActive {
+  background: var(--bg-main);
+  border-color: var(--border-color) !important;
+
+  .text {
+    color: var(--color-text-contrast-hover) !important;
+  }
+}
+
+.settingsIcon {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* ── Footer ── */
+.footer {
+  padding: var(--pd-aside);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.userBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-accent, #6366f1);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.logoutBtn {
+  flex-shrink: 0;
+  font-size: 1.2rem !important;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 1;
   }
 }

@@ -1,0 +1,545 @@
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.count {
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  opacity: 0.6;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ── Search ─────────────────────────────────────────────────────────────── */
+
+.searchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 280px;
+}
+.search {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  background: var(--bg-input);
+  svg,
+  path,
+  line {
+    color: hsl(var(--color-btn-primary));
+  }
+}
+.search:focus {
+  border: 1px solid var(--border-input-focus);
+}
+
+
+.searchIcon {
+  font-size: 2.5rem;
+  color: var(--contrast-color);
+  width: 2.25rem;
+  padding: 0.5rem;
+}
+.searchIcon:focus {
+  background: var(--bg-input) !important;
+}
+
+.searchIcon:focus + .search {
+  border: 1px solid var(--border-input-focus) !important;
+  outline: 1px solid var(--border-input-focus) !important;
+}
+
+.searchInput {
+  outline: none;
+  border: none;
+  font-family: var(--font-base);
+  font-size: 1.35rem;
+  padding: 0.5rem;
+  color: var(--color-text-primary);
+  background-color: transparent;
+  flex: 1;
+  /* Add your search input styles here */
+}
+
+.searchClear {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0.2rem;
+  cursor: pointer;
+  color: var(--color-primary);
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+
+  &:hover { opacity: 1; }
+}
+
+
+/* ── Body ────────────────────────────────────────────────────────────────── */
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.gridWrap {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 1.5rem;
+  padding-right: 1rem;
+}
+
+/* ── Empty state ────────────────────────────────────────────────────────── */
+
+.empty {
+  padding: 4rem 0;
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* ── Grid ───────────────────────────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 0.75rem;
+}
+
+.withPanel .grid {
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
+
+/* ── Card ───────────────────────────────────────────────────────────────── */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-input);
+  border: 1.5px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: border-color 0.15s, transform 0.1s;
+
+  &:hover {
+    border-color: var(--border-color);
+    transform: translateY(-1px);
+  }
+  &:hover .cardOverlay {
+    opacity: 1;
+  }
+}
+
+.cardActive {
+  border-color: var(--color-accent, #6366f1) !important;
+}
+
+.cardThumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--bg-aside);
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5rem;
+}
+
+.cardOverlayText {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.cardFooter {
+  padding: 0.45rem 0.6rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.cardName {
+  font-size: 0.72rem;
+  color: var(--color-contrast);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.cardType {
+  font-size: 0.65rem;
+  color: var(--color-primary);
+  opacity: 0.55;
+}
+
+.cardBadge {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--color-accent, #6366f1);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+/* ── Detail Panel ───────────────────────────────────────────────────────── */
+
+.panel {
+  width: 300px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideIn 0.18s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.panelTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-contrast);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.panelCloseBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  padding: 0.2rem;
+  border-radius: 4px;
+  opacity: 0.6;
+  transition: opacity 0.15s, background 0.15s;
+
+  &:hover { opacity: 1; background: var(--bg-input); }
+}
+
+.panelPreview {
+  background: var(--bg-aside);
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.panelImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.panelContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Fields ──────────────────────────────────────────────────────────────── */
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* ── URL row ──────────────────────────────────────────────────────────────── */
+
+.urlRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem 0.4rem 0.65rem;
+  overflow: hidden;
+}
+
+.urlText {
+  flex: 1;
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: var(--color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.8;
+}
+
+.copyBtn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { background: var(--bg-aside); color: var(--color-contrast); }
+}
+
+.copyBtnDone {
+  color: #22c55e !important;
+}
+
+/* ── Metadata ─────────────────────────────────────────────────────────────── */
+
+.metaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.metaRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.4rem 0.7rem;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+
+  &:last-child { border-bottom: none; }
+}
+
+.metaLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+.metaValue {
+  font-size: 0.75rem;
+  color: var(--color-contrast);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+}
+
+.metaMono {
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+
+/* ── Panel actions ──────────────────────────────────────────────────────── */
+
+.panelActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-color);
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.panelActionsRight {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ── Bulk action bar ─────────────────────────────────────────────────────── */
+
+.bulkBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.bulkBarLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.bulkBarRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bulkCount {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-contrast);
+}
+
+.checkAllBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  border-radius: 4px;
+
+  &:hover { background: var(--bg-input); }
+}
+
+.checkAllIcon {
+  font-size: 1.3rem;
+  color: var(--color-accent, #6366f1);
+}
+
+.checkAllIndeterminate {
+  opacity: 0.5;
+}
+
+/* ── Card checkbox ───────────────────────────────────────────────────────── */
+
+.cardCheckbox {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.45rem;
+  z-index: 2;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.12s;
+  cursor: pointer;
+}
+
+.cardCheckboxVisible {
+  opacity: 1;
+}
+
+.card:hover .cardCheckbox {
+  opacity: 1;
+}
+
+.checkIcon {
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.checkEmpty {
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+}
+
+.cardChecked {
+  border-color: var(--color-accent, #6366f1) !important;
+
+  .cardCheckbox {
+    background: var(--color-accent, #6366f1);
+    opacity: 1;
+  }
+}
+
+.trashIcon {
+  color: white;
+}

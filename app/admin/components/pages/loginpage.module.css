@@ -1,0 +1,63 @@
+.root {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-main);
+  padding: 1.5rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-aside);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── Head ── */
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoWrap {
+  width: 3rem;
+  height: 3rem;
+  background: var(--color-accent, #6366f1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Form ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+}

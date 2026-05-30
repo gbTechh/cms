@@ -1,6 +1,7 @@
 type TRoutes = {
   ADMIN: string;
   ADMIN_LOGIN: string;
+  USERS: string;
   BIENVENIDA: string;
   DASHBOARD: string;
   PAGES: string;
@@ -80,9 +81,12 @@ const menu = tema + "/menu";
 const templates = tema + "/menu";
 const styles = tema + "/menu";
 
+const users = admin + "/users";
+
 export const ROUTES: TRoutes = {
   ADMIN: admin,
   ADMIN_LOGIN: adminLogin,
+  USERS: users,
   BIENVENIDA: bienvenida,
 
   DASHBOARD: dashboard,

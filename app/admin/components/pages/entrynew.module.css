@@ -53,3 +53,30 @@
     flex-direction: column;
   }
 }
+
+.slugField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.slugLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.slugToggle {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  letter-spacing: 0.03em;
+
+  &:hover {
+    background: var(--border-color);
+  }
+}
