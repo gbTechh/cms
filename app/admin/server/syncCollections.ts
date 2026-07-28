@@ -117,4 +117,3 @@ export async function syncCollections() {
 
   console.log("✨ Sincronización de colecciones completada.");
 }
-syncCollections();

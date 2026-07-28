@@ -1,7 +1,10 @@
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { syncCollections } from "~/admin/server/syncCollections";
+import { requireAuth } from "~/admin/use_cases";
 import { logger } from "~/admin/lib/logger.server";
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await requireAuth(request);
   try {
     await syncCollections();
     return Response.json({

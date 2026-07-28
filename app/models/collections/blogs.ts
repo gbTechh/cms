@@ -14,7 +14,13 @@ const BlogsCollection: ICollectionCreate = {
       name: "content",
       type: "richText",
       label: "contenido",
-    },
+    },{
+      name: "category",
+      type: "relationship",
+      label: "Categoría",
+      relationTo: "categories",  // slug de la colección destino
+      multiple: false,            // true si quieres selección múltiple
+    }
   ],
   isMedia: false,
 };
