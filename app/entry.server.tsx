@@ -11,8 +11,15 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+import { logger } from "~/admin/lib/logger.server";
 
 const ABORT_DELAY = 5_000;
+
+export function handleError(error: unknown, { request }: { request: Request }) {
+  if (!request.signal.aborted) {
+    logger.error({ err: error, url: request.url }, "Unhandled server error");
+  }
+}
 
 export default function handleRequest(
   request: Request,
@@ -79,7 +86,7 @@ function handleBotRequest(
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
-            console.error(error);
+            logger.error({ err: error }, "Streaming render error");
           }
         },
       }
@@ -129,7 +136,7 @@ function handleBrowserRequest(
           // errors encountered during initial shell rendering since they'll
           // reject and get logged in handleDocumentRequest.
           if (shellRendered) {
-            console.error(error);
+            logger.error({ err: error }, "Streaming render error");
           }
         },
       }

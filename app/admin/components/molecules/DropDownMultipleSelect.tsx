@@ -105,8 +105,7 @@ export const DropDownMultipleSelect: React.FC<DropdownSelectProps> = ({
       const newInternalValue = [...internalValue, option];
       setInternalValue(newInternalValue);
       setOptionsState(optionsState.filter((opt) => opt.value !== option.value));
-      // Notify parent of change
-      //onChange({ name, value: JSON.stringify(newInternalValue.map((e) => e.value)) });
+      onChange({ name, value: newInternalValue.map((e) => e.value) });
     }
     setIsOpen(false);
     setSearchTerm("");
@@ -115,16 +114,14 @@ export const DropDownMultipleSelect: React.FC<DropdownSelectProps> = ({
   const handleCliclClean = () => {
     setInternalValue([]);
     setOptionsState(options);
-    // Notify parent of change
-    //onChange({ name, value: [] });
+    onChange({ name, value: [] });
   };
 
   const handleRemoveItem = (item: OptionDropdownSelect) => {
     const newInternalValue = internalValue.filter((e) => e.value !== item.value);
     setInternalValue(newInternalValue);
     setOptionsState([...optionsState, item].sort((a, b) => a.label.localeCompare(b.label)));
-    // Notify parent of change
-    //onChange({ name, value: JSON.stringify(newInternalValue.map((e) => e.value)) });
+    onChange({ name, value: newInternalValue.map((e) => e.value) });
   };
 
   const handleSearchInput = (event: React.ChangeEvent<HTMLInputElement>) => {

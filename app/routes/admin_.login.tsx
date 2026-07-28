@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { LoginPage } from "~/admin/components";
-import { login, countUsers, createUser, getSession } from "~/admin/use_cases";
+import { login, countUsers, createUser, getSession, assertCsrf } from "~/admin/use_cases";
 import { ROUTES } from "~/admin/constants";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -16,6 +16,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData();
+  await assertCsrf(request, form);
   const email = form.get("email") as string;
   const password = form.get("password") as string;
   const name = form.get("name") as string | null;

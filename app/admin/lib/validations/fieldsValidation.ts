@@ -82,7 +82,7 @@ const RadioFieldSchema = BaseFieldSchema.extend({
 
 const RelationshipFieldSchema = BaseFieldSchema.extend({
   type: z.literal("relationship"),
-  collection: z.string().min(1, "Se requiere un slug de colección"),
+  relationTo: z.string().min(1, "Se requiere un slug de colección"),
   multiple: z.boolean().optional(),
 });
 

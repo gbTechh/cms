@@ -9,7 +9,11 @@ import {
 export interface CollectionRepository {
   getJustCollections(): Promise<ICollection[]>;
   getAllCollections(): Promise<ICollection[]>;
-  getCollectionBySlug(slug: string): Promise<ICollection | null>;
+  getCollectionBySlug(
+    slug: string,
+    pagination?: { page?: number; pageSize?: number }
+  ): Promise<ICollection | null>;
+  getCollectionById(id: string): Promise<ICollection | null>;
   getEntryById(id: string): Promise<IEntry | null>;
   findEntryBySlug(collectionId: string, slug: string, excludeId?: string): Promise<IEntry | null>;
   createEntry(data: IEntryCreate): Promise<{
@@ -24,4 +28,7 @@ export interface CollectionRepository {
     error: TError<IEntryError> | null;
     entry: IEntry | null;
   }>;
+  listEntryOptions(slug: string): Promise<{ value: string; label: string }[]>;
+  countValidEntryIds(slug: string, ids: string[]): Promise<number>;
+  syncRelationships(fromEntryId: string, type: string, toEntryIds: string[]): Promise<void>;
 }

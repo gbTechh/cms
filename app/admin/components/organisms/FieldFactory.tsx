@@ -1,8 +1,9 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
+import { useFetcher } from '@remix-run/react';
 import { IField } from '~/admin/interfaces';
 import { Checkbox, Input, InputNumber, RadioButton, TextArea, Toggle } from '../atoms';
 import styles from "./fieldFactory.module.css";
-//import RichTextEditor from '../molecules/RichTextEditor';
+import RichTextEditor from '../molecules/RichTextEditor';
 import { DatePicker, DropDownMultipleSelect, DropdownSelect } from '../molecules';
 import { ArrayField } from './ArrayField';
 
@@ -84,12 +85,12 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
       />
     );
   },
-  // richText: ({ field, value, onChange }) => (
-  //   <RichTextEditor
-  //     value={Array.isArray(value) ? value : field.defaultValue}
-  //     onChange={onChange}
-  //   />
-  // ),
+  richText: ({ field, name, value, onChange }) => (
+    <RichTextEditor
+      value={Array.isArray(value) ? value : undefined}
+      onChange={(newValue) => onChange({ name: name ?? field.name, value: newValue })}
+    />
+  ),
   date: ({ field, name, value, onChange }) => (
     <DatePicker
       label={field.label}
@@ -126,6 +127,40 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
           />)
         }
       </>
+    );
+  },
+  relationship: ({ field, name, value, onChange }) => {
+    if (field.type !== 'relationship') return null;
+
+    const fetcher = useFetcher<{ options: { value: string; label: string }[] }>();
+
+    useEffect(() => {
+      if (fetcher.state === 'idle' && !fetcher.data) {
+        fetcher.load(`/admin/relationship-options/${field.relationTo}`);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [field.relationTo]);
+
+    const options = fetcher.data?.options ?? [];
+
+    return field.multiple ? (
+      <DropDownMultipleSelect
+        options={options}
+        name={name ?? field.name}
+        label={field.label}
+        value={Array.isArray(value) ? value : []}
+        onChange={onChange}
+        required={field.required}
+      />
+    ) : (
+      <DropdownSelect
+        options={options}
+        name={name ?? field.name}
+        label={field.label}
+        value={typeof value === 'string' ? value : ''}
+        onChange={onChange}
+        required={field.required}
+      />
     );
   },
   array: ({ field, name, value, onChange}) => {

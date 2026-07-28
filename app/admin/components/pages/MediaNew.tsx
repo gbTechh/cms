@@ -8,6 +8,7 @@ import pdf from "../../assets/images/pdf.png";
 import { IoClose } from "react-icons/io5";
 import { useSubmit } from "@remix-run/react";
 import { ICollection } from "~/admin/interfaces";
+import { useCsrfToken } from "~/admin/lib";
 
 interface Props {
   collection: ICollection;
@@ -15,6 +16,7 @@ interface Props {
 
 export function MediaNew({ collection }: Props) {
   const submit = useSubmit();
+  const csrfToken = useCsrfToken();
   const [selectedFiles, setSelectedFiles] = useState<(File | string)[]>([]);
   const [altText, setAltText] = useState("");
 
@@ -46,6 +48,7 @@ export function MediaNew({ collection }: Props) {
       if (file instanceof File) fd.append("files", file);
     }
     fd.append("altText", altText);
+    fd.append("csrf", csrfToken);
 
     // Submit to the current route action (no explicit action URL needed)
     submit(fd, { method: "post", encType: "multipart/form-data" });

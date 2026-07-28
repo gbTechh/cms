@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { IoClose, IoPersonAddOutline, IoPencilOutline, IoTrashOutline } from "react-icons/io5";
 import { Button, Input, Spacer, Text } from "../atoms";
 import { IUser, IUserError } from "~/admin/interfaces";
-import { TError } from "~/admin/lib";
+import { TError, useCsrfToken } from "~/admin/lib";
 import styles from "./userspage.module.css";
 
 interface Props {
@@ -34,6 +34,7 @@ const formatDate = (iso: string) =>
 export function UsersPage({ users, currentUserId }: Props) {
   const fetcher = useFetcher<FetcherData>();
   const { revalidate } = useRevalidator();
+  const csrfToken = useCsrfToken();
 
   const [modalMode, setModalMode] = useState<ModalMode>(null);
   const [editingUser, setEditingUser] = useState<IUser | null>(null);
@@ -68,12 +69,13 @@ export function UsersPage({ users, currentUserId }: Props) {
   const handleDelete = (id: string, name: string) => {
     if (id === currentUserId) return;
     if (!confirm(`¿Eliminar al usuario "${name}"? Esta acción no se puede deshacer.`)) return;
-    fetcher.submit({ _action: "delete", id }, { method: "post" });
+    fetcher.submit({ _action: "delete", id, csrf: csrfToken }, { method: "post" });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
+    fd.append("csrf", csrfToken);
     if (modalMode === "edit" && editingUser) {
       fd.append("_action", "update");
       fd.append("id", editingUser.id);

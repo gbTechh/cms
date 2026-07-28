@@ -10,9 +10,9 @@ export interface IEntry {
 export interface IRelationship {
   id: string;
   fromEntryId: string;
-  fromEntry?: IEntry;
+  fromEntry?: Pick<IEntry, "id" | "data">;
   toEntryId: string;
-  toEntry?: IEntry;
+  toEntry?: Pick<IEntry, "id" | "data">;
   type: string;
 }
 

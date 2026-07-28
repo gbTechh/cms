@@ -3,8 +3,8 @@ import { MediaRepository, IMediaCreate } from "~/admin/interfaces";
 export class MediaService {
   constructor(private repo: MediaRepository) {}
 
-  getAll() {
-    return this.repo.getAll();
+  getAll(pagination?: { page?: number; pageSize?: number }) {
+    return this.repo.getAll(pagination);
   }
 
   getById(id: string) {

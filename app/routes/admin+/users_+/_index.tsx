@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { UsersPage } from "~/admin/components";
-import { requireAuth, listUsers, createUser, deleteUser, updateUser } from "~/admin/use_cases";
+import { requireAuth, listUsers, createUser, deleteUser, updateUser, assertCsrf } from "~/admin/use_cases";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const currentUser = await requireAuth(request);
@@ -12,6 +12,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   await requireAuth(request);
   const form = await request.formData();
+  await assertCsrf(request, form);
   const _action = form.get("_action") as string;
 
   if (_action === "create") {

@@ -1,6 +1,7 @@
 import { PrismaSingleton } from "../bd";
 import { MediaRepository, IMedia, IMediaCreate, IMediaError } from "~/admin/interfaces";
 import { CatchError, TError } from "~/admin/lib";
+import { logger } from "~/admin/lib/logger.server";
 
 const prisma = PrismaSingleton.getInstance();
 
@@ -16,9 +17,20 @@ const mapMedia = (m: any): IMedia => ({
 });
 
 export class PrismaMediaRepository implements MediaRepository {
-  async getAll(): Promise<IMedia[]> {
-    const data = await prisma.media.findMany({ orderBy: { createdAt: "desc" } });
-    return data.map(mapMedia);
+  async getAll(pagination?: { page?: number; pageSize?: number }): Promise<{ media: IMedia[]; total: number }> {
+    const page = Math.max(1, pagination?.page ?? 1);
+    const pageSize = pagination?.pageSize ?? 60;
+
+    const [data, total] = await Promise.all([
+      prisma.media.findMany({
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      prisma.media.count(),
+    ]);
+
+    return { media: data.map(mapMedia), total };
   }
 
   async getById(id: string): Promise<IMedia | null> {
@@ -38,6 +50,7 @@ export class PrismaMediaRepository implements MediaRepository {
       });
       return { error: null, media: mapMedia(media) };
     } catch (error) {
+      logger.error({ err: error }, "Error al crear media");
       return { error: CatchError(error, "crear"), media: null };
     }
   }
@@ -50,6 +63,7 @@ export class PrismaMediaRepository implements MediaRepository {
       });
       return { error: null, media: mapMedia(media) };
     } catch (error) {
+      logger.error({ err: error }, "Error al actualizar media");
       return { error: CatchError(error, "actualizar"), media: null };
     }
   }
@@ -59,6 +73,7 @@ export class PrismaMediaRepository implements MediaRepository {
       await prisma.media.delete({ where: { id } });
       return { error: null };
     } catch (error) {
+      logger.error({ err: error }, "Error al eliminar media");
       return { error: CatchError(error, "eliminar") };
     }
   }

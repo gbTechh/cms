@@ -2,9 +2,11 @@ import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { CollectionService } from "../service";
 import { PrismaCollectionsRepository } from "~/admin/infraestructure";
 import { ROUTES } from "~/admin/constants";
+import { assertCsrf } from "~/admin/use_cases/auth";
 
 export const updateEntry = async ({ request, params }: ActionFunctionArgs) => {
   const formData = await request.formData();
+  await assertCsrf(request, formData);
   const raw = formData.get("data") as string;
   const entryId = formData.get("entryId") as string;
   const collectionId = formData.get("collectionId") as string;

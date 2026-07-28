@@ -1,0 +1,52 @@
+.wrapper {
+  border: 1px solid var(--border-input);
+  border-radius: 0.8rem;
+  background-color: var(--bg-input);
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  padding: 0.6rem;
+  border-bottom: 1px solid var(--border-input);
+  background-color: var(--bg-input);
+}
+
+.toolbarButton {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 1.3rem;
+  font-family: var(--font-base);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.toolbarButton:hover {
+  background-color: var(--bg-hover);
+  color: var(--color-text-white);
+}
+
+.toolbarButtonActive {
+  background-color: var(--bg-hover);
+  color: var(--color-text-white);
+}
+
+.editable {
+  min-height: 150px;
+  padding: 1.2rem;
+  color: var(--color-text-primary);
+  font-family: var(--font-base);
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.editable [data-slate-placeholder="true"] {
+  color: var(--color-text-contrast);
+  opacity: 1 !important;
+}

@@ -1,6 +1,7 @@
 import { Form } from "@remix-run/react";
 import { SiPayloadcms } from "react-icons/si";
 import { Button, Input, Spacer, Text } from "../atoms";
+import { CsrfInput } from "~/admin/lib";
 import styles from "./loginpage.module.css";
 
 interface Props {
@@ -27,6 +28,7 @@ export function LoginPage({ error, isSetup = false }: Props) {
         </div>
 
         <Form method="post" className={styles.form}>
+          <CsrfInput />
           {isSetup && (
             <Input
               label="Nombre completo"

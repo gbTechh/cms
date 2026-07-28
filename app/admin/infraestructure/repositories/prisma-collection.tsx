@@ -9,6 +9,7 @@ import {
   IField,
 } from "~/admin/interfaces";
 import { CatchError, TError } from "~/admin/lib";
+import { logger } from "~/admin/lib/logger.server";
 
 const prisma = PrismaSingleton.getInstance();
 
@@ -51,22 +52,48 @@ export class PrismaCollectionsRepository implements CollectionRepository {
     }));
   }
 
-  async getCollectionBySlug(slug: string): Promise<ICollection | null> {
+  async getCollectionBySlug(
+    slug: string,
+    pagination?: { page?: number; pageSize?: number }
+  ): Promise<ICollection | null> {
+    const page = Math.max(1, pagination?.page ?? 1);
+    const pageSize = pagination?.pageSize ?? 50;
+
     const data = await prisma.collection.findUnique({
       where: { slug },
       include: {
         entries: {
           include: { relationshipsFrom: true, relationshipsTo: true },
           orderBy: { createdAt: "desc" },
+          skip: (page - 1) * pageSize,
+          take: pageSize,
         },
       },
     });
     if (!data) return null;
+
+    const entriesTotal = await prisma.entry.count({
+      where: { collectionId: data.id },
+    });
+
     return {
       ...data,
       createdAt: data.createdAt.toISOString(),
       fields: data.fields as unknown as IField[],
       entries: data.entries.map(mapEntry),
+      entriesTotal,
+      entriesPage: page,
+      entriesPageSize: pageSize,
+    };
+  }
+
+  async getCollectionById(id: string): Promise<ICollection | null> {
+    const data = await prisma.collection.findUnique({ where: { id } });
+    if (!data) return null;
+    return {
+      ...data,
+      createdAt: data.createdAt.toISOString(),
+      fields: data.fields as unknown as IField[],
     };
   }
 
@@ -85,7 +112,10 @@ export class PrismaCollectionsRepository implements CollectionRepository {
   async getEntryById(id: string): Promise<IEntry | null> {
     const data = await prisma.entry.findUnique({
       where: { id },
-      include: { relationshipsFrom: true, relationshipsTo: true },
+      include: {
+        relationshipsFrom: { include: { toEntry: { select: { id: true, data: true } } } },
+        relationshipsTo: { include: { fromEntry: { select: { id: true, data: true } } } },
+      },
     });
     if (!data) return null;
     return mapEntry(data);
@@ -105,6 +135,7 @@ export class PrismaCollectionsRepository implements CollectionRepository {
       });
       return { error: null, entry: mapEntry(entry) };
     } catch (error) {
+      logger.error({ err: error }, "Error al crear entry");
       return { error: CatchError(error, "crear"), entry: null };
     }
   }
@@ -121,6 +152,7 @@ export class PrismaCollectionsRepository implements CollectionRepository {
       });
       return { error: null, entry: mapEntry(entry) };
     } catch (error) {
+      logger.error({ err: error }, "Error al actualizar entry");
       return { error: CatchError(error, "actualizar"), entry: null };
     }
   }
@@ -136,7 +168,45 @@ export class PrismaCollectionsRepository implements CollectionRepository {
       });
       return { error: null, entry: mapEntry(entry) };
     } catch (error) {
+      logger.error({ err: error }, "Error al eliminar entry");
       return { error: CatchError(error, "eliminar"), entry: null };
     }
+  }
+
+  async listEntryOptions(slug: string): Promise<{ value: string; label: string }[]> {
+    const entries = await prisma.entry.findMany({
+      where: { collection: { slug } },
+      select: { id: true, data: true },
+      orderBy: { createdAt: "desc" },
+      take: 200,
+    });
+
+    return entries.map((e) => {
+      const data = e.data as Record<string, any>;
+      return {
+        value: e.id,
+        label: data?.entry_name || data?.entry_slug || e.id,
+      };
+    });
+  }
+
+  async countValidEntryIds(slug: string, ids: string[]): Promise<number> {
+    if (ids.length === 0) return 0;
+    return prisma.entry.count({
+      where: { id: { in: ids }, collection: { slug } },
+    });
+  }
+
+  async syncRelationships(fromEntryId: string, type: string, toEntryIds: string[]): Promise<void> {
+    await prisma.$transaction([
+      prisma.relationship.deleteMany({ where: { fromEntryId, type } }),
+      ...(toEntryIds.length > 0
+        ? [
+            prisma.relationship.createMany({
+              data: toEntryIds.map((toEntryId) => ({ fromEntryId, toEntryId, type })),
+            }),
+          ]
+        : []),
+    ]);
   }
 }

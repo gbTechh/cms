@@ -18,6 +18,9 @@ export interface ICollection {
   fields?: IField[]; // Definición de campos (como en Payload)
   createdAt?: string;
   entries?: IEntry[];
+  entriesTotal?: number;
+  entriesPage?: number;
+  entriesPageSize?: number;
 }
 export interface ICollectionCreate {
   slug: string; // "products", "sellers"

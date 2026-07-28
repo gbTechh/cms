@@ -1,6 +1,7 @@
 import { PrismaSingleton } from "../bd";
 import { IUser, IUserCreate, IUserError, IUserUpdate, UserRepository } from "~/admin/interfaces";
 import { CatchError, TError } from "~/admin/lib";
+import { logger } from "~/admin/lib/logger.server";
 
 const prisma = PrismaSingleton.getInstance();
 
@@ -9,6 +10,7 @@ const mapUser = (u: any): IUser => ({
   name: u.name,
   email: u.email,
   password: u.password,
+  sessionVersion: u.sessionVersion,
   createdAt: u.createdAt.toISOString(),
   updatedAt: u.updatedAt.toISOString(),
 });
@@ -38,15 +40,21 @@ export class PrismaUserRepository implements UserRepository {
       const u = await prisma.user.create({ data });
       return { error: null, user: mapUser(u) };
     } catch (error) {
+      logger.error({ err: error }, "Error al crear usuario");
       return { error: CatchError(error, "crear"), user: null };
     }
   }
 
   async update(id: string, data: IUserUpdate): Promise<{ error: TError<IUserError> | null; user: IUser | null }> {
     try {
-      const u = await prisma.user.update({ where: { id }, data });
+      // Cambiar el password invalida las sesiones existentes de este usuario.
+      const updateData = data.password
+        ? { ...data, sessionVersion: { increment: 1 } }
+        : data;
+      const u = await prisma.user.update({ where: { id }, data: updateData });
       return { error: null, user: mapUser(u) };
     } catch (error) {
+      logger.error({ err: error }, "Error al actualizar usuario");
       return { error: CatchError(error, "actualizar"), user: null };
     }
   }
@@ -56,6 +64,7 @@ export class PrismaUserRepository implements UserRepository {
       const u = await prisma.user.delete({ where: { id } });
       return { error: null, user: mapUser(u) };
     } catch (error) {
+      logger.error({ err: error }, "Error al eliminar usuario");
       return { error: CatchError(error, "eliminar"), user: null };
     }
   }

@@ -15,10 +15,14 @@ import {
   IoSearchOutline,
 } from "react-icons/io5";
 import { Button, Input, Text, TextArea } from "../atoms";
+import { useCsrfToken } from "~/admin/lib";
 
 interface Props {
   collection: ICollection;
   media: IMedia[];
+  total?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 const formatBytes = (bytes: number | null): string => {
@@ -49,9 +53,10 @@ function MetaRow({ label, value, mono = false }: { label: string; value: string;
   );
 }
 
-export function MediaPage({ collection, media }: Props) {
+export function MediaPage({ collection, media, total, page = 1, pageSize = 60 }: Props) {
   const fetcher = useFetcher<{ error?: string }>();
   const { revalidate } = useRevalidator();
+  const csrfToken = useCsrfToken();
 
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<IMedia | null>(null);
@@ -140,7 +145,7 @@ export function MediaPage({ collection, media }: Props) {
   const handleSave = () => {
     if (!selected) return;
     fetcher.submit(
-      { _action: "update", id: selected.id, altText: editAltText },
+      { _action: "update", id: selected.id, altText: editAltText, csrf: csrfToken },
       { method: "post" }
     );
   };
@@ -148,14 +153,14 @@ export function MediaPage({ collection, media }: Props) {
   const handleDelete = (id: string) => {
     if (!confirm("¿Eliminar este archivo? Esta acción no se puede deshacer.")) return;
     if (selected?.id === id) setSelected(null);
-    fetcher.submit({ _action: "delete", id }, { method: "post" });
+    fetcher.submit({ _action: "delete", id, csrf: csrfToken }, { method: "post" });
   };
 
   const handleBulkDelete = () => {
     const count = checkedIds.size;
     if (!confirm(`¿Eliminar ${count} archivo${count > 1 ? "s" : ""}? Esta acción no se puede deshacer.`)) return;
     fetcher.submit(
-      { _action: "bulkDelete", ids: JSON.stringify([...checkedIds]) },
+      { _action: "bulkDelete", ids: JSON.stringify([...checkedIds]), csrf: csrfToken },
       { method: "post" }
     );
     setCheckedIds(new Set());
@@ -342,6 +347,32 @@ export function MediaPage({ collection, media }: Props) {
             </div>
           )}
         </div>
+
+        {typeof total === "number" && total > pageSize && (
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0.75rem 0" }}>
+            <Text size="xs" color="primary">
+              {total} archivos · página {page} de {Math.max(1, Math.ceil(total / pageSize))}
+            </Text>
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <Link
+                to={`${ROUTES.COLLECTIONS}/${collection.slug}?page=${page - 1}`}
+                style={page <= 1 ? { pointerEvents: "none", opacity: 0.5 } : undefined}
+              >
+                <Button type="button" variant="ghost" color="black" size="extrasmall" disabled={page <= 1}>
+                  Anterior
+                </Button>
+              </Link>
+              <Link
+                to={`${ROUTES.COLLECTIONS}/${collection.slug}?page=${page + 1}`}
+                style={page >= Math.ceil(total / pageSize) ? { pointerEvents: "none", opacity: 0.5 } : undefined}
+              >
+                <Button type="button" variant="ghost" color="black" size="extrasmall" disabled={page >= Math.ceil(total / pageSize)}>
+                  Siguiente
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Detail panel (only when not in bulk mode) */}
         {selected && !hasChecked && (

@@ -6,6 +6,7 @@ import { Button, Text, WrappIcon } from "../atoms";
 import { ICollection, IUserSession } from "~/admin/interfaces";
 import { DropDownMenu } from "../molecules";
 import { ROUTES } from "~/admin/constants";
+import { CsrfInput } from "~/admin/lib";
 
 interface Props {
   collections: ICollection[];
@@ -104,6 +105,7 @@ export function Aside({ collections, currentUser }: Props) {
           </div>
         </div>
         <Form method="post" action={`${ROUTES.ADMIN}/logout`}>
+          <CsrfInput />
           <Button
             type="submit"
             variant="ghost"

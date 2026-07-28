@@ -17,8 +17,11 @@ export const listCollectionBySlug = async ({
   // }
 
   const { slug } = params;
+  const url = new URL(request.url);
+  const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
+
   const collection = new CollectionService(new PrismaCollectionsRepository());
-  const data = await collection.getCollectionBySlug(slug);
+  const data = await collection.getCollectionBySlug(slug, { page });
 
   return {
     collection: data,

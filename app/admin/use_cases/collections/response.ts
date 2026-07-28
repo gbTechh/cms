@@ -8,8 +8,22 @@ export class CollectionResponse {
   fields?: IField[];
   createdAt?: string;
   entries?: IEntry[];
+  entriesTotal?: number;
+  entriesPage?: number;
+  entriesPageSize?: number;
 
-  constructor({ id, name, slug, fields, createdAt, entries, isMedia }: ICollection) {
+  constructor({
+    id,
+    name,
+    slug,
+    fields,
+    createdAt,
+    entries,
+    isMedia,
+    entriesTotal,
+    entriesPage,
+    entriesPageSize,
+  }: ICollection) {
     this.id = id;
     this.name = name;
     this.slug = slug;
@@ -17,5 +31,8 @@ export class CollectionResponse {
     this.fields = fields;
     this.createdAt = createdAt;
     this.entries = entries;
+    this.entriesTotal = entriesTotal;
+    this.entriesPage = entriesPage;
+    this.entriesPageSize = entriesPageSize;
   }
 }

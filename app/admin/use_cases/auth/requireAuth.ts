@@ -1,7 +1,8 @@
 import { redirect } from "@remix-run/node";
-import { getSession } from "./session.server";
+import { destroySession, getSession } from "./session.server";
 import { ROUTES } from "~/admin/constants";
 import { IUserSession } from "~/admin/interfaces";
+import { PrismaUserRepository } from "~/admin/infraestructure";
 
 export const requireAuth = async (request: Request): Promise<IUserSession> => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -9,9 +10,21 @@ export const requireAuth = async (request: Request): Promise<IUserSession> => {
 
   if (!userId) throw redirect(ROUTES.ADMIN_LOGIN);
 
+  const sessionVersion = session.get("sessionVersion") as number | undefined;
+  const repo = new PrismaUserRepository();
+  const user = await repo.findById(userId);
+
+  // Usuario eliminado, o la sesión quedó obsoleta (ej. tras un cambio de
+  // contraseña) porque su sessionVersion ya no coincide con el de la BD.
+  if (!user || user.sessionVersion !== sessionVersion) {
+    throw redirect(ROUTES.ADMIN_LOGIN, {
+      headers: { "Set-Cookie": await destroySession(session) },
+    });
+  }
+
   return {
-    id: userId,
-    name: session.get("userName") as string,
-    email: session.get("userEmail") as string,
+    id: user.id,
+    name: user.name,
+    email: user.email,
   };
 };

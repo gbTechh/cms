@@ -11,6 +11,7 @@ import {
 import { Slate, Editable, withReact, useSlate, ReactEditor } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import isHotkey from "is-hotkey";
+import styles from "./richTextEditor.module.css";
 
 // ─── Custom Slate types ───────────────────────────────────────────────────────
 type CustomElementType =
@@ -150,12 +151,7 @@ const ToolbarButton = ({
   return (
     <button
       type="button"
-      style={{
-        padding: "8px",
-        border: "none",
-        background: isActive ? "#ddd" : "transparent",
-        cursor: "pointer",
-      }}
+      className={`${styles.toolbarButton} ${isActive ? styles.toolbarButtonActive : ""}`}
       onMouseDown={(e) => {
         e.preventDefault();
         if (isMark) {
@@ -203,7 +199,7 @@ const Leaf = ({ attributes, children, leaf }: any) => {
 
 // ─── Main component ──────────────────────────────────────────────────────────
 interface RichTextEditorProps {
-  value: Descendant[];
+  value?: Descendant[];
   onChange: (value: Descendant[]) => void;
   name?: string;
 }
@@ -239,14 +235,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       initialValue={initialValue}
       onValueChange={onChange}
     >
-      <div style={{ border: "1px solid #ddd", padding: "8px" }}>
-        <div
-          style={{
-            borderBottom: "1px solid #ddd",
-            paddingBottom: "8px",
-            marginBottom: "8px",
-          }}
-        >
+      <div className={styles.wrapper}>
+        <div className={styles.toolbar}>
           <ToolbarButton format="bold" icon="B" isMark />
           <ToolbarButton format="italic" icon="I" isMark />
           <ToolbarButton format="underline" icon="U" isMark />
@@ -262,13 +252,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           <ToolbarButton format="justify" icon="⇔" />
         </div>
         <Editable
+          className={styles.editable}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           placeholder="Escribe tu contenido aquí..."
           spellCheck
           autoFocus
           onKeyDown={handleKeyDown}
-          style={{ minHeight: "150px", padding: "8px" }}
         />
         {name && (
           <input type="hidden" name={name} value={JSON.stringify(value)} readOnly />

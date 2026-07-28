@@ -14,12 +14,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  name           String
+  email          String   @unique
+  password       String
+  sessionVersion Int      @default(1)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Role {
@@ -67,6 +68,8 @@ model Entry {
   // Relaciones con otras entradas
   relationshipsFrom Relationship[] @relation("FromEntry")
   relationshipsTo   Relationship[] @relation("ToEntry")
+
+  @@index([collectionId])
 }
 
 model Relationship {
@@ -76,6 +79,9 @@ model Relationship {
   toEntryId   String
   toEntry     Entry  @relation("ToEntry", fields: [toEntryId], references: [id], onDelete: Cascade)
   type        String // "SELLER_TO_HOUSE", "PRODUCT_TO_CATEGORY"
+
+  @@index([fromEntryId])
+  @@index([toEntryId])
 }
 
 model Global {
@@ -89,6 +95,8 @@ model FormSubmission {
   formId    String // ID del formulario (relacionado con Entry)
   data      Json // { name: "Juan", email: "j@test.com" }
   createdAt DateTime @default(now())
+
+  @@index([formId])
 }
 
 model Media {

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { FieldFactory, Tabs, TabsProvider } from "../organisms";
 import { Form, useActionData } from "@remix-run/react";
 import { useForm } from "~/hooks";
+import { CsrfInput } from "~/admin/lib";
 
 interface Props {
   data: ICollection;
@@ -21,7 +22,9 @@ const toSlug = (text: string) =>
     .replace(/\s+/g, "-");
 
 export function EntryNew({ data, entry }: Props) {
-  const actionData = useActionData<{ error?: { message: string; body?: { entry_slug?: string } } }>();
+  const actionData = useActionData<{
+    error?: { message: string; body?: { entry_slug?: string; data?: string } };
+  }>();
   const isEditing = !!entry;
   const initialData = entry?.data ?? {};
 
@@ -59,6 +62,7 @@ export function EntryNew({ data, entry }: Props) {
 
   return (
     <Form method="post">
+      <CsrfInput />
       {isEditing && <input type="hidden" name="entryId" value={entry!.id} />}
       <input type="hidden" name="collectionId" value={data.id} />
       <input type="hidden" name="data" value={JSON.stringify(formData)} />
@@ -72,6 +76,14 @@ export function EntryNew({ data, entry }: Props) {
           <Text size="14" color="primary">
             {isEditing ? `Editando entrada de ${data.name}` : `Creando un nuevo ${data.name}`}
           </Text>
+          {actionData?.error?.body?.data && (
+            <>
+              <Spacer y={0.5} />
+              <Text size="sm" color="error">
+                {actionData.error.body.data}
+              </Text>
+            </>
+          )}
         </div>
 
         <div className={styles.body}>
@@ -189,6 +201,20 @@ export function EntryNew({ data, entry }: Props) {
                 error={actionData?.error?.body?.entry_slug}
               />
             </div>
+            {isEditing && (entry?.relationshipsTo?.length ?? 0) > 0 && (
+              <>
+                <Spacer y={2} />
+                <Text size="sm" color="primary" fw="semibold">
+                  Referenciado por
+                </Text>
+                <Spacer y={0.5} />
+                {entry!.relationshipsTo.map((rel) => (
+                  <Text key={rel.id} size="14" color="primary" as="p">
+                    {rel.fromEntry?.data?.entry_name || rel.fromEntry?.data?.entry_slug || rel.fromEntryId}
+                  </Text>
+                ))}
+              </>
+            )}
           </div>
         </div>
       </div>
