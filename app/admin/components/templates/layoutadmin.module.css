@@ -67,6 +67,12 @@
   --color-text-grey: #727272;
   --color-text-grey-hover: #727272e5;
 
+  /* Texto sobre superficies "de marca" que se mantienen oscuras a propósito
+     en ambos temas (botón "black", barra de tabs, toggle activado — ver
+     --color-btn-black). No se sobrescriben en el tema claro. */
+  --fg-on-dark: #a1a1a1;
+  --fg-on-dark-strong: #f4f4f4;
+
   /* --color-btn-black: #01010e; */
   --color-btn-black: 0, 0%, 6.3%;
   --color-btn-black-border: 0, 0%, 15%;

@@ -36,7 +36,7 @@
 }
 
 .toggleBackground {
-  background-color: var(--button-primary-hover);
+  background-color: var(--bg-hover);
   border-radius: 1rem;
   transition: all 0.3s;
   width: 30rem;
@@ -48,8 +48,7 @@
   position: absolute;
   top: 3px;
   left: 3px;
-  /* background: var(--gradient-button-end); */
-  background: var(--border-color);
+  background: var(--border-input-focus);
   border-radius: calc(1rem - 2px);
   height: 2.2rem;
   width: 2.2rem;
@@ -62,7 +61,7 @@
 
 .toggleBackground.checked::after {
   transform: translateX(129%);
-  background: #404040;
+  background: var(--fg-on-dark-strong);
 }
 
 .toggleText {

@@ -87,7 +87,7 @@
 .black {
   border-color: hsl(var(--color-btn-black-border));
   background: hsl(var(--color-btn-black));
-  color: var(--color-text-contrast);
+  color: var(--fg-on-dark);
 }
 
 .black:hover:not(:disabled) {
@@ -110,7 +110,7 @@
   color: var(--color-text-warning);
 }
 .solid.black {
-  color: var(--color-text-primary);
+  color: var(--fg-on-dark-strong);
 }
 
 .bordered {
@@ -184,14 +184,12 @@
 }
 
 .ghost:hover:not(:disabled) {
-  color: #fff;
+  background-color: var(--bg-hover);
+  color: var(--color-text-white);
 }
 .ghost.warning:hover:not(:disabled) {
   color: var(--color-text-primary);
 }
 .ghost.contrast:hover:not(:disabled) {
   color: var(--color-text-primary);
-}
-.ghost.black:hover:not(:disabled) {
-  color: #fff;
 }

@@ -33,6 +33,17 @@
   }
 }
 
+/*
+ * La barra de tabs (.tabs) se mantiene siempre oscura en ambos temas (ver
+ * --color-btn-black), así que su texto usa el par de colores "on-dark" en
+ * vez del color de texto normal (que sí cambia con el tema). ".btn .text"
+ * (descendiente, especificidad 0,0,2,0) le gana a las clases de color que
+ * el átomo Text aplica sobre el mismo elemento (0,0,1,0).
+ */
+.btn .text {
+  color: var(--fg-on-dark);
+}
+
 .active {
   border-radius: 0.75rem;
   background-color: var(--bg-input);
@@ -43,8 +54,12 @@
   }
 }
 
+.active .text {
+  color: var(--fg-on-dark-strong);
+}
+
 .inactive:hover {
   border-radius: 0.75rem;
-  background-color: rgba(26, 26, 26, 0.66);
+  background-color: hsl(var(--color-btn-black), 85%);
   width: auto;
 }
