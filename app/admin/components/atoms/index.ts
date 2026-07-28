@@ -12,3 +12,4 @@ export * from "./TextArea";
 export * from "./Toggle";
 export * from "./WrappIcon";
 export * from "./Spacer";
+export * from "./ThemeToggle";

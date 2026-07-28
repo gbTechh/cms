@@ -168,6 +168,13 @@
   flex-shrink: 0;
 }
 
+.footerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
 .userBadge {
   display: flex;
   align-items: center;

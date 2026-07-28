@@ -2,7 +2,7 @@ import styles from "./aside.module.css";
 import { Form, Link, useLocation } from "@remix-run/react";
 import { SiPayloadcms } from "react-icons/si";
 import { IoLogOutOutline, IoPeopleOutline } from "react-icons/io5";
-import { Button, Text, WrappIcon } from "../atoms";
+import { Button, Text, ThemeToggle, WrappIcon } from "../atoms";
 import { ICollection, IUserSession } from "~/admin/interfaces";
 import { DropDownMenu } from "../molecules";
 import { ROUTES } from "~/admin/constants";
@@ -104,19 +104,22 @@ export function Aside({ collections, currentUser }: Props) {
             </Text>
           </div>
         </div>
-        <Form method="post" action={`${ROUTES.ADMIN}/logout`}>
-          <CsrfInput />
-          <Button
-            type="submit"
-            variant="ghost"
-            color="black"
-            size="extrasmall"
-            className={styles.logoutBtn}
-            title="Cerrar sesión"
-          >
-            <IoLogOutOutline />
-          </Button>
-        </Form>
+        <div className={styles.footerActions}>
+          <ThemeToggle />
+          <Form method="post" action={`${ROUTES.ADMIN}/logout`}>
+            <CsrfInput />
+            <Button
+              type="submit"
+              variant="ghost"
+              color="black"
+              size="extrasmall"
+              className={styles.logoutBtn}
+              title="Cerrar sesión"
+            >
+              <IoLogOutOutline />
+            </Button>
+          </Form>
+        </div>
       </div>
     </aside>
   );

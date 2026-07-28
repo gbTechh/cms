@@ -115,6 +115,39 @@
   --padding2: 2rem;
 }
 
+/*
+ * Tema claro: mismo set de variables, solo se sobrescriben las que dependen
+ * de fondo/texto/bordes. Los colores de botones (--color-btn-*) se dejan
+ * igual a propósito (son colores de marca/acción, no de superficie).
+ * Se activa poniendo data-theme="light" en <html> (ver ThemeToggle).
+ */
+:root[data-theme="light"] {
+  --bg-body: #f4f4f5;
+  --bg-aside: #ffffff;
+  --bg-main: #ffffff;
+  --bg-scroll: #e0e0e0;
+  --bg-box: #ffffff;
+  --bg-card-hover: rgba(0, 0, 0, 0.05);
+
+  --color-text-black: #000;
+  --color-text-white: #141414;
+  --color-text-primary: #3a3a3d;
+  --color-text-primary-hover: #1a1a1ce5;
+  --color-text-contrast: #7a7a80;
+  --color-text-contrast-hover: #56565b;
+
+  --border-color: rgb(226, 226, 230);
+  --border-row-table: rgba(20, 20, 20, 0.12);
+
+  --bg-input: #ffffff;
+  --bg-input-hover: #f2f2f3;
+  --border-input: #dcdcdf;
+  --border-input-focus: #a8a8ad;
+  --bg-tablerow-hover: rgba(0, 0, 0, 0.04);
+
+  --bg-hover: #ececec;
+}
+
 :global(.paddingWrap) {
   width: calc(100% + (2 * var(--padding)));
   margin-left: calc(var(--padding) * -1);

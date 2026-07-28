@@ -45,6 +45,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <script
+          // Aplica el tema guardado antes del primer pintado, para evitar
+          // el flash de tema oscuro (default) al cargar con tema claro guardado.
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("cms-theme");if(t==="light"){document.documentElement.setAttribute("data-theme","light");}}catch(e){}})();`,
+          }}
+        />
       </head>
       <body>
         {children}
