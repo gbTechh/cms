@@ -1,4 +1,4 @@
-import { Mapped, TError, validateEntryData } from "~/admin/lib";
+import { Mapped, TError, coerceEntryData, validateEntryData } from "~/admin/lib";
 import { CollectionResponse } from "./response";
 import { CollectionRepository, ICollection, IEntryError, IField } from "~/admin/interfaces";
 
@@ -84,7 +84,9 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
       };
     }
 
-    const validation = validateEntryData(collection.fields, data);
+    const coercedData = coerceEntryData(collection.fields, data);
+
+    const validation = validateEntryData(collection.fields, coercedData);
     if (!validation.success) {
       return {
         error: {
@@ -96,7 +98,7 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
       };
     }
 
-    const relationshipError = await this.validateRelationshipReferences(collection, data);
+    const relationshipError = await this.validateRelationshipReferences(collection, coercedData);
     if (relationshipError) {
       return {
         error: {
@@ -108,7 +110,7 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
       };
     }
 
-    const slug = data["entry_slug"];
+    const slug = coercedData["entry_slug"];
     if (slug) {
       const existing = await this.collection.findEntryBySlug(collectionId, slug);
       if (existing) {
@@ -123,9 +125,9 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
       }
     }
 
-    const result = await this.collection.createEntry({ collectionId, data });
+    const result = await this.collection.createEntry({ collectionId, data: coercedData });
     if (!result.error && result.entry) {
-      await this.syncEntryRelationships(collection, result.entry.id, data);
+      await this.syncEntryRelationships(collection, result.entry.id, coercedData);
     }
     return result;
   }
@@ -143,7 +145,9 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
       };
     }
 
-    const validation = validateEntryData(collection.fields, data);
+    const coercedData = coerceEntryData(collection.fields, data);
+
+    const validation = validateEntryData(collection.fields, coercedData);
     if (!validation.success) {
       return {
         error: {
@@ -155,7 +159,7 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
       };
     }
 
-    const relationshipError = await this.validateRelationshipReferences(collection, data);
+    const relationshipError = await this.validateRelationshipReferences(collection, coercedData);
     if (relationshipError) {
       return {
         error: {
@@ -167,7 +171,7 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
       };
     }
 
-    const slug = data["entry_slug"];
+    const slug = coercedData["entry_slug"];
     if (slug && collectionId) {
       const existing = await this.collection.findEntryBySlug(collectionId, slug, id);
       if (existing) {
@@ -182,9 +186,9 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
       }
     }
 
-    const result = await this.collection.updateEntry(id, data);
+    const result = await this.collection.updateEntry(id, coercedData);
     if (!result.error && result.entry) {
-      await this.syncEntryRelationships(collection, id, data);
+      await this.syncEntryRelationships(collection, id, coercedData);
     }
     return result;
   }

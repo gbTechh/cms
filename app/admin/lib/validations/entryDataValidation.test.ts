@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { validateEntryData } from "./entryDataValidation";
+import { coerceEntryData, validateEntryData } from "./entryDataValidation";
 import type { IField } from "~/admin/interfaces";
 
 describe("validateEntryData", () => {
@@ -85,5 +85,56 @@ describe("validateEntryData", () => {
     expect(validateEntryData(fields, { items: [] }).success).toBe(false);
     expect(validateEntryData(fields, { items: [{ name: "" }] }).success).toBe(false);
     expect(validateEntryData(fields, { items: [{ name: "ok" }] }).success).toBe(true);
+  });
+});
+
+describe("coerceEntryData", () => {
+  it("converts a numeric string coming from an HTML input into a real number", () => {
+    const fields: IField[] = [{ type: "number", name: "price", label: "Precio" }];
+    const result = coerceEntryData(fields, { price: "900" });
+    expect(result.price).toBe(900);
+    expect(typeof result.price).toBe("number");
+  });
+
+  it("leaves a non-numeric string as-is so validation still rejects it", () => {
+    const fields: IField[] = [{ type: "number", name: "price", label: "Precio" }];
+    const result = coerceEntryData(fields, { price: "not-a-number" });
+    expect(result.price).toBe("not-a-number");
+  });
+
+  it("makes a numeric-string value pass validation end-to-end", () => {
+    const fields: IField[] = [{ type: "number", name: "price", label: "Precio", min: 0 }];
+    const coerced = coerceEntryData(fields, { price: "900" });
+    expect(validateEntryData(fields, coerced).success).toBe(true);
+  });
+
+  it("leaves non-number fields untouched", () => {
+    const fields: IField[] = [{ type: "text", name: "title", label: "Título" }];
+    const result = coerceEntryData(fields, { title: "900" });
+    expect(result.title).toBe("900");
+  });
+
+  it("coerces number fields nested inside group and array", () => {
+    const fields: IField[] = [
+      {
+        type: "group",
+        name: "specs",
+        label: "Specs",
+        fields: [{ type: "number", name: "area", label: "Área" }],
+      },
+      {
+        type: "array",
+        name: "rooms",
+        label: "Rooms",
+        fields: [{ type: "number", name: "size", label: "Tamaño" }],
+      },
+    ];
+    const result = coerceEntryData(fields, {
+      specs: { area: "120" },
+      rooms: [{ size: "15" }, { size: "20" }],
+    });
+    expect(result.specs.area).toBe(120);
+    expect(result.rooms[0].size).toBe(15);
+    expect(result.rooms[1].size).toBe(20);
   });
 });

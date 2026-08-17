@@ -161,3 +161,32 @@ export function validateEntryData(
   }
   return { success: errors.length === 0, errors };
 }
+
+/**
+ * Los inputs HTML (incluso type="number") siempre entregan strings, nunca
+ * un number real. Antes de validar/guardar, convierte los valores de campos
+ * "number" que llegaron como string numérico ("900") a su forma real (900),
+ * recursivamente dentro de group/array. Deja todo lo demás intacto.
+ */
+export function coerceEntryData(
+  fields: IField[] | undefined | null,
+  data: Record<string, any> | undefined | null
+): Record<string, any> {
+  const result: Record<string, any> = { ...(data ?? {}) };
+
+  for (const field of fields ?? []) {
+    const raw = result[field.name];
+    if (raw === undefined || raw === null) continue;
+
+    if (field.type === "number" && typeof raw === "string" && raw.trim() !== "") {
+      const parsed = Number(raw);
+      if (!Number.isNaN(parsed)) result[field.name] = parsed;
+    } else if (field.type === "group" && raw && typeof raw === "object" && !Array.isArray(raw)) {
+      result[field.name] = coerceEntryData(field.fields, raw);
+    } else if (field.type === "array" && Array.isArray(raw)) {
+      result[field.name] = raw.map((item) => coerceEntryData(field.fields, item));
+    }
+  }
+
+  return result;
+}
