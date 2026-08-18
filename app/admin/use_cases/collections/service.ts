@@ -196,4 +196,34 @@ export class CollectionService extends Mapped<CollectionResponse, ICollection> {
   async deleteEntry(id: string) {
     return this.collection.deleteEntry(id);
   }
+
+  async updateDataSingle(collectionId: string, slug: string, data: Record<string, any>) {
+    const collection = await this.collection.getCollectionById(collectionId);
+    if (!collection) {
+      return {
+        error: {
+          hasError: true,
+          message: "La colección no existe",
+          body: undefined,
+        } as TError<IEntryError>,
+        dataSingle: null,
+      };
+    }
+
+    const coercedData = coerceEntryData(collection.fields, data);
+
+    const validation = validateEntryData(collection.fields, coercedData);
+    if (!validation.success) {
+      return {
+        error: {
+          hasError: true,
+          message: "Datos inválidos",
+          body: { data: validation.errors.map((e) => e.message).join("; ") },
+        } as TError<IEntryError>,
+        dataSingle: null,
+      };
+    }
+
+    return this.collection.upsertDataSingle(collectionId, slug || collection.slug, coercedData);
+  }
 }

@@ -223,8 +223,11 @@ export const Table: React.FC<Props> = ({ headers, data, actionOptions }) => {
           </Text>
           <DropdownSelect
             options={options}
-            onChange={(value) => setResultsPerPage(parseInt(value))}
-            value="10"
+            onChange={({ value }) => {
+              setResultsPerPage(parseInt(value));
+              setCurrentPage(1);
+            }}
+            value={`${resultsPerPage}`}
           />
         </div>
         <div className={styles.pagination}>

@@ -4,3 +4,4 @@ export * from "./service";
 export * from "./actions/createEntry";
 export * from "./actions/updateEntry";
 export * from "./actions/deleteEntry";
+export * from "./actions/updateDataSingle";

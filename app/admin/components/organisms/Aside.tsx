@@ -20,8 +20,34 @@ const initials = (name: string) =>
     .map((w) => w[0]?.toUpperCase() ?? "")
     .join("");
 
+const isSingleType = (type?: string) => type === "global" || type === "page";
+
 export function Aside({ collections, currentUser }: Props) {
   const location = useLocation();
+
+  const regularCollections =
+    collections?.filter((e) => !isSingleType(e.type) && e.type !== "form") ?? [];
+  const singleCollections = collections?.filter((e) => isSingleType(e.type)) ?? [];
+  const formCollections = collections?.filter((e) => e.type === "form") ?? [];
+
+  const renderList = (items: ICollection[]) => (
+    <ul className={styles.ul}>
+      {items.map((e, i) => (
+        <li
+          key={i}
+          className={
+            location.pathname.includes(e.slug) ? styles.activeLink : styles.li
+          }
+        >
+          <Link to={`${ROUTES.COLLECTIONS}/${e.slug}`}>
+            <Text as="span" type="base" size="14" color="primary" className={styles.text}>
+              {e.name}
+            </Text>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
 
   return (
     <aside className={styles.aside}>
@@ -47,31 +73,16 @@ export function Aside({ collections, currentUser }: Props) {
       {/* ── Navegación principal ── */}
       <div className={styles.content}>
         <DropDownMenu title="Colecciones">
-          <ul className={styles.ul}>
-            {collections?.map((e, i) => (
-              <li
-                key={i}
-                className={
-                  location.pathname.includes(e.slug)
-                    ? styles.activeLink
-                    : styles.li
-                }
-              >
-                <Link to={`${ROUTES.COLLECTIONS}/${e.slug}`}>
-                  <Text
-                    as="span"
-                    type="base"
-                    size="14"
-                    color="primary"
-                    className={styles.text}
-                  >
-                    {e.name}
-                  </Text>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {renderList(regularCollections)}
         </DropDownMenu>
+
+        {singleCollections.length > 0 && (
+          <DropDownMenu title="Singles">{renderList(singleCollections)}</DropDownMenu>
+        )}
+
+        {formCollections.length > 0 && (
+          <DropDownMenu title="Formularios">{renderList(formCollections)}</DropDownMenu>
+        )}
 
         {/* ── Configuración ── */}
         <div className={styles.settingsSection}>

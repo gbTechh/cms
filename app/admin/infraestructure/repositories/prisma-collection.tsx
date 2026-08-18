@@ -3,6 +3,7 @@ import { PrismaSingleton } from "../bd";
 import {
   CollectionRepository,
   ICollection,
+  IDataSingle,
   IEntry,
   IEntryCreate,
   IEntryError,
@@ -68,6 +69,7 @@ export class PrismaCollectionsRepository implements CollectionRepository {
           skip: (page - 1) * pageSize,
           take: pageSize,
         },
+        dataSingle: true,
       },
     });
     if (!data) return null;
@@ -84,6 +86,9 @@ export class PrismaCollectionsRepository implements CollectionRepository {
       entriesTotal,
       entriesPage: page,
       entriesPageSize: pageSize,
+      dataSingle: data.dataSingle
+        ? { ...data.dataSingle, data: data.dataSingle.data as Record<string, any> }
+        : null,
     };
   }
 
@@ -208,5 +213,29 @@ export class PrismaCollectionsRepository implements CollectionRepository {
           ]
         : []),
     ]);
+  }
+
+  async upsertDataSingle(
+    collectionId: string,
+    slug: string,
+    data: Record<string, any>
+  ): Promise<{
+    error: TError<IEntryError> | null;
+    dataSingle: IDataSingle | null;
+  }> {
+    try {
+      const dataSingle = await prisma.dataSingle.upsert({
+        where: { collectionId },
+        update: { slug, data: data as Prisma.JsonObject },
+        create: { collectionId, slug, data: data as Prisma.JsonObject },
+      });
+      return {
+        error: null,
+        dataSingle: { ...dataSingle, data: dataSingle.data as Record<string, any> },
+      };
+    } catch (error) {
+      logger.error({ err: error }, "Error al guardar dataSingle");
+      return { error: CatchError(error, "actualizar"), dataSingle: null };
+    }
   }
 }

@@ -57,11 +57,13 @@ export async function syncCollections() {
 
     try {
       await prisma.$transaction(async (tx) => {
-        await tx.collection.upsert({
+        const collection = await tx.collection.upsert({
           where: { fileName: model.fileName }, // Usar fileName como clave única
           update: {
             slug: model.slug,
             name: model.name,
+            type: model.type ?? "collection",
+            template: model.template ?? null,
             fields: model.fields as any,
             isMedia: model.isMedia ?? false,
             deletedAt: null, // Reactivar si estaba soft-deleted
@@ -69,12 +71,27 @@ export async function syncCollections() {
           create: {
             slug: model.slug,
             name: model.name,
+            type: model.type ?? "collection",
+            template: model.template ?? null,
             fields: model.fields as any,
             isMedia: model.isMedia ?? false,
             fileName: model.fileName,
             deletedAt: null, // Nueva colección activa
           },
         });
+
+        // Las colecciones "global"/"page" son singles: un único registro de
+        // datos (DataSingle) en vez de una lista de entries. Nos aseguramos
+        // de que ese registro exista para que se pueda editar de inmediato.
+        // Las colecciones "form" no usan DataSingle: sus registros son los
+        // FormSubmission que van llegando desde el sitio público.
+        if (collection.type === "global" || collection.type === "page") {
+          await tx.dataSingle.upsert({
+            where: { collectionId: collection.id },
+            update: {},
+            create: { collectionId: collection.id, slug: collection.slug, data: {} },
+          });
+        }
       });
       console.log(
         `✅ Colección sincronizada: ${model.slug} (archivo: ${model.fileName})`

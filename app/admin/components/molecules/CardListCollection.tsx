@@ -7,12 +7,23 @@ import { Link } from '@remix-run/react';
 interface Props {
   title: string;
   link:  string;
+  type?: "collection" | "global" | "page" | "form";
 }
 
-export const CardListCollection = ({title, link}: Props) => {
+const badgeLabel: Record<string, string> = {
+  global: "Single",
+  page: "Single",
+  form: "Form",
+};
+
+export const CardListCollection = ({title, link, type = "collection"}: Props) => {
+  const badge = badgeLabel[type];
   return (
     <Box className={styles.card}>
-      <Text className={styles.title}>{title}</Text>
+      <div className={styles.info}>
+        <Text className={styles.title}>{title}</Text>
+        {badge && <Text className={styles.badge}>{badge}</Text>}
+      </div>
       <Link to={link} >
         <CiCirclePlus className={styles.icon} />
       </Link>

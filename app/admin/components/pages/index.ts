@@ -4,5 +4,7 @@ export * from "./MediaNew";
 export * from "./MediaPage";
 export * from "./EntryNew";
 export * from "./ListCollectionsPage";
+export * from "./SingleEdit";
+export * from "./FormSubmissionsPage";
 export * from "./LoginPage";
 export * from "./UsersPage";

@@ -10,10 +10,24 @@ type JsonValue =
   | Prisma.JsonArray
   | null;
 
+// "collection": múltiples entries (como hasta ahora).
+// "global"/"page": un único registro de datos (DataSingle), sin lista de entries.
+// "form": no tiene entries editables desde el admin; el público hace POST
+// a /forms/:slug y cada envío se guarda como FormSubmission.
+export type CollectionType = "collection" | "global" | "page" | "form";
+
+export interface IDataSingle {
+  id: number;
+  slug: string; // Slug editable para el frontend
+  data: Record<string, any>;
+}
+
 export interface ICollection {
   id: string;
   slug: string; // "products", "sellers"
   name: string;
+  type?: CollectionType;
+  template?: string | null; // Nombre del template de card/detalle en el frontend público; null = default
   isMedia: boolean;
   fields?: IField[]; // Definición de campos (como en Payload)
   createdAt?: string;
@@ -21,10 +35,13 @@ export interface ICollection {
   entriesTotal?: number;
   entriesPage?: number;
   entriesPageSize?: number;
+  dataSingle?: IDataSingle | null;
 }
 export interface ICollectionCreate {
   slug: string; // "products", "sellers"
   name: string;
+  type?: CollectionType;
+  template?: string; // Nombre del template de card/detalle en el frontend público
   fields: IField[]; // Definición de campos (como en Payload)
   isMedia?: boolean;
   entries?: IEntry[];

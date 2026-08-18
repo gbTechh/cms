@@ -21,6 +21,7 @@ export interface PublicCollection {
   id: string;
   slug: string;
   name: string;
+  template: string | null;
   fields: IField[];
   entries: PublicEntry[];
   total: number;
@@ -38,7 +39,7 @@ export interface RelatedEntryRef {
 }
 
 export interface PublicEntryDetail {
-  collection: { slug: string; name: string; fields: IField[] };
+  collection: { slug: string; name: string; template: string | null; fields: IField[] };
   entry: PublicEntry;
   // Entradas que ESTA entrada referencia (ej. la propiedad -> su vendedor)
   relatedTo: RelatedEntryRef[];
@@ -55,6 +56,22 @@ const mapPublicEntry = (e: { id: string; data: unknown; createdAt: Date }): Publ
     createdAt: e.createdAt.toISOString(),
   };
 };
+
+/**
+ * Trae el `data` de un Single (`type: "global" | "page"`) por slug — ej.
+ * "site-settings". Sirve para cualquier Single, no solo site-settings: si
+ * el slug no existe todavía (proyecto recién clonado, antes del primer
+ * `npm run sync`) o no es un Single, devuelve `null` sin romper nada.
+ */
+export async function getPublicSingle(slug: string): Promise<Record<string, any> | null> {
+  const collection = await prisma.collection.findUnique({
+    where: { slug },
+    include: { dataSingle: true },
+  });
+  if (!collection || collection.deletedAt) return null;
+  if (collection.type !== "global" && collection.type !== "page") return null;
+  return (collection.dataSingle?.data as Record<string, any> | undefined) ?? {};
+}
 
 /** Lista todas las colecciones de contenido disponibles (no medios). */
 export async function listPublicCollections(): Promise<{ slug: string; name: string }[]> {
@@ -79,7 +96,9 @@ export async function getPublicCollection(
   const pageSize = options?.pageSize ?? 12;
 
   const collection = await prisma.collection.findUnique({ where: { slug } });
-  if (!collection || collection.deletedAt) return null;
+  // Solo colecciones "collection" tienen lista de entries navegable: los
+  // singles (global/page) usan DataSingle y los forms usan FormSubmission.
+  if (!collection || collection.deletedAt || collection.type !== "collection") return null;
 
   const allEntries = await prisma.entry.findMany({
     where: { collectionId: collection.id },
@@ -95,6 +114,7 @@ export async function getPublicCollection(
     id: collection.id,
     slug: collection.slug,
     name: collection.name,
+    template: collection.template,
     fields: collection.fields as unknown as IField[],
     entries: pageEntries.map(mapPublicEntry),
     total,
@@ -129,7 +149,7 @@ export async function getPublicEntry(
   entrySlug: string
 ): Promise<PublicEntryDetail | null> {
   const collection = await prisma.collection.findUnique({ where: { slug: collectionSlug } });
-  if (!collection || collection.deletedAt) return null;
+  if (!collection || collection.deletedAt || collection.type !== "collection") return null;
 
   const entry = await prisma.entry.findFirst({
     where: {
@@ -147,6 +167,7 @@ export async function getPublicEntry(
     collection: {
       slug: collection.slug,
       name: collection.name,
+      template: collection.template,
       fields: collection.fields as unknown as IField[],
     },
     entry: mapPublicEntry(entry),

@@ -1,0 +1,515 @@
+{
+  "version": 1,
+  "exportedAt": "2026-08-18T01:56:15.649Z",
+  "collections": [
+    {
+      "slug": "sellers",
+      "name": "Vendedores",
+      "type": "collection",
+      "fileName": "sellers",
+      "isMedia": false,
+      "template": "sellers",
+      "fields": [
+        {
+          "name": "position",
+          "type": "text",
+          "label": "Cargo",
+          "defaultValue": "Asesor inmobiliario"
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Teléfono"
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "label": "Email"
+        },
+        {
+          "name": "bio",
+          "type": "richText",
+          "label": "Biografía"
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "e026087e-f52b-4a75-ad58-8561083de435",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "Ana Torres",
+            "entry_slug": "ana-torres",
+            "position": "Asesora Senior",
+            "phone": "+51 999 888 777",
+            "email": "ana.torres@casanova.pe",
+            "bio": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "15 años de experiencia en el mercado inmobiliario de Lima. Especialista en propiedades residenciales de alto valor."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "5a55dc45-e846-4781-89af-7c0b14e4bcfe",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "Carlos Ramírez",
+            "entry_slug": "carlos-ramirez",
+            "position": "Asesor Comercial",
+            "phone": "+51 999 555 333",
+            "email": "carlos.ramirez@casanova.pe",
+            "bio": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Especialista en propiedades comerciales y terrenos. Atención personalizada de principio a fin."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "slug": "properties",
+      "name": "Propiedades",
+      "type": "collection",
+      "fileName": "properties",
+      "isMedia": false,
+      "template": "properties",
+      "fields": [
+        {
+          "name": "price",
+          "type": "number",
+          "label": "Precio (USD)",
+          "min": 0,
+          "required": true
+        },
+        {
+          "name": "propertyType",
+          "type": "select",
+          "label": "Tipo de propiedad",
+          "options": [
+            {
+              "label": "Casa",
+              "value": "casa"
+            },
+            {
+              "label": "Departamento",
+              "value": "departamento"
+            },
+            {
+              "label": "Terreno",
+              "value": "terreno"
+            },
+            {
+              "label": "Oficina",
+              "value": "oficina"
+            }
+          ],
+          "defaultValue": "casa"
+        },
+        {
+          "name": "operation",
+          "type": "select",
+          "label": "Operación",
+          "options": [
+            {
+              "label": "Venta",
+              "value": "venta"
+            },
+            {
+              "label": "Alquiler",
+              "value": "alquiler"
+            }
+          ],
+          "defaultValue": "venta"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "label": "Dirección",
+          "required": true
+        },
+        {
+          "name": "bedrooms",
+          "type": "number",
+          "label": "Habitaciones",
+          "min": 0
+        },
+        {
+          "name": "bathrooms",
+          "type": "number",
+          "label": "Baños",
+          "min": 0
+        },
+        {
+          "name": "area",
+          "type": "number",
+          "label": "Área (m²)",
+          "min": 0
+        },
+        {
+          "name": "description",
+          "type": "richText",
+          "label": "Descripción"
+        },
+        {
+          "name": "seller",
+          "type": "relationship",
+          "label": "Vendedor a cargo",
+          "relationTo": "sellers",
+          "multiple": false
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "6c3881ec-2327-4bf3-a6a8-3a6cdc468845",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "Casa en Miraflores",
+            "entry_slug": "casa-en-miraflores",
+            "price": 285000,
+            "propertyType": "casa",
+            "operation": "venta",
+            "address": "Av. Larco 456, Miraflores",
+            "bedrooms": 3,
+            "bathrooms": 2,
+            "area": 180,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Hermosa casa de dos pisos a cinco minutos del malecón, totalmente remodelada, con acabados de primera y jardín propio."
+                  }
+                ]
+              }
+            ],
+            "seller": "e026087e-f52b-4a75-ad58-8561083de435"
+          }
+        },
+        {
+          "id": "ea041e23-5198-486d-84eb-c6df04ee39cd",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "Departamento en San Isidro",
+            "entry_slug": "departamento-en-san-isidro",
+            "price": 1200,
+            "propertyType": "departamento",
+            "operation": "alquiler",
+            "address": "Calle Los Álamos 220, San Isidro",
+            "bedrooms": 2,
+            "bathrooms": 2,
+            "area": 95,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Departamento moderno en edificio con gimnasio y seguridad 24h, a pasos del Golf de San Isidro."
+                  }
+                ]
+              }
+            ],
+            "seller": "5a55dc45-e846-4781-89af-7c0b14e4bcfe"
+          }
+        },
+        {
+          "id": "6c03a663-bf20-4451-9a6a-07ec4e26d8c5",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "Terreno en La Molina",
+            "entry_slug": "terreno-en-la-molina",
+            "price": 340000,
+            "propertyType": "terreno",
+            "operation": "venta",
+            "address": "Urb. Rinconada del Lago, La Molina",
+            "bedrooms": 0,
+            "bathrooms": 0,
+            "area": 450,
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Terreno plano, listo para construir, en zona residencial exclusiva con vista a los cerros."
+                  }
+                ]
+              }
+            ],
+            "seller": "e026087e-f52b-4a75-ad58-8561083de435"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "categories",
+      "name": "categories",
+      "type": "collection",
+      "fileName": "categories",
+      "isMedia": false,
+      "template": null,
+      "fields": [
+        {
+          "label": "título del proyecto",
+          "name": "title",
+          "defaultValue": "",
+          "type": "text"
+        },
+        {
+          "name": "content",
+          "type": "richText",
+          "label": "contenido"
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "760776a4-13f6-45aa-95f5-cd5171d80031",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "Residencial",
+            "entry_slug": "residencial"
+          }
+        },
+        {
+          "id": "6970585c-54d6-4110-8c98-922f192e3f67",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "Comercial",
+            "entry_slug": "comercial"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "blogs",
+      "name": "Blogs",
+      "type": "collection",
+      "fileName": "blogs",
+      "isMedia": false,
+      "template": "blogPost",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "label": "título del blog",
+          "defaultValue": "Untitled"
+        },
+        {
+          "name": "content",
+          "type": "richText",
+          "label": "contenido"
+        },
+        {
+          "name": "category",
+          "type": "relationship",
+          "label": "Categoría",
+          "relationTo": "categories",
+          "multiple": false
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "a2e518da-db74-4983-9701-5ed32f472488",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "5 consejos para vender tu casa más rápido",
+            "entry_slug": "5-consejos-para-vender-tu-casa-mas-rapido",
+            "meta_author": "Ana Torres",
+            "meta_published_at": "2026-08-18T01:56:15.649Z",
+            "content": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Preparar tu propiedad antes de publicarla puede reducir el tiempo de venta a la mitad. Acá te contamos cómo."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "b95ecb00-52e3-4588-814f-d6dd7ad5126b",
+          "createdAt": "2026-08-18T01:56:15.649Z",
+          "data": {
+            "entry_name": "Guía para tu primera inversión inmobiliaria",
+            "entry_slug": "guia-para-tu-primera-inversion-inmobiliaria",
+            "meta_author": "Carlos Ramírez",
+            "meta_published_at": "2026-08-18T01:56:15.649Z",
+            "content": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Invertir en bienes raíces por primera vez puede ser abrumador. Estos son los puntos clave que no puedes pasar por alto."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "slug": "media",
+      "name": "Media",
+      "type": "collection",
+      "fileName": "media",
+      "isMedia": true,
+      "template": null,
+      "fields": [],
+      "dataSingle": null,
+      "entries": []
+    },
+    {
+      "slug": "site-settings",
+      "name": "Configuración del sitio",
+      "type": "global",
+      "fileName": "siteSettings",
+      "isMedia": false,
+      "template": null,
+      "fields": [
+        {
+          "name": "siteName",
+          "type": "text",
+          "label": "Nombre del sitio",
+          "required": true
+        },
+        {
+          "name": "theme",
+          "type": "select",
+          "label": "Tema visual del sitio público",
+          "options": [
+            {
+              "label": "Moderno (verde)",
+              "value": "modern"
+            },
+            {
+              "label": "Clásico (dorado)",
+              "value": "classic"
+            }
+          ],
+          "defaultValue": "modern"
+        },
+        {
+          "name": "logo",
+          "type": "upload",
+          "label": "Logo",
+          "allowedTypes": [
+            "image/*"
+          ]
+        },
+        {
+          "name": "footerText",
+          "type": "textarea",
+          "label": "Texto del footer"
+        },
+        {
+          "name": "contactPhone",
+          "type": "text",
+          "label": "Teléfono de contacto"
+        },
+        {
+          "name": "contactEmail",
+          "type": "text",
+          "label": "Email de contacto"
+        }
+      ],
+      "dataSingle": {
+        "slug": "site-settings",
+        "data": {
+          "siteName": "CasaNova",
+          "theme": "modern",
+          "footerText": "Tu inmobiliaria de confianza en Lima.",
+          "contactPhone": "+51 999 000 111",
+          "contactEmail": "contacto@casanova.pe"
+        }
+      },
+      "entries": []
+    },
+    {
+      "slug": "contact-form",
+      "name": "Formulario de contacto",
+      "type": "form",
+      "fileName": "contactForm",
+      "isMedia": false,
+      "template": null,
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Nombre",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "label": "Email",
+          "required": true
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Teléfono"
+        },
+        {
+          "name": "message",
+          "type": "textarea",
+          "label": "Mensaje",
+          "required": true
+        }
+      ],
+      "dataSingle": null,
+      "entries": []
+    },
+    {
+      "slug": "newsletter",
+      "name": "Newsletter",
+      "type": "form",
+      "fileName": "newsletterForm",
+      "isMedia": false,
+      "template": null,
+      "fields": [
+        {
+          "name": "email",
+          "type": "text",
+          "label": "Email",
+          "required": true
+        }
+      ],
+      "dataSingle": null,
+      "entries": []
+    }
+  ],
+  "relationships": [
+    {
+      "fromEntryId": "6c3881ec-2327-4bf3-a6a8-3a6cdc468845",
+      "toEntryId": "e026087e-f52b-4a75-ad58-8561083de435",
+      "type": "seller"
+    },
+    {
+      "fromEntryId": "ea041e23-5198-486d-84eb-c6df04ee39cd",
+      "toEntryId": "5a55dc45-e846-4781-89af-7c0b14e4bcfe",
+      "type": "seller"
+    },
+    {
+      "fromEntryId": "6c03a663-bf20-4451-9a6a-07ec4e26d8c5",
+      "toEntryId": "e026087e-f52b-4a75-ad58-8561083de435",
+      "type": "seller"
+    }
+  ],
+  "media": []
+}

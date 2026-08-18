@@ -16,7 +16,7 @@ export default function ListCollectionsPage({data}: Props) {
         <Spacer y={2}/>
         <div className={styles.grid}>
           {data.map(e => (
-            <CardListCollection link={e.slug} title={e.name} key={e.id}/>
+            <CardListCollection link={e.slug} title={e.name} type={e.type} key={e.id}/>
           ))}
         </div>
       </div>

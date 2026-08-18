@@ -1,0 +1,1026 @@
+{
+  "version": 1,
+  "exportedAt": "2026-08-18T04:19:04.476315Z",
+  "collections": [
+    {
+      "slug": "doctors",
+      "name": "Equipo médico",
+      "type": "collection",
+      "fileName": "doctors",
+      "isMedia": false,
+      "template": "dentistDoctor",
+      "fields": [
+        {
+          "name": "position",
+          "type": "text",
+          "label": "Cargo",
+          "required": true
+        },
+        {
+          "name": "specialty",
+          "type": "select",
+          "label": "Especialidad",
+          "options": [
+            {
+              "label": "Odontología general",
+              "value": "general"
+            },
+            {
+              "label": "Ortodoncia",
+              "value": "ortodoncia"
+            },
+            {
+              "label": "Odontopediatría",
+              "value": "odontopediatria"
+            },
+            {
+              "label": "Endodoncia",
+              "value": "endodoncia"
+            },
+            {
+              "label": "Cirugía oral",
+              "value": "cirugia"
+            },
+            {
+              "label": "Implantología",
+              "value": "implantologia"
+            }
+          ],
+          "defaultValue": "general"
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Teléfono"
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "label": "Email"
+        },
+        {
+          "name": "photo",
+          "type": "upload",
+          "label": "Foto",
+          "allowedTypes": [
+            "image/*"
+          ]
+        },
+        {
+          "name": "bio",
+          "type": "richText",
+          "label": "Biografía"
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "400e9488-f82e-4098-9318-d6cb9cebc6a8",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Dra. Valeria Rojas",
+            "entry_slug": "valeria-rojas",
+            "position": "Ortodoncista",
+            "specialty": "ortodoncia",
+            "phone": "+51 998 111 222",
+            "email": "valeria.rojas@sonrisatotal.pe",
+            "bio": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Especialista en ortodoncia con más de 10 años de experiencia. Egresada de la UPCH, formada en Brasil en ortodoncia invisible."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "c9a116f9-5b47-4872-a91b-0cfe83777de5",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Dr. Martín Guzmán",
+            "entry_slug": "martin-guzman",
+            "position": "Odontólogo General",
+            "specialty": "general",
+            "phone": "+51 998 333 444",
+            "email": "martin.guzman@sonrisatotal.pe",
+            "bio": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Odontólogo general con enfoque preventivo y estético. Atiende limpiezas, blanqueamientos y cirugías menores desde 2014."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "bb8b79e1-35fe-4793-8252-a107ea5fabbd",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Dra. Camila Ibáñez",
+            "entry_slug": "camila-ibanez",
+            "position": "Odontopediatra",
+            "specialty": "odontopediatria",
+            "phone": "+51 998 555 666",
+            "email": "camila.ibanez@sonrisatotal.pe",
+            "bio": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Odontopediatra dedicada a que los más chicos pierdan el miedo al dentista. Consultorio adaptado especialmente para niños."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "8670ded1-978b-4541-905e-6b62985a0d5e",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Dr. Rodrigo Fernández",
+            "entry_slug": "rodrigo-fernandez",
+            "position": "Implantólogo",
+            "specialty": "implantologia",
+            "phone": "+51 998 777 888",
+            "email": "rodrigo.fernandez@sonrisatotal.pe",
+            "bio": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Especialista en implantes dentales y rehabilitación oral compleja, con más de 800 implantes realizados."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "slug": "services",
+      "name": "Servicios",
+      "type": "collection",
+      "fileName": "services",
+      "isMedia": false,
+      "template": "dentistService",
+      "fields": [
+        {
+          "name": "category",
+          "type": "select",
+          "label": "Categoría",
+          "options": [
+            {
+              "label": "Preventivo",
+              "value": "preventivo"
+            },
+            {
+              "label": "Estético",
+              "value": "estetico"
+            },
+            {
+              "label": "Ortodoncia",
+              "value": "ortodoncia"
+            },
+            {
+              "label": "Odontopediatría",
+              "value": "odontopediatria"
+            },
+            {
+              "label": "Cirugía",
+              "value": "cirugia"
+            },
+            {
+              "label": "Implantes",
+              "value": "implantes"
+            }
+          ],
+          "defaultValue": "preventivo"
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "label": "Precio desde (S/)",
+          "min": 0,
+          "required": true
+        },
+        {
+          "name": "duration",
+          "type": "text",
+          "label": "Duración aproximada"
+        },
+        {
+          "name": "description",
+          "type": "richText",
+          "label": "Descripción"
+        },
+        {
+          "name": "doctor",
+          "type": "relationship",
+          "label": "Especialista a cargo",
+          "relationTo": "doctors",
+          "multiple": false
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "6537b300-fd22-4353-863a-b04bb0be3293",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Limpieza dental",
+            "entry_slug": "limpieza-dental",
+            "category": "preventivo",
+            "price": 90,
+            "duration": "30 min",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Profilaxis dental completa: eliminación de sarro y placa bacteriana, pulido y revisión general."
+                  }
+                ]
+              }
+            ],
+            "doctor": "c9a116f9-5b47-4872-a91b-0cfe83777de5"
+          }
+        },
+        {
+          "id": "760c7e23-82f0-4885-828d-7a5910131570",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Blanqueamiento dental",
+            "entry_slug": "blanqueamiento-dental",
+            "category": "estetico",
+            "price": 350,
+            "duration": "60 min",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Blanqueamiento profesional con luz LED, resultados visibles desde la primera sesión."
+                  }
+                ]
+              }
+            ],
+            "doctor": "c9a116f9-5b47-4872-a91b-0cfe83777de5"
+          }
+        },
+        {
+          "id": "e3d0929d-a06e-482c-85eb-3b2eb76cc8a6",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Ortodoncia con brackets",
+            "entry_slug": "ortodoncia-con-brackets",
+            "category": "ortodoncia",
+            "price": 2800,
+            "duration": "45 min (consulta)",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Tratamiento completo de ortodoncia, con opción de brackets metálicos, estéticos o alineadores invisibles."
+                  }
+                ]
+              }
+            ],
+            "doctor": "400e9488-f82e-4098-9318-d6cb9cebc6a8"
+          }
+        },
+        {
+          "id": "49af60c7-7cd7-4bc7-9fd9-7fd67ad8a3d6",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Odontopediatría",
+            "entry_slug": "odontopediatria",
+            "category": "odontopediatria",
+            "price": 120,
+            "duration": "40 min",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Control y tratamiento dental para niños en un ambiente cálido y sin estrés."
+                  }
+                ]
+              }
+            ],
+            "doctor": "bb8b79e1-35fe-4793-8252-a107ea5fabbd"
+          }
+        },
+        {
+          "id": "b82205bb-311e-4e09-aa49-99cdec7388e8",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Extracción de muela",
+            "entry_slug": "extraccion-de-muela",
+            "category": "cirugia",
+            "price": 250,
+            "duration": "50 min",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Extracción simple o quirúrgica (incluye muelas del juicio), con anestesia local y protocolo post-operatorio."
+                  }
+                ]
+              }
+            ],
+            "doctor": "c9a116f9-5b47-4872-a91b-0cfe83777de5"
+          }
+        },
+        {
+          "id": "37401216-7402-4174-922c-80c650dd675d",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Implante dental",
+            "entry_slug": "implante-dental",
+            "category": "implantes",
+            "price": 1800,
+            "duration": "90 min",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Reemplazo de pieza dental perdida con implante de titanio y corona de porcelana, procedimiento en dos fases."
+                  }
+                ]
+              }
+            ],
+            "doctor": "8670ded1-978b-4541-905e-6b62985a0d5e"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "portfolio",
+      "name": "Casos y trabajos",
+      "type": "collection",
+      "fileName": "portfolio",
+      "isMedia": false,
+      "template": "dentistPortfolio",
+      "fields": [
+        {
+          "name": "treatmentType",
+          "type": "select",
+          "label": "Tipo de tratamiento",
+          "options": [
+            {
+              "label": "Ortodoncia",
+              "value": "ortodoncia"
+            },
+            {
+              "label": "Blanqueamiento",
+              "value": "blanqueamiento"
+            },
+            {
+              "label": "Carillas",
+              "value": "carillas"
+            },
+            {
+              "label": "Implantes",
+              "value": "implantes"
+            },
+            {
+              "label": "Odontopediatría",
+              "value": "odontopediatria"
+            },
+            {
+              "label": "Rehabilitación oral",
+              "value": "rehabilitacion"
+            }
+          ],
+          "defaultValue": "ortodoncia"
+        },
+        {
+          "name": "summary",
+          "type": "textarea",
+          "label": "Resumen breve (se muestra en la card)",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "richText",
+          "label": "Detalle del caso"
+        },
+        {
+          "name": "beforePhoto",
+          "type": "upload",
+          "label": "Foto antes",
+          "allowedTypes": [
+            "image/*"
+          ]
+        },
+        {
+          "name": "afterPhoto",
+          "type": "upload",
+          "label": "Foto después",
+          "allowedTypes": [
+            "image/*"
+          ]
+        },
+        {
+          "name": "doctor",
+          "type": "relationship",
+          "label": "Especialista a cargo",
+          "relationTo": "doctors",
+          "multiple": false
+        },
+        {
+          "name": "featured",
+          "type": "toggle",
+          "label": "Destacar en el home",
+          "defaultValue": false
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "2ff9513f-1e8d-42a1-b973-cb2974dd9d58",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Sonrisa renovada con carillas de porcelana",
+            "entry_slug": "sonrisa-renovada-carillas-porcelana",
+            "treatmentType": "carillas",
+            "summary": "8 carillas de porcelana para corregir forma y color en un paciente con desgaste dental.",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Paciente de 34 años con desgaste dental por bruxismo. Se colocaron 8 carillas de porcelana en el sector anterosuperior, logrando una sonrisa natural y uniforme en 3 sesiones."
+                  }
+                ]
+              }
+            ],
+            "featured": true,
+            "doctor": "c9a116f9-5b47-4872-a91b-0cfe83777de5"
+          }
+        },
+        {
+          "id": "ee38cb8a-dec3-46a9-85a4-7ba188bcaa95",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Alineación completa con ortodoncia invisible",
+            "entry_slug": "alineacion-ortodoncia-invisible",
+            "treatmentType": "ortodoncia",
+            "summary": "Corrección de apiñamiento dental con alineadores transparentes en 14 meses.",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Caso de apiñamiento moderado tratado con alineadores transparentes. Control mensual durante 14 meses hasta lograr una alineación completa sin brackets visibles."
+                  }
+                ]
+              }
+            ],
+            "featured": true,
+            "doctor": "400e9488-f82e-4098-9318-d6cb9cebc6a8"
+          }
+        },
+        {
+          "id": "27d4e7fc-2f0c-41c1-aa78-7ffd158e3e1e",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Rehabilitación con implante unitario",
+            "entry_slug": "rehabilitacion-implante-unitario",
+            "treatmentType": "implantes",
+            "summary": "Reemplazo de pieza perdida con implante de titanio y corona de porcelana.",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Paciente con pérdida de pieza dental por trauma. Se colocó un implante de titanio, con corona de porcelana definitiva a los 4 meses tras la osteointegración."
+                  }
+                ]
+              }
+            ],
+            "featured": true,
+            "doctor": "8670ded1-978b-4541-905e-6b62985a0d5e"
+          }
+        },
+        {
+          "id": "ad1d27a1-385d-4685-8f0b-472395600c4b",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Blanqueamiento dental profesional",
+            "entry_slug": "blanqueamiento-dental-profesional",
+            "treatmentType": "blanqueamiento",
+            "summary": "Aclarado de 4 tonos en una sesión con luz LED.",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Sesión única de blanqueamiento con gel profesional y activación por luz LED, con aclarado de 4 tonos según escala Vita."
+                  }
+                ]
+              }
+            ],
+            "featured": false,
+            "doctor": "c9a116f9-5b47-4872-a91b-0cfe83777de5"
+          }
+        },
+        {
+          "id": "1adfa7dc-3d3e-4749-95ec-21b2c6474fe1",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Primera consulta sin miedo",
+            "entry_slug": "primera-consulta-sin-miedo",
+            "treatmentType": "odontopediatria",
+            "summary": "Adaptación progresiva de un paciente de 5 años a su primer tratamiento.",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Paciente de 5 años con alta ansiedad dental. Se trabajó con técnica de adaptación progresiva en 2 citas previas antes del tratamiento, logrando una experiencia positiva."
+                  }
+                ]
+              }
+            ],
+            "featured": false,
+            "doctor": "bb8b79e1-35fe-4793-8252-a107ea5fabbd"
+          }
+        },
+        {
+          "id": "c070b026-c04f-42bd-86c4-7814f8274991",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Rehabilitación oral completa",
+            "entry_slug": "rehabilitacion-oral-completa",
+            "treatmentType": "rehabilitacion",
+            "summary": "Recuperación funcional y estética con una combinación de implantes y coronas.",
+            "description": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Paciente con múltiples piezas perdidas, tratado con una combinación de 3 implantes y 5 coronas de porcelana para recuperar función masticatoria y estética."
+                  }
+                ]
+              }
+            ],
+            "featured": false,
+            "doctor": "8670ded1-978b-4541-905e-6b62985a0d5e"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "testimonials",
+      "name": "Testimonios",
+      "type": "collection",
+      "fileName": "testimonials",
+      "isMedia": false,
+      "template": "dentistTestimonial",
+      "fields": [
+        {
+          "name": "rating",
+          "type": "number",
+          "label": "Calificación (1-5)",
+          "min": 1,
+          "max": 5,
+          "defaultValue": 5
+        },
+        {
+          "name": "quote",
+          "type": "textarea",
+          "label": "Testimonio",
+          "required": true
+        },
+        {
+          "name": "service",
+          "type": "relationship",
+          "label": "Servicio relacionado",
+          "relationTo": "services",
+          "multiple": false
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "cc84bf21-3595-42ba-9e21-d9817c5420d7",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Patricia Núñez",
+            "entry_slug": "patricia-nunez",
+            "rating": 5,
+            "quote": "Me hice el blanqueamiento y el resultado fue increíble, súper profesionales y el consultorio es muy cómodo.",
+            "service": "760c7e23-82f0-4885-828d-7a5910131570"
+          }
+        },
+        {
+          "id": "ef066781-4377-4013-9963-f97f0ab1cc1e",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Jorge Ramírez",
+            "entry_slug": "jorge-ramirez",
+            "rating": 5,
+            "quote": "Llevo un año con mi tratamiento de ortodoncia con la Dra. Valeria y los avances son notables. Muy recomendados.",
+            "service": "e3d0929d-a06e-482c-85eb-3b2eb76cc8a6"
+          }
+        },
+        {
+          "id": "3e3b4c3c-e013-425b-be05-b4e27107fa9e",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Sofía Delgado",
+            "entry_slug": "sofia-delgado",
+            "rating": 4,
+            "quote": "Llevé a mi hijo de 6 años y por primera vez no lloró en el dentista. La Dra. Camila tiene mucha paciencia.",
+            "service": "49af60c7-7cd7-4bc7-9fd9-7fd67ad8a3d6"
+          }
+        },
+        {
+          "id": "653fd060-2259-48ae-ba55-b4e73d91692a",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "Andrés Peña",
+            "entry_slug": "andres-pena",
+            "rating": 5,
+            "quote": "Me colocaron un implante después de años posponiéndolo por miedo. El Dr. Rodrigo me explicó todo el proceso y no sentí dolor.",
+            "service": "37401216-7402-4174-922c-80c650dd675d"
+          }
+        }
+      ]
+    },
+    {
+      "slug": "faq",
+      "name": "Preguntas frecuentes",
+      "type": "collection",
+      "fileName": "faq",
+      "isMedia": false,
+      "template": null,
+      "fields": [
+        {
+          "name": "answer",
+          "type": "richText",
+          "label": "Respuesta",
+          "required": true
+        }
+      ],
+      "dataSingle": null,
+      "entries": [
+        {
+          "id": "98a02bdb-c713-428d-9bf2-a8ab9338fad4",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "¿Atienden emergencias dentales?",
+            "entry_slug": "atienden-emergencias-dentales",
+            "answer": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Sí, contamos con atención de urgencias en el mismo día llamando a nuestra línea de contacto."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "c602da2a-d1d7-4ce3-9855-4bd2ca3efbd9",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "¿Aceptan seguros dentales?",
+            "entry_slug": "aceptan-seguros-dentales",
+            "answer": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Trabajamos con las principales aseguradoras del país. Consulta disponibilidad con tu seguro al agendar tu cita."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "005ed5c5-54c8-4129-a6d7-8834bb01d7c2",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "¿Cada cuánto debo hacerme una limpieza?",
+            "entry_slug": "cada-cuanto-limpieza",
+            "answer": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Recomendamos una limpieza dental cada 6 meses para mantener una buena salud bucal."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "eb6c91c1-1783-44ce-aa23-d8dc0cd8166d",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "¿Tienen planes de pago para ortodoncia?",
+            "entry_slug": "planes-de-pago-ortodoncia",
+            "answer": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Sí, ofrecemos planes en cuotas mensuales sin intereses para todos los tratamientos de ortodoncia."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "9b666ef9-9093-4aa0-9fb9-d83bfc9a38df",
+          "createdAt": "2026-08-18T04:19:04.476315Z",
+          "data": {
+            "entry_name": "¿Cómo reservo una cita?",
+            "entry_slug": "como-reservo-una-cita",
+            "answer": [
+              {
+                "type": "paragraph",
+                "children": [
+                  {
+                    "text": "Desde la página de Reservas, eligiendo el servicio, el especialista y el horario que prefieras. Te confirmamos por teléfono o email en menos de 24 horas."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "slug": "appointment-form",
+      "name": "Formulario de citas",
+      "type": "form",
+      "fileName": "appointmentForm",
+      "isMedia": false,
+      "template": null,
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Nombre",
+          "required": true
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "label": "Teléfono",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "label": "Email",
+          "required": true
+        },
+        {
+          "name": "service",
+          "type": "text",
+          "label": "Servicio de interés"
+        },
+        {
+          "name": "doctor",
+          "type": "text",
+          "label": "Especialista preferido"
+        },
+        {
+          "name": "preferredDate",
+          "type": "date",
+          "label": "Fecha preferida"
+        },
+        {
+          "name": "preferredTime",
+          "type": "select",
+          "label": "Horario preferido",
+          "options": [
+            {
+              "label": "Mañana (9am - 12pm)",
+              "value": "manana"
+            },
+            {
+              "label": "Tarde (12pm - 5pm)",
+              "value": "tarde"
+            },
+            {
+              "label": "Noche (5pm - 8pm)",
+              "value": "noche"
+            }
+          ],
+          "defaultValue": "manana"
+        },
+        {
+          "name": "message",
+          "type": "textarea",
+          "label": "Mensaje"
+        }
+      ],
+      "dataSingle": null,
+      "entries": []
+    },
+    {
+      "slug": "site-settings",
+      "name": "Configuración del sitio",
+      "type": "global",
+      "fileName": "siteSettings",
+      "isMedia": false,
+      "template": null,
+      "fields": [
+        {
+          "name": "siteName",
+          "type": "text",
+          "label": "Nombre del sitio",
+          "required": true
+        },
+        {
+          "name": "theme",
+          "type": "select",
+          "label": "Tema visual del sitio público",
+          "options": [
+            {
+              "label": "Moderno (verde)",
+              "value": "modern"
+            },
+            {
+              "label": "Clásico (dorado)",
+              "value": "classic"
+            },
+            {
+              "label": "Dental (celeste)",
+              "value": "dental"
+            }
+          ],
+          "defaultValue": "dental"
+        },
+        {
+          "name": "logo",
+          "type": "upload",
+          "label": "Logo",
+          "allowedTypes": [
+            "image/*"
+          ]
+        },
+        {
+          "name": "footerText",
+          "type": "textarea",
+          "label": "Texto del footer"
+        },
+        {
+          "name": "contactPhone",
+          "type": "text",
+          "label": "Teléfono de contacto"
+        },
+        {
+          "name": "contactEmail",
+          "type": "text",
+          "label": "Email de contacto"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "label": "Dirección"
+        },
+        {
+          "name": "yearsExperience",
+          "type": "number",
+          "label": "Años de experiencia",
+          "min": 0,
+          "defaultValue": 15
+        },
+        {
+          "name": "patientsCount",
+          "type": "number",
+          "label": "Pacientes atendidos",
+          "min": 0,
+          "defaultValue": 3000
+        },
+        {
+          "name": "treatmentsCount",
+          "type": "number",
+          "label": "Tratamientos realizados",
+          "min": 0,
+          "defaultValue": 5000
+        }
+      ],
+      "dataSingle": {
+        "slug": "site-settings",
+        "data": {
+          "siteName": "Sonrisa Total",
+          "theme": "dental",
+          "footerText": "Cuidando tu sonrisa con calidez y tecnología de punta.",
+          "contactPhone": "+51 999 222 333",
+          "contactEmail": "hola@sonrisatotal.pe",
+          "address": "Av. Javier Prado Este 1234, San Isidro, Lima",
+          "yearsExperience": 15,
+          "patientsCount": 3000,
+          "treatmentsCount": 5000
+        }
+      },
+      "entries": []
+    }
+  ],
+  "relationships": [
+    {
+      "fromEntryId": "6537b300-fd22-4353-863a-b04bb0be3293",
+      "toEntryId": "c9a116f9-5b47-4872-a91b-0cfe83777de5",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "760c7e23-82f0-4885-828d-7a5910131570",
+      "toEntryId": "c9a116f9-5b47-4872-a91b-0cfe83777de5",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "e3d0929d-a06e-482c-85eb-3b2eb76cc8a6",
+      "toEntryId": "400e9488-f82e-4098-9318-d6cb9cebc6a8",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "49af60c7-7cd7-4bc7-9fd9-7fd67ad8a3d6",
+      "toEntryId": "bb8b79e1-35fe-4793-8252-a107ea5fabbd",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "b82205bb-311e-4e09-aa49-99cdec7388e8",
+      "toEntryId": "c9a116f9-5b47-4872-a91b-0cfe83777de5",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "37401216-7402-4174-922c-80c650dd675d",
+      "toEntryId": "8670ded1-978b-4541-905e-6b62985a0d5e",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "cc84bf21-3595-42ba-9e21-d9817c5420d7",
+      "toEntryId": "760c7e23-82f0-4885-828d-7a5910131570",
+      "type": "service"
+    },
+    {
+      "fromEntryId": "ef066781-4377-4013-9963-f97f0ab1cc1e",
+      "toEntryId": "e3d0929d-a06e-482c-85eb-3b2eb76cc8a6",
+      "type": "service"
+    },
+    {
+      "fromEntryId": "3e3b4c3c-e013-425b-be05-b4e27107fa9e",
+      "toEntryId": "49af60c7-7cd7-4bc7-9fd9-7fd67ad8a3d6",
+      "type": "service"
+    },
+    {
+      "fromEntryId": "653fd060-2259-48ae-ba55-b4e73d91692a",
+      "toEntryId": "37401216-7402-4174-922c-80c650dd675d",
+      "type": "service"
+    },
+    {
+      "fromEntryId": "2ff9513f-1e8d-42a1-b973-cb2974dd9d58",
+      "toEntryId": "c9a116f9-5b47-4872-a91b-0cfe83777de5",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "ee38cb8a-dec3-46a9-85a4-7ba188bcaa95",
+      "toEntryId": "400e9488-f82e-4098-9318-d6cb9cebc6a8",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "27d4e7fc-2f0c-41c1-aa78-7ffd158e3e1e",
+      "toEntryId": "8670ded1-978b-4541-905e-6b62985a0d5e",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "ad1d27a1-385d-4685-8f0b-472395600c4b",
+      "toEntryId": "c9a116f9-5b47-4872-a91b-0cfe83777de5",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "1adfa7dc-3d3e-4749-95ec-21b2c6474fe1",
+      "toEntryId": "bb8b79e1-35fe-4793-8252-a107ea5fabbd",
+      "type": "doctor"
+    },
+    {
+      "fromEntryId": "c070b026-c04f-42bd-86c4-7814f8274991",
+      "toEntryId": "8670ded1-978b-4541-905e-6b62985a0d5e",
+      "type": "doctor"
+    }
+  ],
+  "media": []
+}

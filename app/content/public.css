@@ -1,0 +1,69 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Sitio público únicamente (el admin sigue con CSS Modules). Los tokens de
+   acá abajo son la fuente de verdad del sistema de temas: @theme los
+   declara como variables CSS reales en :root (así funcionan las utilidades
+   de Tailwind, ej. bg-pub-accent), y los bloques :root[data-pub-theme="..."]
+   más abajo las pisan por cascada normal — por eso el tema cambia en vivo
+   con solo cambiar el atributo en <html> (ver app/root.tsx +
+   app/content/theme.server.ts), sin recompilar nada. Agregar un tema nuevo
+   = un bloque más acá, ningún componente sabe que existen. */
+@theme {
+  --color-pub-bg: #f7f7f5;
+  --color-pub-surface: #ffffff;
+  --color-pub-border: #e7e5e0;
+  --color-pub-text: #1f2420;
+  --color-pub-text-muted: #6b6f6a;
+  --color-pub-accent: #2f6f4f;
+  --color-pub-accent-hover: #245a3f;
+  --font-pub: "Inter", sans-serif;
+  --font-pub-display: "Inter", sans-serif;
+  --radius-pub: 0.8rem;
+  --shadow-pub: 0 8px 24px rgba(31, 36, 32, 0.08);
+}
+
+:root[data-pub-theme="classic"] {
+  --color-pub-bg: #faf6ee;
+  --color-pub-surface: #fffdf8;
+  --color-pub-border: #e6dcc6;
+  --color-pub-text: #2b241a;
+  --color-pub-text-muted: #756b57;
+  --color-pub-accent: #9c6b1f;
+  --color-pub-accent-hover: #7d5518;
+  --font-pub: "Sarabun", serif;
+  --font-pub-display: "Sarabun", serif;
+}
+
+:root[data-pub-theme="dental"] {
+  --color-pub-bg: #f6fbfb;
+  --color-pub-surface: #ffffff;
+  --color-pub-border: #dcedef;
+  --color-pub-text: #17282b;
+  --color-pub-text-muted: #5c7378;
+  --color-pub-accent: #1f9ea6;
+  --color-pub-accent-hover: #187b81;
+  --font-pub: "Inter", sans-serif;
+  --font-pub-display: "Fraunces", serif;
+  --radius-pub: 1.2rem;
+  --shadow-pub: 0 12px 32px rgba(23, 40, 43, 0.08);
+}
+
+/* RichTextView (ver app/content/RichTextView.tsx) renderiza HTML semántico
+   sin clases — @tailwindcss/typography (prose) lo estiliza; acá solo
+   coloreamos con los tokens del tema activo. */
+.prose :where(:not(pre) > code) {
+  color: inherit;
+}
+.prose {
+  --tw-prose-body: var(--color-pub-text);
+  --tw-prose-headings: var(--color-pub-text);
+  --tw-prose-bold: var(--color-pub-text);
+  --tw-prose-links: var(--color-pub-accent);
+  --tw-prose-bullets: var(--color-pub-accent);
+  --tw-prose-quotes: var(--color-pub-text-muted);
+  --tw-prose-quote-borders: var(--color-pub-border);
+}
+.prose :where(h1, h2, h3, h4) {
+  font-family: var(--font-pub-display);
+}

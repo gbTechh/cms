@@ -158,6 +158,8 @@ GroupFieldSchema = BaseFieldSchema.extend({
 const CollectionSchema = z.object({
   name: z.string().min(1, "El nombre de la colección es requerido"),
   slug: z.string().min(1, "El slug de la colección es requerido"),
+  type: z.enum(["collection", "global", "page", "form"]).optional(),
+  template: z.string().nullable().optional(),
   fields: z.array(FieldSchema),
   isMedia: z.boolean().optional(),
 });

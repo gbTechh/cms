@@ -1,8 +1,12 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { CollectionSlug, MediaPage } from "~/admin/components";
-import { deleteEntry, listCollectionBySlug, assertCsrf } from "~/admin/use_cases";
+import { CollectionSlug, FormSubmissionsPage, MediaPage, SingleEdit } from "~/admin/components";
+import { deleteEntry, listCollectionBySlug, assertCsrf, updateDataSingle } from "~/admin/use_cases";
 import { bulkDeleteMedia, deleteMediaById, listMedia, updateMediaById } from "~/admin/use_cases/media";
+import { deleteFormSubmissionById, listFormSubmissions } from "~/admin/use_cases/forms";
+import { ROUTES } from "~/admin/constants";
+
+const isSingleType = (type?: string) => type === "global" || type === "page";
 
 export const loader = async (ctx: LoaderFunctionArgs) => {
   const data = await listCollectionBySlug(ctx) as { collection: any };
@@ -11,6 +15,12 @@ export const loader = async (ctx: LoaderFunctionArgs) => {
     const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
     const { media, total, pageSize } = await listMedia({ page });
     return { collection: data.collection, media, total, page, pageSize };
+  }
+  if (data.collection?.type === "form") {
+    const url = new URL(ctx.request.url);
+    const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
+    const { submissions, total, pageSize } = await listFormSubmissions(data.collection.id, { page });
+    return { collection: data.collection, submissions, total, page, pageSize };
   }
   return data;
 };
@@ -35,6 +45,22 @@ export const action = async (ctx: ActionFunctionArgs) => {
     return null;
   }
 
+  if (isSingleType(collection?.type)) {
+    const raw = formData.get("data") as string;
+    const slug = (formData.get("slug") as string) || "";
+    const data = raw ? JSON.parse(raw) : {};
+
+    const result = await updateDataSingle(collection.id, slug, data);
+    if ((result as any).error) return result;
+
+    return redirect(`${ROUTES.COLLECTIONS}/${ctx.params.slug}`);
+  }
+
+  if (collection?.type === "form") {
+    const id = formData.get("id") as string;
+    return deleteFormSubmissionById(id);
+  }
+
   const id = formData.get("id") as string;
   return deleteEntry(id, ctx.params.slug!);
 };
@@ -48,6 +74,21 @@ export default function CollectionsSlugAdmin() {
       <MediaPage
         collection={collection}
         media={media ?? []}
+        total={total}
+        page={page}
+        pageSize={pageSize}
+      />
+    );
+  }
+  if (isSingleType(collection?.type)) {
+    return <SingleEdit data={collection} />;
+  }
+  if (collection?.type === "form") {
+    const { submissions, total, page, pageSize } = loaderData as any;
+    return (
+      <FormSubmissionsPage
+        collection={collection}
+        submissions={submissions ?? []}
         total={total}
         page={page}
         pageSize={pageSize}

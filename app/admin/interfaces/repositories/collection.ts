@@ -1,6 +1,7 @@
 import { TError } from "~/admin/lib";
 import {
   ICollection,
+  IDataSingle,
   IEntry,
   IEntryCreate,
   IEntryError,
@@ -31,4 +32,12 @@ export interface CollectionRepository {
   listEntryOptions(slug: string): Promise<{ value: string; label: string }[]>;
   countValidEntryIds(slug: string, ids: string[]): Promise<number>;
   syncRelationships(fromEntryId: string, type: string, toEntryIds: string[]): Promise<void>;
+  upsertDataSingle(
+    collectionId: string,
+    slug: string,
+    data: Record<string, any>
+  ): Promise<{
+    error: TError<IEntryError> | null;
+    dataSingle: IDataSingle | null;
+  }>;
 }
