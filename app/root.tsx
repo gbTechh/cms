@@ -12,7 +12,13 @@ import { data, type LinksFunction, type LoaderFunctionArgs } from "@remix-run/no
 import { commitSession, ensureCsrfToken, getSession } from "~/admin/use_cases";
 import { getSiteTheme } from "~/content/theme.server";
 
-import "./admin/styles/global.module.css";
+// OJO: el reset (normalize.css) de acá abajo se movió a los dos entry points
+// del admin (admin+/_layout.tsx y admin_.login.tsx) — a propósito, NO va acá.
+// No está envuelto en un @layer, así que si cargara en toda la app le
+// ganaría por cascada a las utilidades de Tailwind del sitio público (una
+// regla fuera de @layer siempre le gana a cualquier regla dentro de un
+// @layer, sin importar el orden ni la especificidad) y las utilidades
+// dejarían de verse aunque las clases estén puestas en el HTML.
 
 export const links: LinksFunction = () => [
   {

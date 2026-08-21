@@ -36,7 +36,11 @@
   --color-white: #fff;
   --color-primary: #181818;
   --color-primary-hover: #181818e5;
-  --color-contrast: #292929;
+  /* Este valor era el mismo en los dos temas (nunca se sobrescribía en el
+     bloque [data-theme="light"] de abajo) -> texto oscuro sobre fondo
+     oscuro en tema oscuro, ilegible. #292929 solo tiene sentido sobre
+     fondos claros, así que ahora vive en el bloque de tema claro. */
+  --color-contrast: #f4f4f4;
   --color-contrast-hover: #c7c7c7e5;
   --color-error: #f43f5e;
   --color-error-hover: #f43f5eb9;
@@ -141,6 +145,7 @@
   --color-text-primary-hover: #1a1a1ce5;
   --color-text-contrast: #7a7a80;
   --color-text-contrast-hover: #56565b;
+  --color-contrast: #292929;
 
   --border-color: rgb(226, 226, 230);
   --border-row-table: rgba(20, 20, 20, 0.12);
@@ -187,6 +192,8 @@
   width: 100%;
   min-height: 100vh;
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
 .main {
@@ -197,9 +204,11 @@
   border-style: solid;
   display: flex;
   flex-direction: column;
+  min-height: 100dvh;
 
   .header {
     display: flex;
+    height: 5rem;
     align-items: center;
     padding: 1rem 1.5rem;
     min-height: 4.9rem;

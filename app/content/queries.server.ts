@@ -123,6 +123,52 @@ export async function getPublicCollection(
   };
 }
 
+/**
+ * Como getPublicCollection, pero filtrando las entradas por texto libre
+ * antes de paginar. Busca en cualquier valor de tipo string de `data` (no
+ * en richText, que guarda un árbol de nodos en vez de texto plano) — sirve
+ * para cualquier colección, no hace falta indexar ni tocar nada a mano.
+ */
+export async function searchPublicCollection(
+  slug: string,
+  query: string,
+  options?: { page?: number; pageSize?: number }
+): Promise<PublicCollection | null> {
+  const page = Math.max(1, options?.page ?? 1);
+  const pageSize = options?.pageSize ?? 12;
+  const q = query.trim().toLowerCase();
+
+  const collection = await prisma.collection.findUnique({ where: { slug } });
+  if (!collection || collection.deletedAt || collection.type !== "collection") return null;
+
+  const allEntries = await prisma.entry.findMany({
+    where: { collectionId: collection.id },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const matches = (data: Record<string, any>): boolean => {
+    if (!q) return true;
+    return Object.values(data).some((v) => typeof v === "string" && v.toLowerCase().includes(q));
+  };
+
+  const published = allEntries.filter((e) => isPublished(e.data) && matches(e.data as Record<string, any>));
+  const total = published.length;
+  const start = (page - 1) * pageSize;
+  const pageEntries = published.slice(start, start + pageSize);
+
+  return {
+    id: collection.id,
+    slug: collection.slug,
+    name: collection.name,
+    template: collection.template,
+    fields: collection.fields as unknown as IField[],
+    entries: pageEntries.map(mapPublicEntry),
+    total,
+    page,
+    pageSize,
+  };
+}
+
 const toRelatedRef = (rel: {
   type: string;
   entry: { id: string; data: unknown; collection: { slug: string; name: string } };

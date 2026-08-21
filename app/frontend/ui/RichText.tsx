@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "./cn";
 
 interface LeafNode {
   text: string;
@@ -53,13 +54,21 @@ function renderNode(node: SlateNode, key: React.Key): React.ReactNode {
   return isLeaf(node) ? renderLeaf(node, key) : renderElement(node, key);
 }
 
-interface RichTextViewProps {
+export interface RichTextProps {
   value: unknown;
   className?: string;
 }
 
-/** Renderiza el árbol de nodos de Slate (guardado por RichTextEditor) como HTML real. */
-export function RichTextView({ value, className }: RichTextViewProps) {
+/**
+ * Renderiza el árbol de nodos de Slate (guardado por el editor del admin)
+ * como HTML real, con la tipografía de `@tailwindcss/typography` (`prose`,
+ * configurada con los tokens del tema en app/frontend/theme.css).
+ */
+export function RichText({ value, className }: RichTextProps) {
   if (!Array.isArray(value)) return null;
-  return <div className={className}>{value.map((node, i) => renderNode(node, i))}</div>;
+  return (
+    <div className={cn("prose max-w-none text-[1.45rem] leading-relaxed", className)}>
+      {value.map((node, i) => renderNode(node, i))}
+    </div>
+  );
 }

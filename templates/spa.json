@@ -1,0 +1,444 @@
+{
+  "version": 1,
+  "exportedAt": "2026-08-21T03:39:13.799Z",
+  "collections": [
+    {
+      "slug": "media",
+      "name": "Media",
+      "type": "collection",
+      "fileName": "media",
+      "isMedia": true,
+      "template": null,
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "label": "título del blog",
+          "defaultValue": "Untitled"
+        },
+        {
+          "name": "content",
+          "type": "richText",
+          "label": "contenido"
+        }
+      ],
+      "entries": [],
+      "dataSingle": null
+    },
+    {
+      "slug": "site-settings",
+      "name": "Configuración del sitio",
+      "type": "global",
+      "fileName": "siteSettings",
+      "isMedia": false,
+      "template": null,
+      "fields": [
+        {
+          "name": "siteName",
+          "type": "text",
+          "label": "Nombre del sitio",
+          "required": true
+        },
+        {
+          "name": "theme",
+          "type": "select",
+          "label": "Tema visual del sitio público",
+          "options": [
+            {
+              "label": "Moderno (verde)",
+              "value": "modern"
+            },
+            {
+              "label": "Clásico (dorado)",
+              "value": "classic"
+            },
+            {
+              "label": "Dental (celeste)",
+              "value": "dental"
+            },
+            {
+              "label": "Spa (salvia)",
+              "value": "spa"
+            }
+          ],
+          "defaultValue": "spa"
+        },
+        {
+          "name": "logo",
+          "type": "upload",
+          "label": "Logo",
+          "allowedTypes": [
+            "image/*"
+          ]
+        },
+        {
+          "name": "footerText",
+          "type": "textarea",
+          "label": "Texto del footer"
+        },
+        {
+          "name": "contactPhone",
+          "type": "text",
+          "label": "Teléfono de contacto"
+        },
+        {
+          "name": "contactEmail",
+          "type": "text",
+          "label": "Email de contacto"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "label": "Dirección"
+        },
+        {
+          "min": 0,
+          "name": "yearsExperience",
+          "type": "number",
+          "label": "Años de experiencia",
+          "defaultValue": 15
+        },
+        {
+          "min": 0,
+          "name": "patientsCount",
+          "type": "number",
+          "label": "Clientes atendidos",
+          "defaultValue": 2000
+        },
+        {
+          "min": 0,
+          "name": "treatmentsCount",
+          "type": "number",
+          "label": "Tratamientos realizados",
+          "defaultValue": 4000
+        }
+      ],
+      "entries": [],
+      "dataSingle": {
+        "slug": "site-settings",
+        "data": {
+          "theme": "dental",
+          "address": "Av. Javier Prado Este 1234, San Isidro, Lima",
+          "siteName": "Sonrisa Total",
+          "footerText": "Cuidando tu sonrisa con calidez y tecnología de punta.",
+          "contactEmail": "hola@sonrisatotal.pe",
+          "contactPhone": "+51 999 222 333",
+          "patientsCount": 3000,
+          "treatmentsCount": 5000,
+          "yearsExperience": 15
+        }
+      }
+    },
+    {
+      "slug": "treatment-items",
+      "name": "Ítems de tratamiento",
+      "type": "collection",
+      "fileName": "treatmentItems",
+      "isMedia": false,
+      "template": "spaTreatmentItem",
+      "fields": [
+        {
+          "name": "shortDescription",
+          "type": "textarea",
+          "label": "Descripción corta",
+          "required": true
+        },
+        {
+          "min": 0,
+          "name": "price",
+          "type": "number",
+          "label": "Precio (S/)",
+          "required": true
+        },
+        {
+          "name": "image",
+          "type": "upload",
+          "label": "Imagen",
+          "allowedTypes": [
+            "image/*"
+          ]
+        },
+        {
+          "name": "treatment",
+          "type": "relationship",
+          "label": "Categoría",
+          "multiple": false,
+          "relationTo": "treatments"
+        },
+        {
+          "name": "benefits",
+          "type": "array",
+          "label": "Beneficios",
+          "fields": [
+            {
+              "name": "image",
+              "type": "upload",
+              "label": "Imagen",
+              "allowedTypes": [
+                "image/*"
+              ]
+            },
+            {
+              "name": "title",
+              "type": "text",
+              "label": "Título",
+              "required": true
+            },
+            {
+              "name": "description",
+              "type": "text",
+              "label": "Descripción"
+            }
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "87defdd5-35c8-4790-b949-63a5af11ad41",
+          "data": {
+            "image": "",
+            "price": 120,
+            "benefits": [
+              {
+                "image": "",
+                "title": "Piel renovada",
+                "description": "Elimina células muertas y destapa poros obstruidos."
+              },
+              {
+                "image": "",
+                "title": "Hidratación profunda",
+                "description": "Mascarilla final que restaura la humedad natural de la piel."
+              },
+              {
+                "image": "",
+                "title": "Luce más luminosa",
+                "description": "Resultado visible desde la primera sesión."
+              }
+            ],
+            "treatment": "3b8914da-8aca-4cbd-8210-430ba915bcd8",
+            "entry_name": "Limpieza Facial Profunda",
+            "entry_slug": "limpieza-facial-profunda",
+            "meta_status": "published",
+            "shortDescription": "Limpieza profesional que remueve impurezas y renueva la piel del rostro."
+          },
+          "createdAt": "2026-08-21T03:39:09.024Z"
+        },
+        {
+          "id": "1db889bc-fac5-4363-8746-a2dba29bbb69",
+          "data": {
+            "image": "",
+            "price": 180,
+            "benefits": [
+              {
+                "image": "",
+                "title": "Sin tiempo de recuperación",
+                "description": "Volvés a tu rutina apenas termina la sesión."
+              },
+              {
+                "image": "",
+                "title": "Reduce líneas finas",
+                "description": "Estimula colágeno para una piel más firme."
+              }
+            ],
+            "treatment": "3b8914da-8aca-4cbd-8210-430ba915bcd8",
+            "entry_name": "Hidrafacial Premium",
+            "entry_slug": "hidrafacial-premium",
+            "meta_status": "published",
+            "shortDescription": "Tratamiento de hidratación intensiva con tecnología de succión suave."
+          },
+          "createdAt": "2026-08-21T03:39:09.035Z"
+        },
+        {
+          "id": "57cc3770-cd7d-4a70-9687-0501be6d548b",
+          "data": {
+            "image": "",
+            "price": 150,
+            "benefits": [
+              {
+                "image": "",
+                "title": "Alivia contracturas",
+                "description": "Trabaja los nudos musculares de espalda y cuello."
+              },
+              {
+                "image": "",
+                "title": "Mejora la circulación",
+                "description": "Técnica que reactiva el flujo sanguíneo local."
+              }
+            ],
+            "treatment": "5c77ea87-35f5-42c5-bfc0-066e446378be",
+            "entry_name": "Masaje Descontracturante",
+            "entry_slug": "masaje-descontracturante",
+            "meta_status": "published",
+            "shortDescription": "Masaje de tejido profundo enfocado en aliviar tensión muscular."
+          },
+          "createdAt": "2026-08-21T03:39:09.039Z"
+        },
+        {
+          "id": "b5154592-b914-4862-9a3e-7d5549a47ab1",
+          "data": {
+            "image": "",
+            "price": 140,
+            "benefits": [
+              {
+                "image": "",
+                "title": "Piel más suave",
+                "description": "Elimina células muertas de todo el cuerpo."
+              },
+              {
+                "image": "",
+                "title": "Estimula la renovación celular",
+                "description": "Prepara la piel para tratamientos posteriores."
+              },
+              {
+                "image": "",
+                "title": "Relajación total",
+                "description": "Incluye masaje ligero durante la aplicación."
+              }
+            ],
+            "treatment": "5c77ea87-35f5-42c5-bfc0-066e446378be",
+            "entry_name": "Exfoliación Corporal",
+            "entry_slug": "exfoliacion-corporal",
+            "meta_status": "published",
+            "shortDescription": "Exfoliación completa con sales minerales para renovar la piel del cuerpo."
+          },
+          "createdAt": "2026-08-21T03:39:09.041Z"
+        },
+        {
+          "id": "08250ee7-5167-49bb-8c5c-3ffc2fbc6ae3",
+          "data": {
+            "image": "",
+            "price": 130,
+            "benefits": [
+              {
+                "image": "",
+                "title": "Reduce el estrés",
+                "description": "Técnica de presión suave con aceites esenciales."
+              },
+              {
+                "image": "",
+                "title": "Mejora el sueño",
+                "description": "Ayuda a relajar el sistema nervioso."
+              }
+            ],
+            "treatment": "6d9d4dbf-2d28-4910-8e69-721b3781a9c8",
+            "entry_name": "Masaje Relajante",
+            "entry_slug": "masaje-relajante",
+            "meta_status": "published",
+            "shortDescription": "Masaje suave de cuerpo completo pensado para reducir el estrés."
+          },
+          "createdAt": "2026-08-21T03:39:09.045Z"
+        },
+        {
+          "id": "326c01d9-ff34-4932-91ad-cac328f1f5a2",
+          "data": {
+            "image": "",
+            "price": 170,
+            "benefits": [
+              {
+                "image": "",
+                "title": "Calor terapéutico",
+                "description": "Las piedras calientes relajan la musculatura en profundidad."
+              },
+              {
+                "image": "",
+                "title": "Alivio duradero",
+                "description": "Efecto relajante que se extiende varios días."
+              }
+            ],
+            "treatment": "6d9d4dbf-2d28-4910-8e69-721b3781a9c8",
+            "entry_name": "Masaje con Piedras Calientes",
+            "entry_slug": "masaje-con-piedras-calientes",
+            "meta_status": "published",
+            "shortDescription": "Masaje terapéutico con piedras volcánicas para una relajación profunda."
+          },
+          "createdAt": "2026-08-21T03:39:09.047Z"
+        }
+      ],
+      "dataSingle": null
+    },
+    {
+      "slug": "treatments",
+      "name": "Tratamientos",
+      "type": "collection",
+      "fileName": "treatments",
+      "isMedia": false,
+      "template": "spaTreatment",
+      "fields": [
+        {
+          "name": "image",
+          "type": "upload",
+          "label": "Imagen de categoría",
+          "allowedTypes": [
+            "image/*"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "3b8914da-8aca-4cbd-8210-430ba915bcd8",
+          "data": {
+            "image": "",
+            "entry_name": "Faciales",
+            "entry_slug": "faciales",
+            "meta_status": "published"
+          },
+          "createdAt": "2026-08-21T03:39:09.018Z"
+        },
+        {
+          "id": "5c77ea87-35f5-42c5-bfc0-066e446378be",
+          "data": {
+            "image": "",
+            "entry_name": "Corporales",
+            "entry_slug": "corporales",
+            "meta_status": "published"
+          },
+          "createdAt": "2026-08-21T03:39:09.038Z"
+        },
+        {
+          "id": "6d9d4dbf-2d28-4910-8e69-721b3781a9c8",
+          "data": {
+            "image": "",
+            "entry_name": "Masajes",
+            "entry_slug": "masajes",
+            "meta_status": "published"
+          },
+          "createdAt": "2026-08-21T03:39:09.044Z"
+        }
+      ],
+      "dataSingle": null
+    }
+  ],
+  "relationships": [
+    {
+      "fromEntryId": "87defdd5-35c8-4790-b949-63a5af11ad41",
+      "toEntryId": "3b8914da-8aca-4cbd-8210-430ba915bcd8",
+      "type": "treatment"
+    },
+    {
+      "fromEntryId": "1db889bc-fac5-4363-8746-a2dba29bbb69",
+      "toEntryId": "3b8914da-8aca-4cbd-8210-430ba915bcd8",
+      "type": "treatment"
+    },
+    {
+      "fromEntryId": "57cc3770-cd7d-4a70-9687-0501be6d548b",
+      "toEntryId": "5c77ea87-35f5-42c5-bfc0-066e446378be",
+      "type": "treatment"
+    },
+    {
+      "fromEntryId": "b5154592-b914-4862-9a3e-7d5549a47ab1",
+      "toEntryId": "5c77ea87-35f5-42c5-bfc0-066e446378be",
+      "type": "treatment"
+    },
+    {
+      "fromEntryId": "08250ee7-5167-49bb-8c5c-3ffc2fbc6ae3",
+      "toEntryId": "6d9d4dbf-2d28-4910-8e69-721b3781a9c8",
+      "type": "treatment"
+    },
+    {
+      "fromEntryId": "326c01d9-ff34-4932-91ad-cac328f1f5a2",
+      "toEntryId": "6d9d4dbf-2d28-4910-8e69-721b3781a9c8",
+      "type": "treatment"
+    }
+  ],
+  "media": []
+}

@@ -15,6 +15,13 @@
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
+  flex-direction: column;
+}
+
+@media (min-width: 980px) {
+  .header {
+    flex-direction: row;
+  }
 }
 
 .headerLeft {
@@ -162,11 +169,14 @@
 
   &:hover {
     border-color: var(--border-color);
-    transform: translateY(-1px);
   }
   &:hover .cardOverlay {
     opacity: 1;
   }
+}
+
+.cardFilename{
+  color: rgba(255,255,255,0.7);
 }
 
 .cardActive {
@@ -199,14 +209,6 @@
   padding: 0.5rem;
 }
 
-.cardOverlayText {
-  font-size: 0.68rem;
-  color: rgba(255, 255, 255, 0.9);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-}
 
 .cardFooter {
   padding: 0.45rem 0.6rem 0.55rem;
@@ -217,17 +219,15 @@
 }
 
 .cardName {
-  font-size: 0.72rem;
-  color: var(--color-contrast);
+  /* color y font-weight ahora los pone <Text color="contrast" fw="medium">;
+     acá solo queda lo que Text no maneja (truncado de una línea). */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 500;
 }
 
 .cardType {
-  font-size: 0.65rem;
-  color: var(--color-primary);
+  /* opacity no tiene equivalente en Text, se queda */
   opacity: 0.55;
 }
 
@@ -273,10 +273,6 @@
 }
 
 .panelTitle {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--color-contrast);
-  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
@@ -342,10 +338,12 @@
 }
 
 .urlText {
+  /* color ahora lo pone <Text color="primary">. font-size no tiene
+     equivalente en Text (ningún size de Text baja de 1.2rem) y
+     font-family/opacity tampoco los maneja Text, se quedan acá. */
   flex: 1;
   font-size: 0.75rem;
   font-family: monospace;
-  color: var(--color-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -397,17 +395,18 @@
 }
 
 .metaLabel {
+  /* font-weight y color ahora los pone <Text fw="semibold" color="primary">.
+     font-size no tiene equivalente en Text; text-transform/letter-spacing
+     tampoco los maneja Text. */
   font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 0.03em;
   flex-shrink: 0;
 }
 
 .metaValue {
+  /* color ahora lo pone <Text color="contrast">. */
   font-size: 0.75rem;
-  color: var(--color-contrast);
   text-align: right;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -495,16 +494,18 @@
 
 .cardCheckbox {
   position: absolute;
+  appearance: none;
   top: 0.45rem;
   left: 0.45rem;
   z-index: 2;
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 2.35rem;
+  height: 2.35rem;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.45);
+  border: 1px solid black;
   opacity: 0;
   transition: opacity 0.12s;
   cursor: pointer;
@@ -519,8 +520,18 @@
 }
 
 .checkIcon {
-  color: #fff;
+  color: #fff !important;
   font-size: 0.85rem;
+
+  /* IoCheckmark se dibuja con stroke (no fill). El path hereda
+     stroke: currentColor, pero currentColor se resuelve con el color
+     del PROPIO path, y global.module.css le pone gris a todo <path>
+     del admin (path, circle, polyline { color: #8f8f8f }). El color
+     de acá arriba pinta el <svg>, no alcanza al <path> — hay que
+     pisar el stroke directo. */
+  path {
+    stroke: #fff !important;
+  }
 }
 
 .checkEmpty {
@@ -541,5 +552,17 @@
 }
 
 .trashIcon {
-  color: white;
+  color: white !important;
+
+  /* mismo caso que .checkIcon: IoTrashOutline se dibuja con stroke,
+     y global.module.css le pone gris al color de cada <path>. */
+  path {
+    stroke: white !important;
+  }
+}
+.bulkDeleteBtn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }

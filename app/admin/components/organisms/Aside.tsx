@@ -13,6 +13,8 @@ interface Props {
   currentUser: IUserSession;
 }
 
+const nameApp = import.meta.env.VITE_PUBLIC_APP_NAME || "CMS Remix";
+
 const initials = (name: string) =>
   name
     .split(" ")
@@ -61,12 +63,9 @@ export function Aside({ collections, currentUser }: Props) {
           </Link>
         </div>
         <div className={styles.headInfo}>
-          <Text size="sm" as="p" color="contrast" fw="medium">
-            {currentUser.name}
-          </Text>
-          <Text size="xs" as="p" color="primary">
-            {currentUser.email}
-          </Text>
+          <Text size="md" as="p" color="contrast" fw="medium">
+            {nameApp}
+          </Text>         
         </div>
       </div>
 
@@ -107,10 +106,10 @@ export function Aside({ collections, currentUser }: Props) {
         <div className={styles.userBadge}>
           <div className={styles.avatar}>{initials(currentUser.name)}</div>
           <div className={styles.userInfo}>
-            <Text size="xs" color="contrast" fw="medium" className={styles.truncate}>
+            <Text size="md" color="contrast" fw="medium" className={styles.truncate}>
               {currentUser.name}
             </Text>
-            <Text size="xs" color="primary" className={styles.truncate}>
+            <Text size="sm" color="primary" className={styles.truncate}>
               {currentUser.email}
             </Text>
           </div>

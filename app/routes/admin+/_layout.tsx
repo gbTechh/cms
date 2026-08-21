@@ -4,6 +4,7 @@ import { LayoutAdmin } from "~/admin/components";
 import { listCollections } from "~/admin/use_cases";
 import { requireAuth } from "~/admin/use_cases";
 import { ROUTES } from "~/admin/constants";
+import "~/admin/styles/global.module.css";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const currentUser = await requireAuth(request);

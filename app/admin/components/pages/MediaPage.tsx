@@ -7,14 +7,13 @@ import noImage from "../../assets/images/no-image.jpg";
 import {
   IoClose,
   IoCopyOutline,
-  IoSearch,
   IoTrashOutline,
   IoCheckmark,
   IoCheckboxOutline,
   IoSquareOutline,
   IoSearchOutline,
 } from "react-icons/io5";
-import { Button, Input, Text, TextArea } from "../atoms";
+import { Button, Text, TextArea } from "../atoms";
 import { useCsrfToken } from "~/admin/lib";
 
 interface Props {
@@ -47,8 +46,8 @@ const getPreviewSrc = (item: IMedia, fallback: string) =>
 function MetaRow({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
   return (
     <div className={styles.metaRow}>
-      <span className={styles.metaLabel}>{label}</span>
-      <span className={`${styles.metaValue} ${mono ? styles.metaMono : ""}`}>{value || "—"}</span>
+      <Text as="span" size="custom" color="primary" fw="semibold" className={styles.metaLabel}>{label}</Text>
+      <Text as="span" size="custom" color="contrast" className={`${styles.metaValue} ${mono ? styles.metaMono : ""}`}>{value || "—"}</Text>
     </div>
   );
 }
@@ -231,6 +230,7 @@ export function MediaPage({ collection, media, total, page = 1, pageSize = 60 }:
                 color="danger"
                 onClick={handleBulkDelete}
                 disabled={isSaving}
+                className={styles.bulkDeleteBtn}
               >
                 <IoTrashOutline className={styles.trashIcon} />
                 Eliminar {checkedIds.size} {checkedIds.size === 1 ? "archivo" : "archivos"}
@@ -241,10 +241,10 @@ export function MediaPage({ collection, media, total, page = 1, pageSize = 60 }:
           // ── Normal header ──
           <>
             <div className={styles.headerLeft}>
-              <Text size="big" color="white">{collection.name}</Text>
-              <span className={styles.count}>
-                {filtered.length} {filtered.length === 1 ? "archivo" : "archivos"}
-              </span>
+              <Text size="big" color="white">{collection.name + ' - '}</Text>
+              <Text size="lg" color="contrast" className={styles.headerCount}>
+                {total ?? media.length} {total === 1 ? "archivo" : "archivos"}
+              </Text>
             </div>
             <div className={styles.headerRight}>
               <div className={styles.searchBar}>
@@ -301,15 +301,27 @@ export function MediaPage({ collection, media, total, page = 1, pageSize = 60 }:
                 const isSelected = selected?.id === item.id && !hasChecked;
                 const isChecked = checkedIds.has(item.id);
                 return (
-                  <button
+                  // div, no button: el checkbox de abajo es un <button> real y
+                  // HTML no permite anidar interactivo dentro de interactivo
+                  // (el navegador cierra el <button> exterior al parsear y
+                  // rompe el DOM -> el checkbox pierde su ancestro con
+                  // position:relative y termina mal posicionado/oculto).
+                  <div
                     key={item.id}
-                    type="button"
+                    role="button"
+                    tabIndex={0}
                     className={`${styles.card} ${isSelected ? styles.cardActive : ""} ${isChecked ? styles.cardChecked : ""}`}
                     onClick={() => handleCardClick(item)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleCardClick(item);
+                      }
+                    }}
                     title={filename}
                   >
                     {/* Checkbox */}
-                    <div
+                    <button
                       className={`${styles.cardCheckbox} ${isChecked || hasChecked ? styles.cardCheckboxVisible : ""}`}
                       onClick={(e) => toggleCheck(item.id, e)}
                       role="checkbox"
@@ -320,7 +332,7 @@ export function MediaPage({ collection, media, total, page = 1, pageSize = 60 }:
                         ? <IoCheckmark className={styles.checkIcon} />
                         : <span className={styles.checkEmpty} />
                       }
-                    </div>
+                    </button>
 
                     <div className={styles.cardThumb}>
                       <img
@@ -331,17 +343,19 @@ export function MediaPage({ collection, media, total, page = 1, pageSize = 60 }:
                       />
                       {!hasChecked && (
                         <div className={styles.cardOverlay}>
-                          <span className={styles.cardOverlayText}>{filename}</span>
+                          <Text as="span" size="14" color="custom" className={styles.cardFilename}>
+                            {filename}
+                          </Text>
                         </div>
                       )}
                     </div>
                     <div className={styles.cardFooter}>
-                      <span className={styles.cardName}>{filename}</span>
-                      <span className={styles.cardType}>
+                      <Text as="span" size="sm" color="contrast" fw="medium" className={styles.cardName}>{filename}</Text>
+                      <Text as="span" size="sm" className={styles.cardType}>
                         {item.mimeType.split("/")[1]?.toUpperCase()} · {formatBytes(item.fileSize)}
-                      </span>
+                      </Text>
                     </div>
-                  </button>
+                  </div>
                 );
               })}
             </div>
@@ -378,7 +392,7 @@ export function MediaPage({ collection, media, total, page = 1, pageSize = 60 }:
         {selected && !hasChecked && (
           <aside className={styles.panel}>
             <div className={styles.panelHead}>
-              <span className={styles.panelTitle}>Detalle del archivo</span>
+              <Text size="sm" color="contrast" className={styles.panelTitle}>Detalle del archivo</Text>
               <Button
                 type="button"
                 variant="ghost"
@@ -415,7 +429,7 @@ export function MediaPage({ collection, media, total, page = 1, pageSize = 60 }:
               <div className={styles.fieldGroup}>
                 <Text as="label" size="xs" color="primary" fw="semibold">URL pública</Text>
                 <div className={styles.urlRow}>
-                  <span className={styles.urlText}>{selected.url}</span>
+                  <Text as="span" size="custom" color="primary" className={styles.urlText}>{selected.url}</Text>
                   <Button
                     type="button"
                     variant="ghost"

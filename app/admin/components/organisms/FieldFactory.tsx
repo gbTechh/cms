@@ -6,6 +6,7 @@ import styles from "./fieldFactory.module.css";
 import RichTextEditor from '../molecules/RichTextEditor';
 import { DatePicker, DropDownMultipleSelect, DropdownSelect } from '../molecules';
 import { ArrayField } from './ArrayField';
+import { MediaPicker } from './MediaPicker';
 
 type OnChangeInput =
   | ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -179,16 +180,26 @@ const fieldComponents: { [key: string]: React.FC<FieldProps> } = {
       />
     )
   },
-  // upload: ({ field, name, value, onChange }) => (
-  //   <input
-  //     type="file"
-  //     name={name ?? field.name}
-  //     onChange={(e) => onChange(e.target.files?.[0])}
-  //     required={field.required}
-  //     accept={(field as any).allowedTypes?.join(',')}
-  //   />
-  // ),
-  // Para relationship, group, repeater, etc., los implementaremos más adelante
+  upload: ({ field, name, value, onChange }) => {
+    if (field.type !== 'upload') return null;
+
+    // No es un <input type="file"> ni un relationship: "upload" guarda una
+    // URL (string) de un archivo YA subido a Media (tabla Prisma separada
+    // de Entry, por eso no puede modelarse como relationship). MediaPicker
+    // abre un selector visual sobre /admin/media-options y escribe esa URL
+    // en el campo — mismo dato que antes, ahora elegido en vez de tipeado.
+    return (
+      <MediaPicker
+        label={field.label}
+        name={name ?? field.name}
+        value={typeof value === 'string' ? value : ''}
+        onChange={onChange}
+        required={field.required}
+        allowedTypes={field.allowedTypes}
+      />
+    );
+  },
+  // Para "group", lo implementamos más adelante
 };
 
 export const FieldFactory: React.FC<FieldProps> = ({ field, name, value = "", onChange }) => {

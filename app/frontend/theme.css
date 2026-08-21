@@ -49,6 +49,20 @@
   --shadow-pub: 0 12px 32px rgba(23, 40, 43, 0.08);
 }
 
+:root[data-pub-theme="spa"] {
+  --color-pub-bg: #f8f6f2;
+  --color-pub-surface: #ffffff;
+  --color-pub-border: #e8e1d6;
+  --color-pub-text: #332d26;
+  --color-pub-text-muted: #7a6f60;
+  --color-pub-accent: #8a9a7e;
+  --color-pub-accent-hover: #6f8064;
+  --font-pub: "Inter", sans-serif;
+  --font-pub-display: "Fraunces", serif;
+  --radius-pub: 1.4rem;
+  --shadow-pub: 0 12px 32px rgba(51, 45, 38, 0.08);
+}
+
 /* RichTextView (ver app/content/RichTextView.tsx) renderiza HTML semántico
    sin clases — @tailwindcss/typography (prose) lo estiliza; acá solo
    coloreamos con los tokens del tema activo. */

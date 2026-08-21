@@ -3,6 +3,7 @@ import { useActionData, useLoaderData } from "@remix-run/react";
 import { LoginPage } from "~/admin/components";
 import { login, countUsers, createUser, getSession, assertCsrf } from "~/admin/use_cases";
 import { ROUTES } from "~/admin/constants";
+import "~/admin/styles/global.module.css";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Si ya hay sesión activa, redirigir al admin

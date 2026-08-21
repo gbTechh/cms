@@ -10,7 +10,7 @@ El proyecto trae cargado como ejemplo/cliente actual el sitio de **Sonrisa Total
 
 - **Framework:** Remix 2.16 con remix-flat-routes
 - **Base de datos:** PostgreSQL via Prisma 6.x
-- **Estilos:** admin → CSS Modules. Sitio público → **Tailwind v4** (`@tailwindcss/vite`), con tokens de tema (`app/content/public.css`) mapeados a variables CSS para que el theme-switching (`modern`/`classic`/`dental`) siga funcionando en vivo sin recompilar
+- **Estilos:** admin → CSS Modules. Sitio público → **Tailwind v4** (`@tailwindcss/vite`), con tokens de tema (`app/frontend/theme.css`) mapeados a variables CSS para que el theme-switching (`modern`/`classic`/`dental`) siga funcionando en vivo sin recompilar
 - **Editor de texto:** Slate.js
 - **Subida de archivos:** memoria + `fs.writeFile` (local) → migrar a S3/R2
 
@@ -27,8 +27,8 @@ El proyecto trae cargado como ejemplo/cliente actual el sitio de **Sonrisa Total
   - Subida de múltiples archivos
 - **Singles** (`type: "global" | "page"`) — un único registro de datos (`DataSingle`) en vez de una lista de entries; editor dedicado en el admin. Ver `app/models/collections/siteSettings.ts`
 - **Forms** (`type: "form"`) — el público hace `POST /forms/:slug` (form normal o `fetch` JSON) y cada envío se guarda como `FormSubmission`, visible en el admin. Protegido con honeypot, time-trap, rate limit por IP+form y validación de Origin. Ver `app/models/collections/appointmentForm.ts` y `app/routes/reservar.tsx` (página dedicada que llama al form directo desde su propia `action`, sin depender de JS)
-- **Templates de página por colección** (`/:slug`, `/:slug/:entrySlug`) — cualquier colección `type: "collection"` es navegable en el público sin escribir una ruta a mano; el campo `template` de la colección elige el renderer (`app/content/templates/registry.tsx`), con un fallback genérico si no se define ninguno
-- **Temas visuales** — paleta/tipografía del sitio público controladas por el campo `theme` del Single `site-settings`, sin tocar componentes (tokens Tailwind en `app/content/public.css`, aplicados vía `data-pub-theme` en `<html>`)
+- **Frontend público separado del backend** (`app/frontend/`) — librería de componentes Tailwind estilo shadcn (`app/frontend/ui/`, con `cn()` de clsx+tailwind-merge), fachada de datos (`app/frontend/data/client.server.ts`) y cada página del sitio como una ruta explícita que compone ambas. Sin resolución automática de "colección → template": cada colección pública tiene su propia ruta escrita a mano. Ver la sección "Arquitectura del frontend" más abajo
+- **Temas visuales** — paleta/tipografía del sitio público controladas por el campo `theme` del Single `site-settings`, sin tocar componentes (tokens Tailwind en `app/frontend/theme.css`, aplicados vía `data-pub-theme` en `<html>`)
 - **Migraciones vía JSON** (`npm run template:export` / `template:import`) — snapshot completo de collections + entries + singles + relaciones + metadata de media, idempotente
 - Navegación por sidebar dividida en Colecciones / Singles / Formularios
 - Componentes atom reutilizables (Button, Input, TextArea, Text, Toggle, etc.)
@@ -99,32 +99,52 @@ El proyecto trae cargado como ejemplo/cliente actual el sitio de **Sonrisa Total
 
 ---
 
-### Templates de frontend (implementado)
+### Arquitectura del frontend (implementado)
 
-- [x] **Templates por colección** — rutas genéricas `/:slug` y `/:slug/:entrySlug` (`app/routes/$slug*.tsx`) resuelven el renderer según el campo `template` de la colección (`app/content/templates/registry.tsx`), con fallback genérico. Sin prefijo: `Collection.slug` es `@unique` en el schema, así que nunca choca con otra colección, y las rutas escritas a mano (`/admin`, `/forms`, `/`, `/reservar`) siempre le ganan por prioridad de ruta estática
-- [x] **Temas visuales** — el Single `site-settings` elige el tema (`modern` / `classic` / `dental`) aplicado vía `data-pub-theme` en `<html>` (`app/root.tsx` + `app/content/theme.server.ts`); agregar un tema nuevo es sumar un bloque `:root[data-pub-theme="..."]` en `app/content/public.css`. El tema `dental` además define `--font-pub-display` (Fraunces) para los titulares
-- [x] **Tailwind v4 solo en el sitio público** — `app/content/public.css` (`@import "tailwindcss"` + `@theme` con los tokens `pub-*` + `@tailwindcss/typography` para el HTML que sale de `RichTextView`). Se importa una sola vez en `app/content/PublicLayout.tsx` (no en `app/root.tsx`) para que Preflight/las utilidades queden scopeadas por Vite a las rutas públicas — el admin (`app/admin/**`) nunca importa ese layout, así que sigue 100% CSS Modules sin que nada se pise. Clases repetidas entre `registry.tsx` y las rutas genéricas (card, section, badge, avatar…) están centralizadas como strings en `app/content/ui.ts` para no reescribirlas en cada template
+El sitio público vive separado del backend en `app/frontend/` — el admin (`app/admin/`, `app/content/*.server.ts`) no lo importa nunca, y viceversa:
+
+```
+app/frontend/
+  ui/            Librería de componentes (estilo shadcn): Text, Heading, Price, Badge,
+                 Avatar, Rating, Button/ButtonLink, Card/CardLink, LinkText, Section,
+                 Grid, Accordion, Sidebar, Pagination, RichText, Nav, Footer...
+                 Todos aceptan `className` mergeado con cn() (clsx + tailwind-merge) —
+                 la base de estilos se pisa sin pelear con Tailwind. cn.ts es el
+                 utilitario, ui/index.ts el barrel de exports.
+  data/
+    client.server.ts   Única puerta a los datos: getCollections(), getEntries(slug, opts),
+                       getEntry(slug, entrySlug), getSingle(slug), searchEntries(slug, q, opts),
+                       getTheme(). Por debajo llaman a app/content/queries.server.ts (Prisma
+                       real) — un template nunca importa ese archivo directo.
+  templates/
+    Layout.tsx    Chrome del sitio (Nav + Footer + contenido de ESTE proyecto)
+  lib/            format.ts, labels.ts, richtext.ts — helpers chicos compartidos
+  theme.css       @import "tailwindcss" + @theme con los tokens pub-* + @tailwindcss/typography
+```
+
+**No hay resolución automática "colección → template"** (no existe un `registry.tsx` ni un `getTemplate()`): cada colección que se quiere pública tiene su propia ruta escrita a mano en `app/routes/` (`services._index.tsx`, `services.$entrySlug.tsx`, etc.), que arma su loader con `~/frontend/data/client.server` y su JSX con `~/frontend/ui`. Ver el bloque de abajo para la lista de páginas actuales. Trade-off consciente: una colección nueva **no aparece sola** en el público hasta que se le escribe la ruta — a cambio, cada página tiene control total sin pelear con un contrato compartido.
+
+- [x] **Temas visuales** — el Single `site-settings` elige el tema (`modern` / `classic` / `dental`) aplicado vía `data-pub-theme` en `<html>` (`app/root.tsx` + `app/content/theme.server.ts`); agregar un tema nuevo es sumar un bloque `:root[data-pub-theme="..."]` en `app/frontend/theme.css`. El tema `dental` además define `--font-pub-display` (Fraunces) para los titulares
+- [x] **Tailwind v4 solo en el sitio público** — `app/frontend/theme.css` se importa una sola vez en `app/frontend/templates/Layout.tsx` (no en `app/root.tsx`) para que Preflight/las utilidades queden scopeadas por Vite a las rutas que pasan por ese Layout — el admin nunca lo importa, así que sigue 100% CSS Modules sin que nada se pise (verificado: el admin no tiene ni un `--tw-*` en su HTML, y el público no tiene ni un `normalize.css`)
 
 ---
 
 ### El sitio actual: Sonrisa Total (clínica dental)
 
-El proyecto viene configurado como el sitio de una clínica dental de ejemplo — es lo que se ve en `/` hoy. Collections (`app/models/collections/`):
+El proyecto viene configurado como el sitio de una clínica dental de ejemplo. Collections (`app/models/collections/`) y su ruta pública:
 
-| Collection | Tipo | Qué es |
-|---|---|---|
-| `doctors` | collection | Equipo médico |
-| `services` | collection | Servicios, con precio y especialista a cargo |
-| `portfolio` | collection | Casos y trabajos realizados (antes/después) — la vitrina de resultados |
-| `testimonials` | collection | Testimonios de pacientes |
-| `faq` | collection | Preguntas frecuentes (acordeón en el home) |
-| `appointment-form` | form | Reserva de citas — `POST /forms/appointment-form`, o directo desde `app/routes/reservar.tsx` |
-| `site-settings` | global | Tema, marca, contacto, y las cifras de la franja de confianza del home |
-| `media` | collection especial | Galería de medios |
+| Collection | Tipo | Qué es | Rutas |
+|---|---|---|---|
+| `doctors` | collection | Equipo médico | `/doctors`, `/doctors/:slug` |
+| `services` | collection | Servicios, con precio y especialista a cargo | `/services`, `/services/:slug` |
+| `portfolio` | collection | Casos y trabajos realizados (antes/después) | `/portfolio`, `/portfolio/:slug` |
+| `testimonials` | collection | Testimonios de pacientes | `/testimonials`, `/testimonials/:slug` |
+| `faq` | collection | Preguntas frecuentes (acordeón) | `/faq`, `/faq/:slug` |
+| `appointment-form` | form | Reserva de citas | `POST /forms/appointment-form`, página dedicada en `/reservar` |
+| `site-settings` | global | Tema, marca, contacto, cifras de la franja de confianza del home | — (se lee, no tiene página propia) |
+| `media` | collection especial | Galería de medios | — (solo admin) |
 
 No hay motor de disponibilidad/calendario: la reserva es una **solicitud** (se guarda como `FormSubmission`) que el consultorio confirma por teléfono/email — no bloquea horarios en tiempo real.
-
-Componentes de frontend específicos del vertical: `dentistDoctor`, `dentistService`, `dentistTestimonial`, `dentistPortfolio` en `app/content/templates/registry.tsx` (con placeholders prolijos — avatar con iniciales, bloque "antes/después" — mientras no se suban fotos reales).
 
 ---
 
@@ -192,8 +212,8 @@ app/
 3. `npm run sync` para que las colecciones del punto anterior queden en la base (esto da de baja por soft-delete las que ya no tengan archivo)
 4. Opcional: `npm run template:import -- templates/dentist-clinic.json` (si es otra clínica dental) o el JSON del rubro que corresponda, para arrancar con contenido de ejemplo navegable de inmediato
 5. Crear el primer usuario admin (`app/admin/scripts/` no trae un seed de usuario todavía — hacerlo a mano vía Prisma Studio o un script rápido con `bcryptjs`)
-6. Ajustar `app/content/PublicLayout.tsx` (nav, marca, footer) y `app/routes/_index.tsx` (home) al rubro/cliente nuevo — son clases de Tailwind directo en el JSX — y la paleta en `app/content/public.css` (o sumar un tema nuevo — ver sección de Temas visuales arriba)
-7. Para secciones nuevas sin diseño curado: con darle `template` (o dejarlo sin definir → fallback genérico) y el campo `fields`, la colección ya queda navegable en `/:slug` sin escribir rutas — ver `app/content/templates/registry.tsx` para sumar un Card/Detail propio
+6. Ajustar `app/frontend/templates/Layout.tsx` (nav, marca, footer) y `app/routes/_index.tsx` (home) al rubro/cliente nuevo — son clases de Tailwind directo en el JSX, componiendo `app/frontend/ui/` — y la paleta en `app/frontend/theme.css` (o sumar un tema nuevo — ver sección de Temas visuales arriba)
+7. Para secciones nuevas: escribir su ruta a mano en `app/routes/` (ej. `productos._index.tsx` + `productos.$entrySlug.tsx`) con un loader que llame a `~/frontend/data/client.server` y un componente armado con `~/frontend/ui` — usar `services._index.tsx`/`services.$entrySlug.tsx` como referencia
 
 Cuando el proyecto crezca y se aparte mucho de este starter, `npm run template:export` sirve como snapshot portable para mover datos entre entornos (staging → producción, o restaurar un backup).
 
